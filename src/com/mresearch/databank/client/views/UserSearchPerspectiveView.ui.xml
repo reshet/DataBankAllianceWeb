@@ -1,0 +1,149 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:app="urn:import:com.mresearch.databank.client.views">
+	<ui:style>
+		.research-catalog {
+			font:10px;
+			padding: 2px;
+			margin: 1 1 1 1;
+		}
+	
+		.gwt-Tree .gwt-TreeItem
+		{
+		   padding: 2px;
+		   font: 9px;
+		   color: green;
+		   margin: 2px;
+		}
+		.tree {
+			background-color: gray;
+			color: white;
+			margin: 1 1 1 1;
+		}
+		.gwt-Tree .gwt-TreeItem-selected
+		{
+		   background-color: blue;
+		}
+		
+		.search-types
+		{
+			padding-right: 35px;
+		}
+		.search-terms
+		{
+	
+		}
+		.search-term
+		{
+			line-height: 1.2;
+		}
+		.small_text
+		{
+			font-size: 9px;
+		}
+		.large_text
+		{
+			font-size: 15px;
+			color: #69c014;
+		}
+		.root_panel{
+			margin-left: 40px;
+			margin-top: 20px;
+			width: 800px;
+		}
+	</ui:style>
+
+			<g:ScrollPanel width="100%" height="100%">
+				<g:VerticalPanel ui:field="root_panel" styleName="{style.root_panel}" width="1024px"
+					horizontalAlignment="ALIGN_CENTER"
+				>
+				<g:HTML>
+						<div class="line-separator"></div>
+					</g:HTML>
+				<g:VerticalPanel
+					horizontalAlignment="ALIGN_LEFT"
+				>
+					<g:HTML>
+						<h1>Расширенный поиск</h1>
+						<br/>
+					</g:HTML>
+					
+					<g:HorizontalPanel horizontalAlignment="ALIGN_LEFT">
+						<g:VerticalPanel spacing="2" styleName="{style.search-types}">
+							<g:Label text="Область поиска" styleName="{style.large_text}"/>
+							<g:CheckBox checked="true" text="Всё" ui:field="all"/>
+							<g:CheckBox text="Исследования" ui:field="socioresearch"/>
+<!-- 							<g:CheckBox text="Концепты"/> -->
+<!-- 							<g:CheckBox text="Опросы"/> -->
+							<g:CheckBox text="Переменные" ui:field="sociovars"/>
+							<g:CheckBox text="Публикации" ui:field="publications"/>
+							<g:CheckBox text="Законодательство" ui:field="laws"/>
+							<g:CheckBox text="Консультации юриста" ui:field="consults"/>
+						</g:VerticalPanel>
+						<g:VerticalPanel>
+							<g:HorizontalPanel>
+								<g:VerticalPanel spacing="2" styleName="{style.search-terms}">
+									<g:Label text="Содержит" styleName="{style.large_text}"/>
+									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
+										<g:Label text="Одно из слов" styleName="{style.small_text}"/>
+										<g:TextBox ui:field="contains_one_of"></g:TextBox>
+									</g:VerticalPanel>
+									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
+										<g:Label text="Формулировку целиком" styleName="{style.small_text}"/>
+										<g:TextBox ui:field="contains_exact"></g:TextBox>
+									</g:VerticalPanel>			
+								</g:VerticalPanel>
+								
+								<g:VerticalPanel spacing="2" styleName="{style.search-terms}">
+									<g:Label text="А также содержит" styleName="{style.large_text}"/>
+									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
+										<g:Label text="Формулировку целиком" styleName="{style.small_text}"/>
+										<g:TextBox ui:field="contains_exact_too"></g:TextBox>
+									</g:VerticalPanel>			
+									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
+										<g:Label text="или" styleName="{style.small_text}"/>
+										<g:TextBox ui:field="contains_or"></g:TextBox>
+									</g:VerticalPanel>
+									
+								</g:VerticalPanel>
+								
+								<g:VerticalPanel spacing="2" styleName="{style.search-terms}">
+									<g:Label text="Но не содержит" styleName="{style.large_text}"/>
+									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
+										<g:Label text="ни одного из слов" styleName="{style.small_text}"/>
+										<g:TextBox ui:field="contains_none_of"></g:TextBox>
+									</g:VerticalPanel>
+									<g:VerticalPanel spacing="2" styleName="{style.search-term}">
+										<g:Label text="или точной формулировки" styleName="{style.small_text}"/>
+										<g:TextBox ui:field="not_contains_exact"></g:TextBox>
+									</g:VerticalPanel>			
+								</g:VerticalPanel>
+							</g:HorizontalPanel>
+							
+							<g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
+								<g:Button ui:field="search" text="Найти"></g:Button>
+								<g:Label text="или переключиться в " styleName="{style.small_text}"></g:Label>
+								<g:Anchor ui:field="simple_search" text="простой поиск" styleName="{style.small_text}"></g:Anchor>
+							</g:HorizontalPanel>
+						</g:VerticalPanel>
+					</g:HorizontalPanel>
+					</g:VerticalPanel>
+					<g:HTML>
+						<div class="line-separator"></div>
+						<br/>
+					</g:HTML>
+					<g:VerticalPanel ui:field="centerPanel">
+	<!-- 					<app:ImprovedSearchView ui:field="impr_search_view"> -->
+	<!-- 					</app:ImprovedSearchView> -->
+	<!-- 					<g:HTMLPanel> -->
+	<!-- 						<h2>Результаты поиска по запросу:</h2> -->
+	<!-- 							<h4><g:Label ui:field="queryStr"></g:Label></h4> -->
+	<!-- 						<br/> -->
+	<!-- 					</g:HTMLPanel> -->
+	<!-- 					<g:FlexTable ui:field="res_table"></g:FlexTable> -->
+					</g:VerticalPanel>
+					<app:WhiteFooter></app:WhiteFooter>
+				</g:VerticalPanel>	
+			</g:ScrollPanel>
+</ui:UiBinder> 

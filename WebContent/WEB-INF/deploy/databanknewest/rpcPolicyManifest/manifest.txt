@@ -1,0 +1,9 @@
+# Module databanknewest
+# RPC service class, partial path of RPC policy file
+com.mresearch.databank.client.service.UserAccountService, 7C17DC7B8403197D688FAFC6F06DC37C.gwt.rpc
+com.mresearch.databank.client.service.StartPageService, 968244B66764D3B1AA04953687C8FED4.gwt.rpc
+com.mresearch.databank.client.service.CatalogService, B27428AFB784F75A2C8DB9B97E4E72A6.gwt.rpc
+com.mresearch.databank.client.service.UserSocioResearchService, 1A4A191F2AD2DFC4D0B2A1C5E687D381.gwt.rpc
+com.mresearch.databank.client.service.SearchService, FBEDAF12A4D8D51B158AF620CF46092D.gwt.rpc
+com.mresearch.databank.client.service.AdminArticleService, 903FA146F0AF733641208E9CF4FB3675.gwt.rpc
+com.mresearch.databank.client.service.AdminSocioResearchService, 020F436860806A31CDB12F45234E536E.gwt.rpc

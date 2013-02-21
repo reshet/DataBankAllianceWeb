@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:third="urn:import:org.zenika.widget.client.datePicker">
+	
+<ui:style>
+		.category
+		{
+			color: #772222;
+			font-weight: bold;
+			font: 16px;
+			vertical-align: text-top;
+		}
+</ui:style>
+	<g:HorizontalPanel>
+		<g:Label ui:field="field_name" styleName="{style.category}"></g:Label>
+		<g:Label ui:field="date_picker"></g:Label>
+	</g:HorizontalPanel>
+</ui:UiBinder> 
