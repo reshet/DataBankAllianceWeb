@@ -16,23 +16,23 @@ public class ShowVarDetailsEvent extends GwtEvent<ShowVarDetailsEventHandler> {
 	public ShowVarDetailsEvent(long res_id) {
 		this.Var_id = res_id;
 		DatabankApp.get().getCurrentUser().setCurrant_var(Var_id);
-		new RPCCall<UserAccountDTO>() {
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("Error on updating account state!");
-			}
-
-			@Override
-			public void onSuccess(UserAccountDTO result) {
-				DatabankApp.get().setCurrentUser(result);
-			}
-
-			@Override
-			protected void callService(AsyncCallback<UserAccountDTO> cb) {
-				DatabankApp.get().getUserService().updateResearchState(DatabankApp.get().getCurrentUser(),cb);
-			}
-		}.retry(2);
+//		new RPCCall<UserAccountDTO>() {
+//			
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				Window.alert("Error on updating account state!");
+//			}
+//
+//			@Override
+//			public void onSuccess(UserAccountDTO result) {
+//				DatabankApp.get().setCurrentUser(result);
+//			}
+//
+//			@Override
+//			protected void callService(AsyncCallback<UserAccountDTO> cb) {
+//				DatabankApp.get().getUserService().updateResearchState(DatabankApp.get().getCurrentUser(),cb);
+//			}
+//		}.retry(2);
 	}
 	public ShowVarDetailsEvent(long res_id,UserAnalysisSaveDTO pre_saved) {
 		this(res_id);

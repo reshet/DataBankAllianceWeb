@@ -17,14 +17,15 @@
 							<td><g:Button ui:field="back_btn" text="&larr;Назад к переменным"></g:Button>
 							</td>
  							<td float="right"><g:ToggleButton height="32px" width="32px"  ui:field="weights_use"></g:ToggleButton></td>
+ 							<td float="right"><g:ListBox height="32px" width="90px"  ui:field="weights_list" visible="false"></g:ListBox></td>
 							<td float="right"><g:PushButton ui:field="plotBtn" height="32px" width="32px"></g:PushButton></td>
 							<td float="right"><g:PushButton ui:field="dim2Btn" height="32px" width="32px"></g:PushButton></td>
  							<td float="right"><g:PushButton ui:field="saveHtmlBtn" height="32px" width="32px"></g:PushButton></td>
 							<td float="right"><g:ToggleButton  height="32px" width="32px" ui:field="filters_use"></g:ToggleButton></td>
   							<td float="right"><g:Button ui:field="filters_details_btn" text="Фильтры"></g:Button></td>	
+ 							<td float="right"><g:Button ui:field="recalculate_btn" text="Пересчитать" visible="true"></g:Button></td>	
  							<td float="right"><g:Button ui:field="save_btn" text="Сохранить" visible="false"></g:Button></td>	
-<!-- 							<td float="right"><g:Button ui:field="filters_add_btn" text="+"></g:Button></td>	 -->
-<!-- 							<td float="right"><g:Button ui:field="filters_delete_btn" text="-"></g:Button></td> -->
+<!--  						<td float="right"><g:Button ui:field="save_btn" text="Сохранить" visible="false"></g:Button></td>	 -->
 						</tr>
 					</table>
 				</g:HTMLPanel>

@@ -2,6 +2,8 @@ package com.mresearch.databank.client.views;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.zenika.widget.client.datePicker.DatePicker;
 
@@ -81,7 +83,9 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 	private ArrayList<Long> var_ids;
 	private AddOrgPopupView addOrgView = new AddOrgPopupView();
 	private Long org_impl_id,org_order_id;
-	private Long research_id,weight_var_id;
+	private Long research_id;
+	private List<Long> weight_var_ids;
+	
 	private String def_gengeath_text,def_method_text,def_researches_text,def_concepts_text;
 	private MetaUnitMultivaluedEntityDTO _db_;
 	private MultiValuedField mv;
@@ -93,7 +97,8 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 		this._db_ = db_entity;
 		this.dto = dto;
 		research_id = dto.getId();
-		weight_var_id = dto.getVar_weight_id();
+		weight_var_ids = dto.getVar_weight_ids();
+		//weights.setMultipleSelect(true);
 //		int i = 0;
 //		if(dto.getPublications()!=null)
 //		for (String publName:dto.getPublications())
@@ -148,6 +153,16 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 		
 		
 	}
+	
+	public LinkedList<Long> getSelectedItemsWeights() {
+	    LinkedList<Long> selectedItems = new LinkedList<Long>();
+	    for (int i = 0; i < weights.getItemCount(); i++) {
+	        if (weights.isItemSelected(i)) {
+	            selectedItems.add((long)i);
+	        }
+	    }
+	    return selectedItems;
+	}
 	public void addPublication(String name,String doi,String url)
 	{
 		VerticalPanel panel = new VerticalPanel();
@@ -176,18 +191,21 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 		{
 			weights.addItem(name);
 		}
-		if (weight_var_id != null)
+		if (weight_var_ids != null)
+		for(Long selid:weight_var_ids)
 		{
-			weights.setSelectedIndex(var_ids.indexOf(weight_var_id)+1);
+			weights.setSelectedIndex(var_ids.indexOf(selid)+1);
 		}
 	}
 
 	@Override
-	public long getWeightVarID() {
-		int sel = weights.getSelectedIndex();
-		if (sel <= 0) return 0;
-			else
-				return var_ids.get(sel-1);
+	public ArrayList<Long> getWeightVarIDs() {
+		ArrayList<Long> lst = new ArrayList<Long>();
+		for(Long sel:getSelectedItemsWeights())
+		{
+		 lst.add(var_ids.get((int)(sel-1)));
+		}
+		return lst;
 	}
 	
 	@Override
@@ -196,10 +214,12 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 	}
 	
 	@Override
-	public String getWeightVarName(long weight_var_id) {
+	public ArrayList<String> getWeightVarNames(List<Long> weight_var_ids) {
+		ArrayList<String> ss = new ArrayList<String>();
+		for(Long weight_var_id:weight_var_ids)
 		if (weight_var_id != 0 && var_ids.contains(weight_var_id))
-			return var_names.get(var_ids.indexOf(weight_var_id));
-		return "";
+			ss.add(var_names.get(var_ids.indexOf(weight_var_id)));
+		return ss;
 	}
 	
 
@@ -249,4 +269,5 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 	public String getDescription() {
 		return richTextEditor.getValue();
 	}
+	
 }

@@ -7,6 +7,7 @@ import com.mresearch.databank.shared.SocioResearchDTO;
 import com.mresearch.databank.shared.SocioResearchDTO_Light;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
+import com.mresearch.databank.shared.UserHistoryDTO;
 import com.mresearch.databank.shared.UserResearchSettingDTO;
 
 public interface UserAccountServiceAsync {
@@ -18,8 +19,8 @@ public interface UserAccountServiceAsync {
 
 	void logout(AsyncCallback<Void> callback);
 
-	void updateResearchState(UserAccountDTO dto,
-			AsyncCallback<UserAccountDTO> callback);
+	void updateResearchState(UserHistoryDTO dto,
+			AsyncCallback<UserHistoryDTO> callback);
 
 	void getUserAllAnalisysList(AsyncCallback<List<UserAnalysisSaveDTO>> cb);
 

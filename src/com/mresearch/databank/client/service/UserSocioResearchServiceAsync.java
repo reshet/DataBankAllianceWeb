@@ -84,6 +84,8 @@ void getResearch(long id, AsyncCallback<SocioResearchDTO> callback);
 			AsyncCallback<ArrayList<Long>> callback);
 	void getVarsResearchNames(ArrayList<Long> keys,
 			AsyncCallback<ArrayList<VarDTO_Research>> callback);
+	void getResearchVarsWeightCandidates(long research_ad,
+			AsyncCallback<ArrayList<VarDTO_Light>> callback);
 	
 	
 }

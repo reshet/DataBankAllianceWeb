@@ -23,23 +23,23 @@ public class ShowResearchDetailsEvent extends GwtEvent<ShowResearchDetailsEventH
 		this.research_id = res_id;
 		DatabankApp.get().getCurrentUser().setCurrent_research(research_id);
 		DatabankApp.get().getCurrentUser().setCurrant_var(0);
-		new RPCCall<UserAccountDTO>() {
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("Error on updating account state!");
-			}
-
-			@Override
-			public void onSuccess(UserAccountDTO result) {
-				DatabankApp.get().setCurrentUser(result);
-			}
-
-			@Override
-			protected void callService(AsyncCallback<UserAccountDTO> cb) {
-				DatabankApp.get().getUserService().updateResearchState(DatabankApp.get().getCurrentUser(),cb);
-			}
-		}.retry(2);
+//		new RPCCall<UserAccountDTO>() {
+//			
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				Window.alert("Error on updating account state!");
+//			}
+//
+//			@Override
+//			public void onSuccess(UserAccountDTO result) {
+//				DatabankApp.get().setCurrentUser(result);
+//			}
+//
+//			@Override
+//			protected void callService(AsyncCallback<UserAccountDTO> cb) {
+//				DatabankApp.get().getUserService().updateResearchState(DatabankApp.get().getCurrentUser(),cb);
+//			}
+//		}.retry(2);
 	}
 	public ShowResearchDetailsEvent(long  res_id,UserResearchSettingDTO dto)
 	{

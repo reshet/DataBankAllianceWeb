@@ -67,8 +67,8 @@ html {
 
 div#bottom
 {
-     	background: url(i/bg-jpg-72.jpg) no-repeat top center; 
-     	height: 600px;
+/*      	background: url(i/bg-jpg-72.jpg) no-repeat top center;  */
+     	height: 200px;
      	width: 100%;
      		-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -282,12 +282,16 @@ div.figure-caption {
     padding-top: 5px;
 }
 
+/* div.logo { */
+/*     width: 465px; */
+/*     height: 36px; */
+/*     background: transparent url(i/logo.png) left top no-repeat; */
+/* } */
 div.logo {
-    width: 465px;
-    height: 36px;
-    background: transparent url(i/logo.png) left top no-repeat;
+    width: 200px;
+    height: 82px;
+    background: transparent url(i/alliance_ukraine.gif) left top no-repeat;
 }
-
 div.spacer50 {
     clear: both;
     height: 50px;
@@ -328,7 +332,7 @@ div.mm-container {
 div.mm-title {
     position: relative;
     float: left;
-    background: transparent url(i/mainmenu-title.png) scroll 0 22px no-repeat;
+    background: transparent url(i/mainmenu-title_alliance.png) scroll 0 22px no-repeat;
     width: 280px;
     height: 51px;
 }
@@ -370,7 +374,7 @@ div.mm-search {
     font-family: 'Trebuchet MS', Verdana, Arial, Helvetica;
     font-size: 14px;
     font-weight: bold;
-    padding: 17px 8px 0 8px;
+    padding: 15px 8px 1px 180px;
 }
 
 input.mm-search {

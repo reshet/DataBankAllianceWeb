@@ -71,6 +71,7 @@
 		<h3>Переменная использовалась как:</h3>
 		<g:FlexTable ui:field="generalizedTbl"></g:FlexTable>
 		<br/>
+		
 		<table>
 			<tr>
 				<th>

@@ -27,6 +27,7 @@ import com.mresearch.databank.shared.SocioResearchDTO;
 import com.mresearch.databank.shared.SocioResearchDTO_Light;
 import com.mresearch.databank.shared.SocioResearchFilesDTO;
 import com.mresearch.databank.shared.UserAccountDTO;
+import com.mresearch.databank.shared.UserHistoryDTO;
 import com.mresearch.databank.shared.VarDTO;
 import com.mresearch.databank.shared.VarDTO_Detailed;
 import com.mresearch.databank.shared.VarDTO_Light;
@@ -68,14 +69,16 @@ public class UserSocioResearchServiceImpl extends RemoteServiceServlet implement
 	@Override
 	public VarDTO getVar(long id) {
 		 UserAccountDTO userAcc =   (UserAccountDTO) this.getThreadLocalRequest().getSession().getAttribute("user");
-		return eao.getVar(id,userAcc);
+		 UserHistoryDTO userHist =   (UserHistoryDTO) this.getThreadLocalRequest().getSession().getAttribute("user_history");
+		 return eao.getVar(id,userAcc,userHist);
 	}
 
 	
 	@Override
 	public VarDTO_Detailed getVarDetailed(long id) {
 		 UserAccountDTO userAcc =   (UserAccountDTO) this.getThreadLocalRequest().getSession().getAttribute("user");
-		return eao.getVarDetailed(id,userAcc);
+		 UserHistoryDTO userHist =   (UserHistoryDTO) this.getThreadLocalRequest().getSession().getAttribute("user_history");
+		 return eao.getVarDetailed(id,userAcc,userHist);
 	}
 
 	
@@ -102,8 +105,9 @@ public class UserSocioResearchServiceImpl extends RemoteServiceServlet implement
 	@Override
 	public ArrayList<Double> get2DDistribution(long var_id1, long var_id2,long res_id) {
 		 UserAccountDTO userAcc =   (UserAccountDTO) this.getThreadLocalRequest().getSession().getAttribute("user");
-		userAcc.setCurrent_research(res_id);
-		 return eao.get2DDistribution(var_id1, var_id2,userAcc);
+		 UserHistoryDTO userHist =   (UserHistoryDTO) this.getThreadLocalRequest().getSession().getAttribute("user_history");
+		 userAcc.setCurrent_research(res_id);
+		 return eao.get2DDistribution(var_id1, var_id2,userAcc,userHist);
 	}
 
 	@Override
@@ -240,6 +244,12 @@ public class UserSocioResearchServiceImpl extends RemoteServiceServlet implement
 	@Override
 	public ArrayList<VarDTO_Research> getVarsResearchNames(ArrayList<Long> keys) {
 		return eao.getVarsResearchNames(keys);
+	}
+
+	@Override
+	public ArrayList<VarDTO_Light> getResearchVarsWeightCandidates(
+			long research_ad) {
+		return eao.getResearchVarsWeightCandidates(research_ad);
 	}
 
 }

@@ -44,6 +44,8 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -58,6 +60,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.mresearch.databank.client.event.RecalculateDistributionsEvent;
+import com.mresearch.databank.client.event.RecalculateDistributionsEventHandler;
 import com.mresearch.databank.client.event.ShowConsultationDetailsEvent;
 import com.mresearch.databank.client.event.ShowPlaceEvent;
 import com.mresearch.databank.client.event.ShowPlaceEventHandler;
@@ -67,10 +71,12 @@ import com.mresearch.databank.client.event.ShowConsultationDetailsEventHandler;
 import com.mresearch.databank.client.event.ShowResearchDetailsEvent;
 import com.mresearch.databank.client.event.ShowResearchDetailsEventHandler;
 import com.mresearch.databank.client.event.ShowStartPageMainEvent;
+import com.mresearch.databank.client.event.ShowVar2DDEvent;
 import com.mresearch.databank.client.event.ShowVarDetailsEvent;
 import com.mresearch.databank.client.event.ShowVarDetailsEventHandler;
 import com.mresearch.databank.client.event.ShowZaconDetailsEvent;
 import com.mresearch.databank.client.event.ShowZaconDetailsEventHandler;
+import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.presenters.Presenter;
 import com.mresearch.databank.client.presenters.StartPagePerspectivePresenter;
 import com.mresearch.databank.client.presenters.UserLawPerspectivePresenter;
@@ -97,6 +103,9 @@ import com.mresearch.databank.client.views.UserConsultationPerspectiveView;
 import com.mresearch.databank.client.views.UserResearchPerspectiveView;
 import com.mresearch.databank.client.views.UserSearchPerspectiveView;
 import com.mresearch.databank.shared.IShowPlaceParameters;
+import com.mresearch.databank.shared.UserAnalysisSaveDTO;
+import com.mresearch.databank.shared.UserHistoryDTO;
+import com.mresearch.databank.shared.UserResearchSettingDTO;
 
 
 
@@ -224,6 +233,7 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
   
   private void bind() {
     History.addValueChangeHandler(this);
+    //History.
 //    mainNav.setCommand(new Command() {
 //		@Override
 //		public void execute() {
@@ -361,8 +371,61 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
 		public void onShowVarDetails(ShowVarDetailsEvent event) {
 			//if(History.getToken().startsWith("search-results")||History.getToken().startsWith("user-main"))
 				doViewUserResearchVar(event.getVar_id());
+				History.fireCurrentHistoryState();
 		}
 	});
+    
+    eventBus.addHandler(RecalculateDistributionsEvent.TYPE, new RecalculateDistributionsEventHandler() {
+		@Override
+		public void onRecalculateDistributions(final RecalculateDistributionsEvent ev) {
+//			TreeItem it = display.getSelectedItem();
+//			if (it instanceof VarDescItem)
+//			{
+//				VarDescItem rv = (VarDescItem)it;
+//				eventBus.fireEvent(new ShowVarDetailsEvent(rv.getVar_id()));
+//				//weights will be recalculated on server; may be not syncronized!!!
+//			}
+			//History.newItem("");
+				new RPCCall<UserHistoryDTO>() {
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Error on updating account state!");
+				}
+		
+				@Override
+				public void onSuccess(UserHistoryDTO result) {
+					DatabankApp.get().setCurrentUserHistory(result);
+					result.setCurrant_var(ev.getVar_anal());
+					//if(result.getCurrant_var().getDistr_type().equals(UserAnalysisSaveDTO.DISTR_TYPE_1D))
+					if(ev.getVar_anal().getDistr_type().equals(UserAnalysisSaveDTO.DISTR_TYPE_1D))
+					{
+						eventBus.fireEvent(new ShowVarDetailsEvent(ev.getVar_anal().getVar_1().getId()));
+					}else
+					{
+						ShowVar2DDEvent event = new ShowVar2DDEvent(result.getCurrent_research().getResearh().getID());
+						result.getCurrant_var().setDistribution(null);
+						event.setPre_saved(result.getCurrant_var());
+						eventBus.fireEvent(event);
+					}
+					
+					
+				}
+		
+				@Override
+				protected void callService(AsyncCallback<UserHistoryDTO> cb) {
+					UserHistoryDTO dt = DatabankApp.get().getCurrentUserHistory();
+					UserResearchSettingDTO dto = ev.getSetting();
+					dt.setCurrent_research(dto);
+					DatabankApp.get().getUserService().updateResearchState(dt,cb);
+					
+				}
+			}.retry(1);
+		
+		}
+	});
+
+    
     eventBus.addHandler(ShowZaconDetailsEvent.TYPE, new ShowZaconDetailsEventHandler() {
 		
 		@Override

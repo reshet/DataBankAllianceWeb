@@ -27,6 +27,7 @@ import com.mresearch.databank.client.service.UserAccountServiceAsync;
 //import com.mresearch.databank.client.views.HighChartSingleBarPanel;
 //import com.mresearch.databank.client.views.StartPagePerspectiveView;
 import com.mresearch.databank.shared.UserAccountDTO;
+import com.mresearch.databank.shared.UserHistoryDTO;
 import com.smartgwt.client.widgets.HTMLPane;
 
 
@@ -42,6 +43,14 @@ public class DatabankApp implements EntryPoint {
 	private SimpleEventBus eventBus = new SimpleEventBus();
 	private AppController appController;
 	private UserAccountDTO currentUser;
+	private UserHistoryDTO currentUserHistory = new UserHistoryDTO();
+	
+	public UserHistoryDTO getCurrentUserHistory() {
+		return currentUserHistory;
+	}
+	public void setCurrentUserHistory(UserHistoryDTO currentUserHistory) {
+		this.currentUserHistory = currentUserHistory;
+	}
 	private final UserAccountServiceAsync userService = GWT.create(UserAccountService.class);
 	  
 	//@UiField VerticalPanel innerPanel;
@@ -101,7 +110,7 @@ public class DatabankApp implements EntryPoint {
 	
 	public void updateUserAccountState()
 	{
-		new RPCCall<UserAccountDTO>() {
+		new RPCCall<UserHistoryDTO>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -109,13 +118,13 @@ public class DatabankApp implements EntryPoint {
 			}
 
 			@Override
-			public void onSuccess(UserAccountDTO result) {
-				setCurrentUser(result);
+			public void onSuccess(UserHistoryDTO result) {
+				setCurrentUserHistory(result);
 			}
 
 			@Override
-			protected void callService(AsyncCallback<UserAccountDTO> cb) {
-				userService.updateResearchState(getCurrentUser(),cb);
+			protected void callService(AsyncCallback<UserHistoryDTO> cb) {
+				userService.updateResearchState(getCurrentUserHistory(),cb);
 			}
 		}.retry(2);
 
@@ -129,53 +138,76 @@ public class DatabankApp implements EntryPoint {
 		          }
 
 		          
-		          public void onSuccess(UserAccountDTO result) {
-		            setCurrentUser(result);
-		            //Window.alert(result.getAccountType()+" "+result.getName());
-		            if (getCurrentUser() == null)
-		    		{
-		    			Window.alert("Error while login!");
-		    			
-		    			return;
-		    	
-		    		}
-		            
-		            
-		            
-		            
-		            
-		    		if (getCurrentUser().getAccountType().equals("simpleUser"))
-		    		{
-		    			StartPageServiceAsync startpageService = GWT.create(StartPageService.class);
-		    			appController = new UserAppController(startpageService, eventBus,DatabankApp.this);
-		    		}else 
-		    			
-		    		if (getCurrentUser().getAccountType().equals("researchAdmin"))
-		    		{
-		    			appController = new ResearchAdminAppController(eventBus);
-		    		}
-		    		
-		    		else if (getCurrentUser().getAccountType().equals("lawAdmin"))
-		    		{
-		    			appController = new LawAdminAppController(eventBus);
-		    		}
-		    		else if (getCurrentUser().getAccountType().equals("pubAdmin"))
-		    		{
-		    			appController = new PubAdminAppController(eventBus);
-		    		}
-		    		else if (getCurrentUser().getAccountType().equals("juryConsultant"))
-		    		{
-		    			appController = new JuryAdminAppController(eventBus);
-		    		}
-		    		//else if (getCurrentUser().getAccountType().equals("superAdmin"))
-//		    		{
-//		    			appController = new SuperAppController(eventBus);
-//		    		}
-//	
-		    		
-		    		createUI();
+		          public void onSuccess(final UserAccountDTO result) {
+		        	  new RPCCall<UserHistoryDTO>() {
+
+		      			@Override
+		      			public void onFailure(Throwable caught) {
+		      				Window.alert("Error on updating account state!");
+		      			}
+
+		      			@Override
+		      			public void onSuccess(UserHistoryDTO result_hist) {
+		      				 setCurrentUserHistory(result_hist);
+		      				 loginSuccessful(result);
+		      			}
+
+		      			@Override
+		      			protected void callService(AsyncCallback<UserHistoryDTO> cb) {
+		      				userService.updateResearchState(getCurrentUserHistory(),cb);
+		      			}
+		      		}.retry(2);
+		        	 
 		          }
 		        });
+	}
+	public void loginSuccessful(UserAccountDTO result)
+	{
+		   setCurrentUser(result);
+           //Window.alert(result.getAccountType()+" "+result.getName());
+           if (getCurrentUser() == null)
+   		{
+   			Window.alert("Error while login!");
+   			
+   			return;
+   	
+   		}
+           
+           
+           
+           
+           
+   		if (getCurrentUser().getAccountType().equals("simpleUser"))
+   		{
+   			StartPageServiceAsync startpageService = GWT.create(StartPageService.class);
+   			appController = new UserAppController(startpageService, eventBus,DatabankApp.this);
+   		}else 
+   			
+   		if (getCurrentUser().getAccountType().equals("researchAdmin"))
+   		{
+   			appController = new ResearchAdminAppController(eventBus);
+   		}
+   		
+   		else if (getCurrentUser().getAccountType().equals("lawAdmin"))
+   		{
+   			appController = new LawAdminAppController(eventBus);
+   		}
+   		else if (getCurrentUser().getAccountType().equals("pubAdmin"))
+   		{
+   			appController = new PubAdminAppController(eventBus);
+   		}
+   		else if (getCurrentUser().getAccountType().equals("juryConsultant"))
+   		{
+   			appController = new JuryAdminAppController(eventBus);
+   		}
+   		//else if (getCurrentUser().getAccountType().equals("superAdmin"))
+//   		{
+//   			appController = new SuperAppController(eventBus);
+//   		}
+//
+   		
+   		createUI();
+      
 	}
 	public void logout()
 	{

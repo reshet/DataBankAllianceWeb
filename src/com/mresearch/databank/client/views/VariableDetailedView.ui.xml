@@ -151,6 +151,9 @@
 				Переменная использовалась как:
 				<g:FlexTable ui:field="generalizedTbl"></g:FlexTable>
 			<br/>
+		<g:Button text="Сопоставить таблицей" ui:field="compare_table"></g:Button>
+		<g:Button text="Сопоставить графиком" ui:field="compare_graph"></g:Button>
+				<br/>
 			<table>
 				<tr>
 					<th>

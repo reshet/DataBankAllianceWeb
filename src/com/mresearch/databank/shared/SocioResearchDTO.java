@@ -15,21 +15,12 @@ public class SocioResearchDTO implements Serializable,ICatalogizable,IPickableEl
 	private static SocioResearchDTO type;
 	private Long id;
 	private String name;
-	private Long var_weight_id;
-	private String var_weight_name;
+	private ArrayList<Long> var_weight_ids;
+	private ArrayList<String> var_weight_names;
 	private int selection_size;
 	private ArrayList<Long> var_ids = new ArrayList<Long>();
 	private Date start_date,end_date;
 	private Long file_accessor_id;
-	public Long getFile_accessor_id() {
-		return file_accessor_id;
-	}
-
-	public void setFile_accessor_id(Long file_accessor_id) {
-		this.file_accessor_id = file_accessor_id;
-	}
-
-	
 	private HashMap<String,String> filling;
         private String json_descriptor;
 
@@ -42,6 +33,8 @@ public class SocioResearchDTO implements Serializable,ICatalogizable,IPickableEl
 	public void setDesctiption(String desc) {
 		this.description_text = desc;
 	}
+       
+	
 	public SocioResearchDTO()
 	{
 		filling = new HashMap<String, String>();
@@ -80,12 +73,12 @@ public class SocioResearchDTO implements Serializable,ICatalogizable,IPickableEl
 
 	
 
-	public Long getVar_weight_id() {
-		return var_weight_id;
+	public ArrayList<Long> getVar_weight_ids() {
+		return var_weight_ids;
 	}
 
-	public void setVar_weight_id(long var_weight_id) {
-		this.var_weight_id = var_weight_id;
+	public void setVar_weight_ids(ArrayList<Long> var_weight_ids) {
+		this.var_weight_ids = var_weight_ids;
 	}
 
 	public int getSelection_size() {
@@ -116,12 +109,12 @@ public class SocioResearchDTO implements Serializable,ICatalogizable,IPickableEl
 
 	
 
-	public String getVar_weight_name() {
-		return var_weight_name;
+	public ArrayList<String> getVar_weight_names() {
+		return var_weight_names;
 	}
 
-	public void setVar_weight_name(String var_weight_name) {
-		this.var_weight_name = var_weight_name;
+	public void setVar_weight_names(ArrayList<String> var_weight_names) {
+		this.var_weight_names = var_weight_names;
 	}
 
 	public SocioResearchDTO getType() {
@@ -140,6 +133,13 @@ public class SocioResearchDTO implements Serializable,ICatalogizable,IPickableEl
 
 	
 
+	public Long getFile_accessor_id() {
+		return file_accessor_id;
+	}
+
+	public void setFile_accessor_id(Long file_accessor_id) {
+		this.file_accessor_id = file_accessor_id;
+	}
 
     /**
      * @return the filling

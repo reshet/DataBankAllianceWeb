@@ -248,20 +248,21 @@
 								</div>
 							</div>
 						</g:Anchor>
-						<g:Anchor href="javascript:;" ui:field="lawNav">
-							<div class="mm-item mm-21 mm-hover">
-								<div class="mm-caption">
-									Законодательство
-								</div>
-							</div>
-						</g:Anchor>
-						<g:Anchor href="javascript:;" ui:field="juryNav">
-							<div class="mm-item mm-31 mm-hover">
-								<div class="mm-caption">
-									Юридическая консультация
-								</div>
-							</div>
-						</g:Anchor>
+<!-- 						<g:Anchor href="javascript:;" ui:field="lawNav"> -->
+<!-- 							<div class="mm-item mm-21 mm-hover"> -->
+<!-- 								<div class="mm-caption"> -->
+<!-- 									Законодательство -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</g:Anchor> -->
+<!-- 						<g:Anchor href="javascript:;" ui:field="juryNav"> -->
+<!-- 							<div class="mm-item mm-31 mm-hover"> -->
+<!-- 								<div class="mm-caption"> -->
+<!-- 									Юридическая консультация -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</g:Anchor> -->
+						
 						<g:Anchor href="javascript:;" ui:field="pubNav">
 							<div class="mm-item mm-41 mm-hover">
 								<div class="mm-caption">

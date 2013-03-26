@@ -3,6 +3,7 @@ package com.mresearch.databank.client.presenters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.collections.map.HashedMap;
 
@@ -51,10 +52,10 @@ public class AdminResearchDetailedPresenter implements Presenter{
 	public interface EditDisplay
 	 {
 		 long getResearchID();
-		 long getWeightVarID();
+		 ArrayList<Long> getWeightVarIDs();
 		 HasClickHandlers getCondirmBtn();
 		 HasClickHandlers getDeleteBtn();
-		 String getWeightVarName(long weight_var_id);
+		 ArrayList<String> getWeightVarNames(List<Long> weight_var_id);
 		 void setVarsWeight(ArrayList<String> names,ArrayList<Long> ids);
 		 Widget asWidget();
 		 MetaUnitFiller getDBfiller();
@@ -176,8 +177,8 @@ public class AdminResearchDetailedPresenter implements Presenter{
 	{
 		SocioResearchDTO dto = new SocioResearchDTO();
 		dto.setId(edit_display.getResearchID());
-		dto.setVar_weight_id(edit_display.getWeightVarID());
-		dto.setVar_weight_name(edit_display.getWeightVarName(edit_display.getWeightVarID()));
+		dto.setVar_weight_ids(edit_display.getWeightVarIDs());
+		dto.setVar_weight_names(edit_display.getWeightVarNames(edit_display.getWeightVarIDs()));
 		
 		
 		JSON_Representation json = edit_display.getDBfiller().getJSON();
@@ -437,7 +438,7 @@ public class AdminResearchDetailedPresenter implements Presenter{
 
 			@Override
 			protected void callService(AsyncCallback<ArrayList<VarDTO_Light>> cb) {
-				rpcUserService.getResearchVarsSummaries(research_ID, cb);
+				rpcUserService.getResearchVarsWeightCandidates(research_ID, cb);
 			}
 		}.retry(2);
 	}

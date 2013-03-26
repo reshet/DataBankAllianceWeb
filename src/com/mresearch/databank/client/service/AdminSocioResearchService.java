@@ -98,5 +98,6 @@ void setStartupContent(StartupBundleDTO dto);
   //ArrayList<E>
 //  SocioResearchDTO addResearch(SocioResearchDTO research);
 
-ArrayList<VarDTO_Light> findVarsLikeThis(Long var_id,ComparativeSearchParamsDTO params);
+ArrayList<VarDTO_Detailed> findVarsLikeThis(Long var_id,
+		ComparativeSearchParamsDTO params);
 }

@@ -100,6 +100,7 @@ import com.mresearch.databank.shared.SocioResearchDTO_Light;
 import com.mresearch.databank.shared.TextVarDTO_Detailed;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
+import com.mresearch.databank.shared.UserHistoryDTO;
 import com.mresearch.databank.shared.UserResearchSettingDTO;
 import com.mresearch.databank.shared.VarDTO;
 import com.mresearch.databank.shared.VarDTO_Detailed;
@@ -161,6 +162,36 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 		    this.display = view;
 		    bind();
 		  }
+	 private void updateUserHistory(UpdateUserHistoryActor actor){
+		 
+	 }
+	abstract class UpdateUserHistoryActor{
+		public UpdateUserHistoryActor(final UserResearchSettingDTO setting){
+			new RPCCall<UserHistoryDTO>() {
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Error on updating account state!");
+				}
+		
+				@Override
+				public void onSuccess(UserHistoryDTO result) {
+					DatabankApp.get().setCurrentUserHistory(result);
+					doPostAction();
+				}
+		
+				@Override
+				protected void callService(AsyncCallback<UserHistoryDTO> cb) {
+					UserHistoryDTO dt = DatabankApp.get().getCurrentUserHistory();
+					dt.setCurrent_research(setting);
+					DatabankApp.get().getUserService().updateResearchState(dt,cb);
+					
+				}
+			}.retry(1);
+			
+		}
+		public abstract void doPostAction();
+	}
 	@Override
 	public void go(HasWidgets container,ArrayList<String> p_names,ArrayList<String> p_values) {
 		 container.clear();
@@ -176,6 +207,8 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 			 {
 				 display.getCenterPanel().clear();
 				 display.getCenterPanel().add(previous_centerpanel_state);
+//				 USERRESEARCHSETTINGDTO DTO = DATABANKAPP.GET().GETCURRENTUSERHISTORY().GETCURRENT_RESEARCH();
+//				 DTO.SETRESEARH(RESEARH)
 			 }
 			 else{
 				 prev_res_id = new Long(current_research_id);
@@ -807,14 +840,13 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 			//	AdminResearchDetailedPresenter presenter = new AdminResearchDetailedPresenter(rpcUserService,rpcAdminService, eventBus, ad_view, ed_view);
 			//	presenter.go(display.getCenterPanel());
 				
-				final UserAnalysisSaveDTO sv_dt = new UserAnalysisSaveDTO();
-				sv_dt.setVar_1(result);
-				sv_dt.setDistribution(result.getDistribution());
-				final UserResearchSettingDTO sett = new UserResearchSettingDTO();
+				//UserAccountDTO accdto = DatabankApp.get().getCurrentUser();
+				
+				//histdto.
 				//if
 				
 				//fetchResearchDetailesFirst(result.getResearch_id());
-				if(current_research == null)
+				if(current_research == null || !result.getResearch_id().equals(current_research.getDto().getId()))
 				{
 					new RPCCall<ResearchBundleDTO>() {
 
@@ -826,11 +858,30 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 						@Override
 						public void onSuccess(ResearchBundleDTO result_dto) {
 							current_research = result_dto;
-							
+							//UserHistoryDTO histdto = DatabankApp.get().getCurrentUserHistory();
+							final UserResearchSettingDTO sett = new UserResearchSettingDTO();
 							sett.setResearh(current_research.getDto());
 							//UserAccountDTO user = DatabankApp.get().getCurrentUser();
-							sv_dt.setSeting(sett);
-							showVariableView(result, sv_dt);
+							//DatabankApp.get().getCurrentUserHistory().setCurrent_research(sett);
+							updateUserHistory(new UpdateUserHistoryActor(sett){
+								@Override
+								public void doPostAction() {
+									final UserAnalysisSaveDTO sv_dt = new UserAnalysisSaveDTO();
+									sv_dt.setVar_1(result);
+									sv_dt.setDistribution(result.getDistribution());
+									UserHistoryDTO histdto2 = DatabankApp.get().getCurrentUserHistory();
+									final UserResearchSettingDTO sett2 = histdto2.getCurrent_research();
+									//sett2.setResearh(current_research.getDto());
+									
+									sv_dt.setSeting(sett2);
+		
+									showVariableView(result, sv_dt);
+								}
+							});
+							//showVariableView(result, sv_dt);
+							
+							
+						
 						}
 
 						@Override
@@ -840,6 +891,13 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 					}.retry(2);
 				}else
 				{
+					final UserAnalysisSaveDTO sv_dt = new UserAnalysisSaveDTO();
+					
+					sv_dt.setVar_1(result);
+					sv_dt.setDistribution(result.getDistribution());
+					UserHistoryDTO histdto = DatabankApp.get().getCurrentUserHistory();
+					final UserResearchSettingDTO sett = histdto.getCurrent_research();
+					
 					sett.setResearh(current_research.getDto());
 					//UserAccountDTO user = DatabankApp.get().getCurrentUser();
 					sv_dt.setSeting(sett);
@@ -848,10 +906,17 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 			}
 
 			@Override
-			protected void callService(AsyncCallback<VarDTO_Detailed> cb) {
-				rpcService.getVarDetailed(id_var, cb);
+			protected void callService(final AsyncCallback<VarDTO_Detailed> cb) {
+				UserHistoryDTO histdto = DatabankApp.get().getCurrentUserHistory();
+				final UserResearchSettingDTO sett = histdto.getCurrent_research();
+				updateUserHistory(new UpdateUserHistoryActor(sett){
+					@Override
+					public void doPostAction() {
+						rpcService.getVarDetailed(id_var, cb);
+					}
+				});
 			}
-		}.retry(3);
+		}.retry(1);
 	}
 	
 	private void showVariableView(final VarDTO_Detailed result,final UserAnalysisSaveDTO sv_dt)
@@ -1015,10 +1080,25 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 			}
 
 			@Override
-			public void onSuccess(ResearchBundleDTO result) {
+			public void onSuccess(final ResearchBundleDTO result) {
 				current_research = result;
-				display.showResearchDetailes(result);
-				previous_centerpanel_state = display.getCenterPanel().getWidget(0);
+				UserResearchSettingDTO setting = new UserResearchSettingDTO();
+				if(DatabankApp.get().getCurrentUserHistory()!=null &&
+						DatabankApp.get().getCurrentUserHistory().getCurrent_research()!=null &&
+						DatabankApp.get().getCurrentUserHistory().getCurrent_research().getResearh() !=null &&
+						DatabankApp.get().getCurrentUserHistory().getCurrent_research().getResearh().getId() == result.getDto().getId()){
+					setting = DatabankApp.get().getCurrentUserHistory().getCurrent_research();
+				}
+				setting.setResearh(result.getDto());
+				//DatabankApp.get().getCurrentUserHistory().getCurrent_research().setResearh(result.getDto());
+				updateUserHistory(new UpdateUserHistoryActor(setting){
+					@Override
+					public void doPostAction() {
+						display.showResearchDetailes(result);
+						previous_centerpanel_state = display.getCenterPanel().getWidget(0);
+					}
+				});
+				
 			}
 
 			@Override

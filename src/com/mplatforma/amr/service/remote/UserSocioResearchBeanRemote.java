@@ -12,14 +12,15 @@ import java.util.List;
 @Remote
 public interface UserSocioResearchBeanRemote {
     SocioResearchDTO getResearch(long id);
-    VarDTO getVar(long id,UserAccountDTO dto);
-    VarDTO_Detailed getVarDetailed(long id,UserAccountDTO dto);
+    VarDTO getVar(long id,UserAccountDTO dto,UserHistoryDTO hist_dto);
+    VarDTO_Detailed getVarDetailed(long id,UserAccountDTO dto,UserHistoryDTO hist_dto);
     ArrayList<VarDTO_Research> getVarsResearchNames(ArrayList<Long> keys);
+    ArrayList<VarDTO_Light> getResearchVarsWeightCandidates(long research_id);
     ArrayList<SocioResearchDTO_Light> getResearchSummaries();
     ArrayList<SocioResearchDTO_Light> getResearchSummaries(List<FilterBaseDTO> filters);
     ArrayList<SocioResearchDTO_Light> getResearchDTOs(ArrayList<Long> ids); 
     ArrayList<VarDTO_Light> getResearchVarsSummaries(long research_id);
-    ArrayList<Double> get2DDistribution(long var_id1,long var_id2,UserAccountDTO user);
+    ArrayList<Double> get2DDistribution(long var_id1,long var_id2,UserAccountDTO user,UserHistoryDTO hist_dto);
     ResearchFilesDTO getResearchFiles(long research_id);
     SocioResearchFilesDTO getResearchFilesInCategory(long research_id,String category);
     ArrayList<SSE_DTO> getSSEs(String clas, String kind);

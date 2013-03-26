@@ -185,7 +185,7 @@ public class AdminSocioResearchServiceImpl extends RemoteServiceServlet implemen
 		eao.setStartupContent(dto);
 	}
 	@Override
-	public ArrayList<VarDTO_Light> findVarsLikeThis(Long var_id,
+	public ArrayList<VarDTO_Detailed> findVarsLikeThis(Long var_id,
 			ComparativeSearchParamsDTO params) {
 		return eao.findVarsLikeThis(var_id, params);
 	}

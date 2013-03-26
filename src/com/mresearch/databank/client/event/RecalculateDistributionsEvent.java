@@ -4,16 +4,23 @@ import java.util.ArrayList;
 
 import com.google.gwt.event.shared.GwtEvent;
 import com.mresearch.databank.shared.CatalogConceptDTO;
+import com.mresearch.databank.shared.UserAnalysisSaveDTO;
+import com.mresearch.databank.shared.UserResearchSettingDTO;
 
 public class RecalculateDistributionsEvent extends GwtEvent<RecalculateDistributionsEventHandler> {
 	public static Type<RecalculateDistributionsEventHandler> TYPE = new Type<RecalculateDistributionsEventHandler>();
-	private Integer weights_use,filters_use;
-	private ArrayList<String> filters;
-	public RecalculateDistributionsEvent(Integer weights_use,Integer filters_use,ArrayList<String> filters)
+	private UserResearchSettingDTO setting;
+	private UserAnalysisSaveDTO var_anal;
+	public UserResearchSettingDTO getSetting() {
+		return setting;
+	}
+	public void setSetting(UserResearchSettingDTO setting) {
+		this.setting = setting;
+	}
+	public RecalculateDistributionsEvent(UserResearchSettingDTO dto,UserAnalysisSaveDTO var_anal)
 	{
-		this.weights_use = weights_use;
-		this.filters_use = filters_use;
-		this.filters = filters;
+		this.setting = dto;
+		this.var_anal = var_anal;
 	}
 	@Override
 	public Type<RecalculateDistributionsEventHandler> getAssociatedType() {
@@ -24,24 +31,12 @@ public class RecalculateDistributionsEvent extends GwtEvent<RecalculateDistribut
 	protected void dispatch(RecalculateDistributionsEventHandler handler) {
 		handler.onRecalculateDistributions(this);
 	}
+	public UserAnalysisSaveDTO getVar_anal() {
+		return var_anal;
+	}
+	public void setVar_anal(UserAnalysisSaveDTO var_anal) {
+		this.var_anal = var_anal;
+	}
 
-	public Integer getWeights_use() {
-		return weights_use;
-	}
-	public void setWeights_use(Integer weights_use) {
-		this.weights_use = weights_use;
-	}
-	public Integer getFilters_use() {
-		return filters_use;
-	}
-	public void setFilters_use(Integer filters_use) {
-		this.filters_use = filters_use;
-	}
-	public ArrayList<String> getFilters() {
-		return filters;
-	}
-	public void setFilters(ArrayList<String> filters) {
-		this.filters = filters;
-	}
 	
 }

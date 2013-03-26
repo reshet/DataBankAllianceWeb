@@ -17,7 +17,7 @@ public interface UserAccountBeanRemote {
     UserAccountDTO getUserAccount(String email, String password);
     UserHistoryDTO getUserResearchHistory(long user_id,long research_id);
     UserAccountDTO getDefaultUser();   
-    UserAccountDTO updateAccountResearchState(UserAccountDTO dto);
+    UserHistoryDTO updateAccountResearchState(UserHistoryDTO dto,long acc_id);
     void initDefaults();
     StartupBundleDTO getStartupContent();
     void addToSelectedResearches(UserResearchSettingDTO dto,long user_id);

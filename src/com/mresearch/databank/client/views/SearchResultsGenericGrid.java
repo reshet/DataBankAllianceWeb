@@ -42,7 +42,7 @@ public class SearchResultsGenericGrid extends VerticalPanel
 
     ListGrid countryGrid = new ListGrid();
     countryGrid.setZIndex(0);
-    
+    countryGrid.setGroupByField("_type_group");
     countryGrid.setWidth("1024");
     countryGrid.setHeight("100%");
     countryGrid.setShowAllRecords(Boolean.valueOf(true));
@@ -92,7 +92,6 @@ public class SearchResultsGenericGrid extends VerticalPanel
     //ListGridField id_f = new ListGridField("_id", "ID");
     ListGridField type_f = new ListGridField("_type_vis", "Тип сущности");
     ListGridField contents_f = new ListGridField("_contents", "Содержание");
-    countryGrid.setGroupByField("_type_group");
    // id_f.setWidth(25);
     type_f.setWidth(120);
    // contents_f.setWidth(600);

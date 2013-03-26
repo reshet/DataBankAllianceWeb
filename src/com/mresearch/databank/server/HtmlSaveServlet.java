@@ -140,8 +140,11 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 				SocioResearchDTO research;
 			    try {
 			      research = eao.getResearch(research_id);
+			      
 			      String var_weight_name = null;
-			      if(research != null )var_weight_name= research.getVar_weight_name();
+			      //TODO add var from personal account settings
+			      //if(research != null )var_weight_name= research.getVar_weight_name();
+			      
 			      if (var_weight_name != null) ans+=var_weight_name;
 			      	else 	ans+=" нет";
 			    	  

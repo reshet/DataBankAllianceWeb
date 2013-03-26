@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -110,7 +111,18 @@ public class UserResearchDetailedView extends Composite {
 //		this.selectionAppr.setText(sel_appr);
 //		//this.selectionAppr.setText(dto.getSelection_appr());
 //		this.method.setText(dto.getMethod());
-		this.weights.setText(dto.getVar_weight_name());
+		this.weights.setText("Без взвешивания");
+		if(dto.getVar_weight_names()!=null)
+		{
+			String text = "";
+			for(String st:dto.getVar_weight_names())
+			{
+				text+=st+";";
+			//	this.weights.addItem(st);
+			}
+			this.weights.setText(text);
+		}
+		//this.weights.setSelectedIndex(0);
 		//orgImpl.setText(text);
 		renderDBfillers();
 	}

@@ -26,6 +26,7 @@ import com.mresearch.databank.shared.SocioResearchDTO;
 import com.mresearch.databank.shared.SocioResearchDTO_Light;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
+import com.mresearch.databank.shared.UserHistoryDTO;
 import com.mresearch.databank.shared.UserResearchSettingDTO;
 
 
@@ -35,7 +36,7 @@ public interface UserAccountService extends RemoteService {
   public UserAccountDTO login(String email, String password);
   public void logout();
   public void initDefaultUsers();
-  public UserAccountDTO updateResearchState(UserAccountDTO dto);
+  public UserHistoryDTO updateResearchState(UserHistoryDTO dto);
 List<UserAnalysisSaveDTO> getUserAllAnalisysList();
 List<SocioResearchDTO_Light> getMyResearchesList();
 void saveResearchAnalisys(UserAnalysisSaveDTO dto);

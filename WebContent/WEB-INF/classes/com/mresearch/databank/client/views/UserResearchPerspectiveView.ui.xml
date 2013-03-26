@@ -121,7 +121,7 @@
 				</g:east>	
 				
 			</g:SplitLayoutPanel>
-			<views:WhiteFooter></views:WhiteFooter>
+<!-- 			<views:WhiteFooter></views:WhiteFooter> -->
 	</g:VerticalPanel>
 	
 </ui:UiBinder> 

@@ -9,10 +9,12 @@ import java.util.Map;
 import org.opendatafoundation.data.spss.mod.SPSSUtils;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -50,9 +52,10 @@ public class TextVariableDetailedView extends Composite {
 	@UiField VerticalPanel research_link;
 	@UiField HorizontalPanel analysis_bar;
 	@UiField Label concept_name,concept_value;
-
+	private UserResearchPerspectivePresenter.Display display;
 	public TextVariableDetailedView(TextVarDTO_Detailed dto,MetaUnitMultivaluedEntityDTO dt,SimpleEventBus bus,UserResearchPerspectivePresenter.Display display,UserAnalysisSaveDTO sv_dt) {
 		initWidget(uiBinder.createAndBindUi(this));
+		this.display = display;
 		this.dto = dto;
 		this.db = dt;
 		UserAccountDTO user = DatabankApp.get().getCurrentUser();
@@ -85,6 +88,7 @@ public class TextVariableDetailedView extends Composite {
 		}
 		renderDBfillers();
 	}
+	
 	private void renderDBfillers()
 	{
 		//elasticDBfields.clear();

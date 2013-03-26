@@ -67,7 +67,7 @@ public interface AdminSocioResearchServiceAsync {
 	void updateVar(VarDTO_Detailed var, AsyncCallback<Void> callback);
 	void setStartupContent(StartupBundleDTO dto, AsyncCallback<Void> callback);
 	void findVarsLikeThis(Long var_id, ComparativeSearchParamsDTO params,
-			AsyncCallback<ArrayList<VarDTO_Light>> callback);
+			AsyncCallback<ArrayList<VarDTO_Detailed>> callback);
 	void generalizeVars(ArrayList<Long> gen_var_ids,
 			AsyncCallback<Void> callback);
 	

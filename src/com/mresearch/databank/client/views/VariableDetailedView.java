@@ -3,10 +3,12 @@ package com.mresearch.databank.client.views;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import org.moxieapps.gwt.highcharts.client.Chart;
 import org.moxieapps.gwt.highcharts.client.ChartTitle;
+import org.moxieapps.gwt.highcharts.client.Legend;
 import org.moxieapps.gwt.highcharts.client.Legend.Align;
 import org.moxieapps.gwt.highcharts.client.Point;
 import org.moxieapps.gwt.highcharts.client.Series;
@@ -26,6 +28,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -67,6 +70,8 @@ public class VariableDetailedView extends Composite {
 	@UiField Label dates,gen_geath,sel_size,org_impl,tag;
 	@UiField HorizontalPanel analysis_bar;
 	@UiField VerticalPanel research_link;
+	private UserResearchPerspectivePresenter.Display display;
+	
 //	Hyperlink link;
 //	private FormPanel form;
 //	private TextBox hidden_box;
@@ -128,6 +133,7 @@ public class VariableDetailedView extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.db = dt;
 		this.dto = dto;
+		this.display = display;
 		
 		setResearchMeta();
 		UserAccountDTO user = DatabankApp.get().getCurrentUser();
@@ -235,6 +241,18 @@ public class VariableDetailedView extends Composite {
 		if(mapa.containsKey("socioresearch_tag"))tag.setText(mapa.get("socioresearch_tag"));
 		
 	}
+	@UiHandler(value="compare_table")
+	public void compare_table(ClickEvent ev)
+	{
+		display.getCenterPanel().clear();
+		display.getCenterPanel().add(new CompareVariableTablesView(dto.getGen_vars_ids(),display));
+	}
+	@UiHandler(value="compare_graph")
+	public void compare_graph(ClickEvent ev)
+	{
+		display.getCenterPanel().clear();
+		display.getCenterPanel().add(new CompareVariableGraphsView(dto.getGen_vars_ids(),display));
+	}
 	private void renderDBfillers()
 	{
 		Collection<MetaUnitDTO> base = db.getSub_meta_units();
@@ -297,9 +315,9 @@ public class VariableDetailedView extends Composite {
 			   .setMarginRight(10)
 //			   .setWidth100()
 //			   .setHeight100()
-////			    .setLegend(new Legend()
-//				      .setAlign(Legend.Align.RIGHT)
-//				      .setVerticalAlign(Legend.Align.)
+//			    .setLegend(new Legend()
+//				      .setAlign(Legend.Align.CENTER)
+//				      //.setVerticalAlign(Legend.Align.)
 //				      .setBackgroundColor("#CCCCCC")
 //				      .setShadow(true)
 //				   )

@@ -23,7 +23,7 @@
 		
 		<g:HorizontalPanel>
 				<g:Label>Взвешивание:</g:Label>
-				<g:Label ui:field="weights">Без взвешивания.</g:Label>
+				<g:Label ui:field="weights"/>
 		</g:HorizontalPanel>
 		
 	</g:VerticalPanel>

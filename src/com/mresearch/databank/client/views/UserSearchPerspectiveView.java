@@ -50,7 +50,7 @@ public class UserSearchPerspectiveView extends Composite implements UserSearchPe
 	//@UiField FlexTable res_table;
 	//@UiField Label queryStr;
 	SimpleResearchList simpleResearchListItem;
-	@UiField CheckBox all,socioresearch,sociovars,laws,publications,consults;
+	@UiField CheckBox all,socioresearch,sociovars,publications;//laws,consults;
 	//@UiField ImprovedSearchView impr_search_view;
 	private ArrayList<SearchResultDTO> resultsList;
 	public UserSearchPerspectiveView() {
@@ -147,15 +147,16 @@ public class UserSearchPerspectiveView extends Composite implements UserSearchPe
 	@Override
 	public String[] getTypesToSearch() {
 		ArrayList<String> types = new ArrayList<String>();
-		if(all.getValue()) return new String[]{"research","sociovar"
-												,"law","consultation","publication"
+		if(all.getValue()) return new String[]{"research","sociovar",
+												//"law","consultation",
+												"publication"
 												};
 		
 		if(socioresearch.getValue())types.add("research");
 		if(sociovars.getValue())types.add("sociovar");
-		if(laws.getValue())types.add("law");
+		//if(laws.getValue())types.add("law");
 		if(publications.getValue())types.add("publication");
-		if(consults.getValue())types.add("consultation");
+		//if(consults.getValue())types.add("consultation");
 		String [] arr = new String[types.size()];
 		types.toArray(arr);
 

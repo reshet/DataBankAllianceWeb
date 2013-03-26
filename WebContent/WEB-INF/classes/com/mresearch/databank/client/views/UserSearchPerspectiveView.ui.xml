@@ -78,8 +78,8 @@
 <!-- 							<g:CheckBox text="Опросы"/> -->
 							<g:CheckBox text="Переменные" ui:field="sociovars"/>
 							<g:CheckBox text="Публикации" ui:field="publications"/>
-							<g:CheckBox text="Законодательство" ui:field="laws"/>
-							<g:CheckBox text="Консультации юриста" ui:field="consults"/>
+<!-- 							<g:CheckBox text="Законодательство" ui:field="laws"/> -->
+<!-- 							<g:CheckBox text="Консультации юриста" ui:field="consults"/> -->
 						</g:VerticalPanel>
 						<g:VerticalPanel>
 							<g:HorizontalPanel>

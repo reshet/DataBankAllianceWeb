@@ -47,6 +47,7 @@ import com.mresearch.databank.client.views.DBviewers.VarMultiValuedFieldViewer;
 import com.mresearch.databank.shared.ComparativeSearchParamsDTO;
 import com.mresearch.databank.shared.JSON_Representation;
 import com.mresearch.databank.shared.MetaUnitMultivaluedEntityDTO;
+import com.mresearch.databank.shared.SocioResearchDTO_Light;
 import com.mresearch.databank.shared.VarDTO_Detailed;
 import com.mresearch.databank.shared.VarDTO_Light;
 import com.rednels.ofcgwt.client.ChartWidget;
@@ -93,7 +94,7 @@ public class VariableEditView extends Composite {
 	private MetaUnitMultivaluedEntityDTO db;
 	private VarDTO_Detailed dto;
 	private AdminResearchPerspectivePresenter.Display displ;
-	private ArrayList<VarDTO_Light> vars_to_generalize;
+	private ArrayList<VarDTO_Detailed> vars_to_generalize;
 	public VariableEditView(AdminResearchPerspectivePresenter.Display  displ,final VarDTO_Detailed dto,MetaUnitMultivaluedEntityDTO dt) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.displ= displ;
@@ -241,18 +242,18 @@ public class VariableEditView extends Composite {
 	@UiHandler(value="searchBtn")
 	public void onCompSearchDo(ClickEvent ev)
 	{
-		new RPCCall<ArrayList<VarDTO_Light>>() {
+		new RPCCall<ArrayList<VarDTO_Detailed>>() {
 			@Override
 			public void onFailure(Throwable arg0) {
 				Window.alert("Ошибка поиска похожих переменных!");
 			}
 			@Override
-			public void onSuccess(ArrayList<VarDTO_Light> res) {
+			public void onSuccess(ArrayList<VarDTO_Detailed> res) {
 				vars_to_generalize = res;
 				fillToGeneralizeTbl();
 			}
 			@Override
-			protected void callService(AsyncCallback<ArrayList<VarDTO_Light>> cb) {
+			protected void callService(AsyncCallback<ArrayList<VarDTO_Detailed>> cb) {
 				ComparativeSearchParamsDTO dt = new ComparativeSearchParamsDTO();
 				AdminSocioResearchService.Util.getInstance().findVarsLikeThis(dto.getId(),dt, cb);
 			}
@@ -268,6 +269,9 @@ public class VariableEditView extends Composite {
 		for(int j = 0; j < vars_to_generalize.size();j++)
 		{
 			to_generalizeTbl.setWidget(j, 0, new CheckBox("идентична"));
+			ResearchDescItemView rw = new ResearchDescItemView(new SocioResearchDTO_Light(vars_to_generalize.get(j).getResearch_id(),
+					vars_to_generalize.get(j).getResearch_name()));
+			to_generalizeTbl.setWidget(j, 2, rw);
 			to_generalizeTbl.setWidget(j, 1, new VarLink(vars_to_generalize.get(j).getId(),vars_to_generalize.get(j).getLabel()));
 			//to_generalizeTbl.setWidget(j, 2, new Label(", из исследования"));
 			//to_generalizeTbl.setWidget(j, 3, new ResearchLink(res.get(j).,dto.getGen_research_names().get(j)));

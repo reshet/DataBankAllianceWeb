@@ -16,6 +16,7 @@ import com.mresearch.databank.shared.SocioResearchDTO;
 import com.mresearch.databank.shared.SocioResearchDTO_Light;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
+import com.mresearch.databank.shared.UserHistoryDTO;
 import com.mresearch.databank.shared.UserResearchSettingDTO;
 
 @SuppressWarnings("serial")
@@ -90,33 +91,43 @@ public class UserAccountServiceImpl extends RemoteServiceServlet implements
 @Override
 public void logout() {
 	this.getThreadLocalRequest().getSession().removeAttribute("user");
+	this.getThreadLocalRequest().getSession().removeAttribute("user_history");
 }
 
 
 
 
 @Override
-public UserAccountDTO updateResearchState(UserAccountDTO dto_acc) {
+public UserHistoryDTO updateResearchState(UserHistoryDTO dto_acc) {
 	UserAccountDTO userAcc =   (UserAccountDTO) this.getThreadLocalRequest().getSession().getAttribute("user");
 	if (userAcc != null)
 	{
+		//UserHistoryDTO userHist =   (UserHistoryDTO) this.getThreadLocalRequest().getSession().getAttribute("user_history");
+		
 		if (userAcc.getId() != 0)
 		{
-			UserAccountDTO account,dto;
-			dto = eao.updateAccountResearchState(dto_acc);	
-			this.getThreadLocalRequest().getSession().setAttribute("user", dto);
+			UserHistoryDTO dto;
+			dto = eao.updateAccountResearchState(dto_acc,userAcc.getId());	
+			this.getThreadLocalRequest().getSession().setAttribute("user_history", dto);
+			System.out.println("user id == "+userAcc.getId());
 			return dto;
 		}
 		else
 		{
-			if(dto_acc.getCurrent_research() == 0 && dto_acc.getCurrant_var() != 0)
+			if(dto_acc.getCurrent_research().getResearh().getID() == 0 && dto_acc.getCurrant_var().getVar_1().getId() != 0)
 			{
-				dto_acc.setCurrent_research(seao.getVar(dto_acc.getCurrant_var(), null).getResearch_id());
+				dto_acc.getCurrent_research().getResearh().setId(
+						seao.getVar(dto_acc.getCurrant_var().getVar_1().getId(), null,null).getResearch_id());
 			}
-			this.getThreadLocalRequest().getSession().setAttribute("user", dto_acc);
+			//UserHistoryDTO dto;
+			
+			//dto = eao.updateAccountResearchState(dto_acc);
+			this.getThreadLocalRequest().getSession().setAttribute("user_history", dto_acc);
+			System.out.println("user id == 0");
 			return dto_acc;
 		}
 	}
+	System.out.println("useracc == null");
 	return dto_acc;
 }
 

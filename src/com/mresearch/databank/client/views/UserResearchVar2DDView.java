@@ -30,6 +30,7 @@ import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
+import com.mresearch.databank.shared.UserHistoryDTO;
 import com.mresearch.databank.shared.VarDTO;
 import com.mresearch.databank.shared.VarDTO_Detailed;
 import com.mresearch.databank.shared.VarDTO_Light;
@@ -75,7 +76,7 @@ public class UserResearchVar2DDView extends Composite {
 		//UserAccountDTO user = DatabankApp.get().getCurrentUser();
 		anal_bar_w = new AnalisysBarView(bus, display,this.pre_saved);
 		analysis_bar.add(anal_bar_w);
-		new RPCCall<UserAccountDTO>() {
+		new RPCCall<UserHistoryDTO>() {
 			
 			@Override
 			public void onFailure(Throwable caught) {
@@ -83,8 +84,8 @@ public class UserResearchVar2DDView extends Composite {
 			}
 
 			@Override
-			public void onSuccess(UserAccountDTO result) {
-				DatabankApp.get().setCurrentUser(result);
+			public void onSuccess(UserHistoryDTO result) {
+				DatabankApp.get().setCurrentUserHistory(result);
 				//target_panel.add(new SaveHTMLAddon(content_panel));
 				var1_lbox.addItem("Загрузка переменных...");
 				var2_lbox.addItem("Загрузка переменных...");
@@ -93,8 +94,8 @@ public class UserResearchVar2DDView extends Composite {
 			}
 
 			@Override
-			protected void callService(AsyncCallback<UserAccountDTO> cb) {
-				DatabankApp.get().getUserService().updateResearchState(DatabankApp.get().getCurrentUser(),cb);
+			protected void callService(AsyncCallback<UserHistoryDTO> cb) {
+				DatabankApp.get().getUserService().updateResearchState(DatabankApp.get().getCurrentUserHistory(),cb);
 			}
 		}.retry(2);
 		
@@ -188,8 +189,8 @@ public class UserResearchVar2DDView extends Composite {
 			var2_lbox.addItem(dto.getCode()+"::"+dto.getLabel());
 		}
 		
-		if(pre_saved.getDistribution()!=null){
-			fill2DDtable(pre_saved.getVar_1(), pre_saved.getVar_2(), pre_saved.getDistribution());
+		if(pre_saved.getVar_1()!= null && pre_saved.getVar_2()!=null)
+		{
 			int index1=0,index2=0;
 			int i = 0;
 			for(VarDTO_Light dto:arr)
@@ -200,10 +201,13 @@ public class UserResearchVar2DDView extends Composite {
 			}
 			var1_lbox.setItemSelected(index1, true);
 			var2_lbox.setItemSelected(index2, true);
-			
 		}
-		
-		
+		if(pre_saved.getDistribution()!=null){
+			fill2DDtable(pre_saved.getVar_1(), pre_saved.getVar_2(), pre_saved.getDistribution());
+		}else
+		{
+			if(var1_lbox.getSelectedIndex()!=0&&var2_lbox.getSelectedIndex()!=0)fetchSelectedVarDTOs();
+		}
 	}
 	private void fill2DDtable(VarDTO var1,VarDTO var2,ArrayList<Double> distr)
 	{

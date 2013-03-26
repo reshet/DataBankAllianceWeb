@@ -28,7 +28,7 @@
 	</g:HTMLPanel>
 					<g:HorizontalPanel>
 				<g:Label styleName="{style.category}">Взвешивание:</g:Label>
-				<g:ListBox ui:field="weights" />
+				<g:ListBox ui:field="weights" height="220" multipleSelect="true"/>
 			</g:HorizontalPanel>
 			<g:HorizontalPanel>
 				<g:Button ui:field="confirmBtn">Подтвердить</g:Button>

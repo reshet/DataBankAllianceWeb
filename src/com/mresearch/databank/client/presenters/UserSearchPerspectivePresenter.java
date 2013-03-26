@@ -21,6 +21,7 @@ import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -251,9 +252,12 @@ public class UserSearchPerspectivePresenter implements Presenter
 	    	  JSONObject obj_b = new JSONObject();
 		      JSONObject obj_text = new JSONObject();
 		      obj_text.put("_all", new JSONString(display.getContainsOneOf()));
-		      obj_b.put("text", obj_text);
+		      obj_b.put("match_phrase_prefix", obj_text);
+		      //obj_b.put("prefix", obj_text);
+		      
 		      
 		      arr_contains.set(index_c++, obj_b);
+		      History.newItem("search-results@query="+display.getContainsOneOf());
 	      }if(display.getContainsExact().length()>0)
 	      {
 	    	  JSONObject obj_b = new JSONObject();
@@ -276,7 +280,7 @@ public class UserSearchPerspectivePresenter implements Presenter
 	    	  JSONObject obj_b = new JSONObject();
 		      JSONObject obj_text = new JSONObject();
 		      obj_text.put("_all", new JSONString(display.getContainsOr()));
-		      obj_b.put("text", obj_text);
+		      obj_b.put("match_phrase_prefix", obj_text);
 		      arr_contains_too.set(index_c2++, obj_b);
 	      }
 
@@ -294,7 +298,7 @@ public class UserSearchPerspectivePresenter implements Presenter
 	    	  JSONObject obj_b = new JSONObject();
 		      JSONObject obj_text = new JSONObject();
 		      obj_text.put("_all", new JSONString(display.getContainsNoneOf()));
-		      obj_b.put("text", obj_text);
+		      obj_b.put("match_phrase_prefix", obj_text);
 		      arr_not_contains.set(index_c3++, obj_b);
 	      }
 	     
