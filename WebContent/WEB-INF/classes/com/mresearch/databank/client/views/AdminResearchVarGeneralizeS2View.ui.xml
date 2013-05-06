@@ -23,8 +23,10 @@
 			background-color: #444488;
 		}
 	</ui:style>
-	<g:VerticalPanel>
-		<g:FlexTable ui:field="the_table" styleName="{style.flexTable}"></g:FlexTable>
-		<g:Button ui:field="generalize_btn" text="Генерализировать!"></g:Button>
-	</g:VerticalPanel>
+	<g:ScrollPanel width="100%" height="100%">
+		<g:VerticalPanel width="100%" height="100%">
+			<g:Button ui:field="generalize_btn" text="Генерализировать!"></g:Button>
+			<g:FlexTable ui:field="the_table" styleName="{style.flexTable}"></g:FlexTable>		
+		</g:VerticalPanel>
+	</g:ScrollPanel>
 </ui:UiBinder> 

@@ -9,9 +9,9 @@ public class DialogBoxFactory {
 	{
 		void doAction();
 	}
-	public static PopupPanel createDialogBox(String header,Widget w,closeAction action) {
+	public static PopupPanel createDialogBox(String header,Widget w,closeAction action,String close_text_btn) {
 	    final PopupPanel dialogBox = new PopupPanel();
-	    DialogBoxFrame fr = new DialogBoxFrame(header, dialogBox, w,action);
+	    DialogBoxFrame fr = new DialogBoxFrame(header, dialogBox, w,action,close_text_btn);
 	  	dialogBox.setWidget(fr);
 	    dialogBox.setGlassEnabled(true);
 	    dialogBox.setAnimationEnabled(true);

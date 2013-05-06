@@ -103,40 +103,33 @@
 					<div class="{style.tableStyle}">
 					<table>
 						<tr>
-							<td><g:Label styleName="{style.text_f}">Текст вопроса:  </g:Label></td>
-							<td colspan="3"><g:Label ui:field="varText"></g:Label></td>
+							<td colspan="2"><g:Label styleName="{style.text_f}">Текст вопроса:  </g:Label></td>
+						</tr>
+						<tr>	
+							<td colspan="2"><g:Label ui:field="varText"></g:Label></td>
 						</tr>
 						<tr>
-							<td>Исследование
-							</td>
-							<td>Даты
-							</td>
-							<td>Генеральная совокупность
-							</td>
-							<td>Объем выборки
-							</td>
-<!-- 							<td>Организация-исполнитель -->
-<!-- 							</td> -->
-<!-- 							<td>Тэги -->
-<!-- 							</td> -->
-						</tr>
-						
-						<tr>
+							<td>Исследование</td>
 							<td>
-							<div class="{style.cleaner}">
-							<g:VerticalPanel ui:field="research_link"></g:VerticalPanel>
-							</div>
+								<div class="{style.cleaner}">
+									<g:VerticalPanel ui:field="research_link"></g:VerticalPanel>
+								</div>
 							</td>
+						</tr>
+						<tr>
+							<td>Даты</td>
 							<td><g:Label ui:field="dates"/>
 							</td>
+						</tr>
+						<tr>
+							<td>Генеральная совокупность</td>
 							<td><g:Label ui:field="gen_geath"/>
 							</td>
+						</tr>
+						<tr>
+							<td>Объем выборки</td>
 							<td><g:Label ui:field="sel_size"/>
 							</td>
-<!-- 							<td><g:Label ui:field="org_impl"/> -->
-<!-- 							</td> -->
-<!-- 							<td><g:Label ui:field="tag"/> -->
-<!-- 							</td> -->
 						</tr>
 					</table>
 					</div>

@@ -79,6 +79,7 @@ import com.mresearch.databank.client.event.ShowZaconDetailsEventHandler;
 import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.presenters.Presenter;
 import com.mresearch.databank.client.presenters.StartPagePerspectivePresenter;
+import com.mresearch.databank.client.presenters.UpdateUserHistoryActor;
 import com.mresearch.databank.client.presenters.UserLawPerspectivePresenter;
 import com.mresearch.databank.client.presenters.UserPubPerspectivePresenter;
 import com.mresearch.databank.client.presenters.UserJuryPerspectivePresenter;
@@ -185,51 +186,6 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
     
     bind();
   }
-  public static native void bind_menu()/*-{
-	$wnd.$.bs = {};
-	$wnd.$.bs.mm_init = function(schema, menu_callback) {
-	    var mm = $wnd.$('div#mm');
-	    mm.html('');
-	    var mm_c = $wnd.$('<div/>').addClass('mm-container').appendTo(mm);
-	    $wnd.$('<div/>').addClass('mm-title').appendTo(mm_c);
-	    $wnd.$.each(schema, function(i, n) {
-	        var item = $wnd.$('<div/>').addClass('mm-item mm-'+(i+1)+'1 mm-hover').appendTo(mm_c);
-	        item.click(function() { menu_callback(i+1, 1); });
-	        $wnd.$('<div/>').addClass('mm-caption').appendTo(item).html(n[0]);
-	        if (n.length > 1) {
-	            var holder = $wnd.$('<div/>').addClass('mm-item-holder').appendTo(mm_c);
-	            //holder.css('left', item.offset().left+'px');
-	            $wnd.$.each(n, function(j, m) {
-	                if (j>0) {
-	                    var subitem = $wnd.$('<div/>').addClass('mm-item mm-'+(i+1)+(j+1)+' mm-hover').appendTo(holder);
-	                    subitem.click(function() { menu_callback(i+1, j+1); });
-	                    $wnd.$('<div/>').addClass('mm-caption').appendTo(subitem).html(m);
-	                }
-	            });
-	            $wnd.$.each([item, holder], function(k, el) {
-	                    el.hover(function(){
-	                    holder.stop(true).delay(300).fadeIn();
-	                }, function(){
-	                    holder.stop(true).delay(300).fadeOut();
-	                })  
-	            });
-	        }
-	    })
-	};
-	
-	
-		$wnd.$(function(){
-                $wnd.$.bs.mm_init([
-                    ['Банк данных', 'Исследования', 'Публикации', 'Статистика'],
-                    ['Законодательство', 'Закон 1', 'Закон 2', 'Закон 3', 'Закон 4'],
-                    ['Юридическая консультация', 'Дело 1', 'Дело 2', 'Дело 3', 'Дело 4', 'Дело 5'],
-                    ['Актуальный комментарий', '1', '2', '3', '4', '5', '6']
-                ], function(i, j) {
-                    alert('Выбран '+i+'-й столбец, '+j+'-я строка');
-                });
-		});
-
-  }-*/;
   
   private void bind() {
     History.addValueChangeHandler(this);
@@ -400,12 +356,14 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
 					//if(result.getCurrant_var().getDistr_type().equals(UserAnalysisSaveDTO.DISTR_TYPE_1D))
 					if(ev.getVar_anal().getDistr_type().equals(UserAnalysisSaveDTO.DISTR_TYPE_1D))
 					{
+						DatabankApp.get().setCurrentUserHistory(result);
 						eventBus.fireEvent(new ShowVarDetailsEvent(ev.getVar_anal().getVar_1().getId()));
 					}else
 					{
 						ShowVar2DDEvent event = new ShowVar2DDEvent(result.getCurrent_research().getResearh().getID());
 						result.getCurrant_var().setDistribution(null);
 						event.setPre_saved(result.getCurrant_var());
+						DatabankApp.get().setCurrentUserHistory(result);
 						eventBus.fireEvent(event);
 					}
 					
@@ -417,6 +375,7 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
 					UserHistoryDTO dt = DatabankApp.get().getCurrentUserHistory();
 					UserResearchSettingDTO dto = ev.getSetting();
 					dt.setCurrent_research(dto);
+					
 					DatabankApp.get().getUserService().updateResearchState(dt,cb);
 					
 				}

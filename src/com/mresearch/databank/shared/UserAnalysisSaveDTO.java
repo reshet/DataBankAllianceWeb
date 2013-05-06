@@ -26,12 +26,16 @@ import java.util.ArrayList;
 
 
 
+
+
 public class UserAnalysisSaveDTO implements Serializable, ICatalogizable {
 
   /**
 	 * 
 	 */
-    
+	public static enum User2DD_Choice {FREQ,PERC_ROW,PERC_COL,PERC_ALL}; 
+	private User2DD_Choice user2dd_choice = User2DD_Choice.FREQ;
+	
   public static String DISTR_TYPE_1D = "1D";
   public static String DISTR_TYPE_2D = "2D";   
 	private static final long serialVersionUID = 4066887588027126691L;
@@ -42,8 +46,18 @@ public class UserAnalysisSaveDTO implements Serializable, ICatalogizable {
   private VarDTO_Detailed var_1;
   private VarDTO_Detailed var_2;
   private ArrayList<Double> distribution;
+  private ArrayList<Double> valid_distribution;
   
-  public UserAnalysisSaveDTO() {
+  
+  public ArrayList<Double> getValid_distribution() {
+	return valid_distribution;
+}
+
+public void setValid_distribution(ArrayList<Double> valid_distribution) {
+	this.valid_distribution = valid_distribution;
+}
+
+public UserAnalysisSaveDTO() {
   
   }
 
@@ -158,6 +172,14 @@ public class UserAnalysisSaveDTO implements Serializable, ICatalogizable {
 	public long getID() {
 		// TODO Auto-generated method stub
 		return id;
+	}
+
+	public User2DD_Choice getUser2dd_choice() {
+		return user2dd_choice;
+	}
+
+	public void setUser2dd_choice(User2DD_Choice user2dd_choice) {
+		this.user2dd_choice = user2dd_choice;
 	}
 	
 

@@ -89,42 +89,6 @@ public class CompareVariableTableItemView extends Composite {
 //		//save_pnl.add(new HTML("<a href=\"/databank/htmlSave?tosave="+s+"\" target=\"_blank\">Скачать файл!</a>"));
 //	}
 	
-	
-	private native JavaScriptObject getJSON()/*-{
-		return eval(
-		{
-			"title":{"text":"ПРодажі Васі", "style":"font-size: 14px; font-family: Verdana; text-align: center;"}, 
-			"legend":{"visible":true, "bg_colour":"#fefefe", "position":"right", "border":true, "shadow":true},
-			"bg_colour":"#ffffff", 
-			"elements":
-				[
-					{"type":"pie",
-					 "tip":"#label# $#val#<br>#percent#", 
-					"values":[
-						{"value":1000, "label":"AU", "text":"Австралія"},
-						{"value":84000, "label":"USA", "text":"USA"},
-						{"value":37000, "label":"UK", "text":"United Kingdom"},
-						{"value":9000, "label":"JP", "text":"Japan"},
-						{"value":32000, "label":"EU", "text":"Europe"}],
-					"radius":130, 
-					"highlight":"alpha", 
-					"animate":true, 
-					"gradient-fill":true, 
-					"alpha":0.5, 
-					"no-labels":true, 
-					"colours":["#ff0000","#00aa00","#0000ff","#ff9900","#ff00ff"]
-					}
-				]
-			}
-	)
- }-*/;
-	
-	
-	
-	
-	
-	
-	
 	private MetaUnitMultivaluedEntityDTO db;
 	private VarDTO_Detailed dto;
 	private AnalisysBarView anal_bar_w;
@@ -155,10 +119,10 @@ public class CompareVariableTableItemView extends Composite {
 		ArrayList<String> values = dto.getV_label_values();
 		
 		int i = 0;
-		codeSchemeTbl.setSize("450px", "350px");
-		codeSchemeTbl.setWidget(0, 0, new Label("Код"));
-		codeSchemeTbl.setWidget(0, 1, new Label("Текст альтернативы"));
-		codeSchemeTbl.setWidget(0, 2, new Label("Проценты"));
+		codeSchemeTbl.setSize("350px", "250px");
+		//codeSchemeTbl.setWidget(0, 0, new Label("Код"));
+		codeSchemeTbl.setWidget(0, 0, new Label("Текст альтернативы"));
+		codeSchemeTbl.setWidget(0, 1, new Label("Проценты"));
 		//codeSchemeTbl.insertCell(beforeRow, beforeColumn)
 		Double total = new Double(0);
 		
@@ -169,8 +133,8 @@ public class CompareVariableTableItemView extends Composite {
         for(Double key:codes)
         {
  		   String label = values.get(i);
-           codeSchemeTbl.setWidget(i+1, 0, new Label(key.toString()));
-           codeSchemeTbl.setWidget(i+1, 1, new Label(label.toString()));
+           //codeSchemeTbl.setWidget(i+1, 0, new Label(key.toString()));
+           codeSchemeTbl.setWidget(i+1, 0, new Label(label.toString()));
            
            //NumberFormat formatter = NumberFormat.getInstance();
            NumberFormat formatter = NumberFormat.getFormat("0.0");
@@ -179,7 +143,7 @@ public class CompareVariableTableItemView extends Composite {
            String myNumber = formatter.format(new Double(dto.getDistribution().get(i)/total)*100);
            
           // new NumberFormat();
-           codeSchemeTbl.setWidget(i+1, 2, new Label(myNumber+"%"));
+           codeSchemeTbl.setWidget(i+1, 1, new Label(myNumber+"%"));
            //com.google.gwt.user.client.ui.MultiWordSuggestOracle c = new MultiWordSuggestOracle();
            //c.requestSuggestions(request, callback)
            //com.google.gwt.user.client.ui.
@@ -217,105 +181,106 @@ public class CompareVariableTableItemView extends Composite {
 		int place=Math.max(Math.max(in.lastIndexOf(" ",len),in.lastIndexOf("\t",len)),in.lastIndexOf("-",len));
 		return in.substring(0,place).trim()+"<br/>"+wrap(in.substring(place),len);
 		}
-	private void showPlot()
-	{
-		if(!plot_viewed)
-		{
-			plot_viewed = true;
-			
-//			ChartWidget widg = new ChartWidget();
-//			JSONObject obj_json = new JSON_Construct(dto).getGraph();
-//			String json = obj_json.toString();
-//			widg.setJsonData(json);
-//			widg.setPixelSize(600, 600);
-//			
-			
-			//StringUtils.wordWrap(dto.getLabel(),50,Locale.getDefault());
-			double dum = 0;
-			for(Double d:dto.getDistribution())dum+=d;
-			Chart chart = new Chart()
-			   .setType(Series.Type.PIE)
-//			   .setChartTitleText(wrap(dto.getLabel(),70))
-	
-			   .setChartTitle(new ChartTitle().setText(wrap(dto.getLabel(),70)).setAlign(org.moxieapps.gwt.highcharts.client.ChartTitle.Align.LEFT))
-			   .setSizeToMatchContainer()
-			   .setMarginRight(10)
-//			   .setWidth100()
-//			   .setHeight100()
-////			    .setLegend(new Legend()
-//				      .setAlign(Legend.Align.RIGHT)
-//				      .setVerticalAlign(Legend.Align.)
-//				      .setBackgroundColor("#CCCCCC")
-//				      .setShadow(true)
-//				   )
-//				
-				   .setPlotBorderWidth(null)  
-            .setPlotShadow(true)  
-            .setPiePlotOptions(new PiePlotOptions()  
-                .setAllowPointSelect(true)  
-                .setCursor(PlotOptions.Cursor.POINTER)  
-                .setPieDataLabels(new PieDataLabels()  
-                    .setEnabled(false)  
-                )  
-                .setShowInLegend(true)  
-            )  
-            .setToolTip(new ToolTip()  
-                .setFormatter(new ToolTipFormatter() {  
-                    public String format(ToolTipData toolTipData) {  
-                        return "<b>" + toolTipData.getPointName() + "</b>: " + toolTipData.getYAsDouble() + " %";  
-                    }  
-                })  
-            )   
-				   ;
-			
-			Point [] points = new Point[dto.getV_label_codes().size()];
-			int i = 0;
-			for(String name:dto.getV_label_values())
-			{
-				  NumberFormat formatter = NumberFormat.getFormat("0.0");
-		          // formatter.
-		           //formatter.setMaximumFractionDigits(2);
-				  Double d = new Double(0);
-			      if(dto.getDistribution()!=null && dto.getDistribution().get(i)!=null)
-				  {
-				      d = dto.getDistribution().get(i);
-				  }
-				  double ddd = (d/dum)*100;
-				  String st = formatter.format(ddd);
-				  if(st.contains(","))st = st.replaceAll(",", ".");
-		           double myNumber = Double.parseDouble(st);
-		         
-		           
-				points[i] = (new Point(name,myNumber));
-				i++;
-			}
-			
-			points[0].setSelected(true).setSliced(true);
-//			new Point[]{  
-//	                new Point("Firefox", 45.0),  
-//	                new Point("IE", 26.8),  
-//	                new Point("Chrome", 12.8)  
-//	                    .setSliced(true)  
-//	                    .setSelected(true),  
-//	                new Point("Safari", 8.5),  
-//	                new Point("Opera", 6.2),  
-//	                new Point("Others", 0.7)  
-//	            } 
-//		   )
-			Series series = chart.createSeries()
-					   .setName("Варианты ответа")
-					   .setPoints(points);
-					chart.addSeries(series);
-			
-			final PopupPanel dialogBox = createDialogBox(chart);
-		    dialogBox.setGlassEnabled(true);
-		    dialogBox.setAnimationEnabled(true);
-		    
-			dialogBox.center();
-	        dialogBox.show();
-		}
 
-	}
+//	private void showPlot()
+//	{
+//		if(!plot_viewed)
+//		{
+//			plot_viewed = true;
+//			
+////			ChartWidget widg = new ChartWidget();
+////			JSONObject obj_json = new JSON_Construct(dto).getGraph();
+////			String json = obj_json.toString();
+////			widg.setJsonData(json);
+////			widg.setPixelSize(600, 600);
+////			
+//			
+//			//StringUtils.wordWrap(dto.getLabel(),50,Locale.getDefault());
+//			double dum = 0;
+//			for(Double d:dto.getDistribution())dum+=d;
+//			Chart chart = new Chart()
+//			   .setType(Series.Type.PIE)
+////			   .setChartTitleText(wrap(dto.getLabel(),70))
+//	
+//			   .setChartTitle(new ChartTitle().setText(wrap(dto.getLabel(),70)).setAlign(org.moxieapps.gwt.highcharts.client.ChartTitle.Align.LEFT))
+//			   .setSizeToMatchContainer()
+//			   .setMarginRight(10)
+////			   .setWidth100()
+////			   .setHeight100()
+//////			    .setLegend(new Legend()
+////				      .setAlign(Legend.Align.RIGHT)
+////				      .setVerticalAlign(Legend.Align.)
+////				      .setBackgroundColor("#CCCCCC")
+////				      .setShadow(true)
+////				   )
+////				
+//				   .setPlotBorderWidth(null)  
+//            .setPlotShadow(true)  
+//            .setPiePlotOptions(new PiePlotOptions()  
+//                .setAllowPointSelect(true)  
+//                .setCursor(PlotOptions.Cursor.POINTER)  
+//                .setPieDataLabels(new PieDataLabels()  
+//                    .setEnabled(false)  
+//                )  
+//                .setShowInLegend(true)  
+//            )  
+//            .setToolTip(new ToolTip()  
+//                .setFormatter(new ToolTipFormatter() {  
+//                    public String format(ToolTipData toolTipData) {  
+//                        return "<b>" + toolTipData.getPointName() + "</b>: " + toolTipData.getYAsDouble() + " %";  
+//                    }  
+//                })  
+//            )   
+//				   ;
+//			
+//			Point [] points = new Point[dto.getV_label_codes().size()];
+//			int i = 0;
+//			for(String name:dto.getV_label_values())
+//			{
+//				  NumberFormat formatter = NumberFormat.getFormat("0.0");
+//		          // formatter.
+//		           //formatter.setMaximumFractionDigits(2);
+//				  Double d = new Double(0);
+//			      if(dto.getDistribution()!=null && dto.getDistribution().get(i)!=null)
+//				  {
+//				      d = dto.getDistribution().get(i);
+//				  }
+//				  double ddd = (d/dum)*100;
+//				  String st = formatter.format(ddd);
+//				  if(st.contains(","))st = st.replaceAll(",", ".");
+//		           double myNumber = Double.parseDouble(st);
+//		         
+//		           
+//				points[i] = (new Point(name,myNumber));
+//				i++;
+//			}
+//			
+//			points[0].setSelected(true).setSliced(true);
+////			new Point[]{  
+////	                new Point("Firefox", 45.0),  
+////	                new Point("IE", 26.8),  
+////	                new Point("Chrome", 12.8)  
+////	                    .setSliced(true)  
+////	                    .setSelected(true),  
+////	                new Point("Safari", 8.5),  
+////	                new Point("Opera", 6.2),  
+////	                new Point("Others", 0.7)  
+////	            } 
+////		   )
+//			Series series = chart.createSeries()
+//					   .setName("Варианты ответа")
+//					   .setPoints(points);
+//					chart.addSeries(series);
+//			
+//			final PopupPanel dialogBox = createDialogBox(chart);
+//		    dialogBox.setGlassEnabled(true);
+//		    dialogBox.setAnimationEnabled(true);
+//		    
+//			dialogBox.center();
+//	        dialogBox.show();
+//		}
+//
+//	}
 	
 	private PopupPanel createDialogBox(Widget w) {
 	    // Create a dialog box and set the caption text

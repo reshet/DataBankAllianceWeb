@@ -36,7 +36,7 @@ import com.mresearch.databank.shared.UserAnalysisSaveDTO;
 import com.mresearch.databank.shared.VarDTO;
 import com.mresearch.databank.shared.VarDTO_Detailed;
 
-public class RealVariableDetailedView extends Composite {
+public class RealVariableDetailedView extends Composite implements HTML_Saver{
 
 	private static RealVariableDetailedViewUiBinder uiBinder = GWT
 			.create(RealVariableDetailedViewUiBinder.class);
@@ -54,6 +54,7 @@ public class RealVariableDetailedView extends Composite {
 	private MetaUnitMultivaluedEntityDTO db;
 	private VarDTO_Detailed dto;
 	@UiField VerticalPanel research_link;
+	@UiField HTMLPanel main_html;
 	@UiField HorizontalPanel analysis_bar;
 
 	
@@ -63,7 +64,7 @@ public class RealVariableDetailedView extends Composite {
 		this.dto = dto;
 		this.db = dt;
 		UserAccountDTO user = DatabankApp.get().getCurrentUser();
-		analysis_bar.add(new AnalisysBarView(bus, display,save_Dto));
+		analysis_bar.add(new AnalisysBarView(bus, display,save_Dto,this));
 		
 		//target_panel.add(new SaveHTMLAddon(content_panel));
 		//varCode.setText(dto.getCode());
@@ -130,5 +131,9 @@ public class RealVariableDetailedView extends Composite {
 		}
 	
 
+	}
+	@Override
+	public String composeSpecificContent() {
+		return main_html.toString();
 	}
 }

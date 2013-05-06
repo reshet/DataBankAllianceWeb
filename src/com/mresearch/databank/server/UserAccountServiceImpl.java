@@ -114,7 +114,9 @@ public UserHistoryDTO updateResearchState(UserHistoryDTO dto_acc) {
 		}
 		else
 		{
-			if(dto_acc.getCurrent_research().getResearh().getID() == 0 && dto_acc.getCurrant_var().getVar_1().getId() != 0)
+			if(dto_acc.getCurrent_research()!=null && dto_acc.getCurrent_research().getResearh()!=null)
+			if(dto_acc.getCurrent_research().getResearh().getID() == 0 && dto_acc.getCurrant_var()!=null && dto_acc.getCurrant_var().getVar_1()!=null
+				&&  dto_acc.getCurrant_var().getVar_1().getId() != 0)
 			{
 				dto_acc.getCurrent_research().getResearh().setId(
 						seao.getVar(dto_acc.getCurrant_var().getVar_1().getId(), null,null).getResearch_id());
@@ -135,7 +137,7 @@ public UserHistoryDTO updateResearchState(UserHistoryDTO dto_acc) {
 @Override
 public void addToSelectedResearches(SocioResearchDTO dt) {
 	UserAccountDTO userAcc =   (UserAccountDTO) this.getThreadLocalRequest().getSession().getAttribute("user");
-	if (userAcc != null)
+	if (userAcc != null && userAcc.getId() != 0)
 	{
 		UserResearchSettingDTO dto = new UserResearchSettingDTO();
 		dto.setResearh(dt);
@@ -160,7 +162,7 @@ public List<SocioResearchDTO_Light> getMyResearchesList() {
 	List<SocioResearchDTO_Light> list= new ArrayList<SocioResearchDTO_Light>();
 	UserAccountDTO userAcc =   (UserAccountDTO) this.getThreadLocalRequest().getSession().getAttribute("user");
 	//if (userAcc != null && userAcc.getId() != 0)
-	if (userAcc != null)
+	if (userAcc != null && userAcc.getId() != 0)
 	{
 		list = eao.getUserMyResearches(userAcc.getId());
 	}
@@ -170,11 +172,19 @@ public List<SocioResearchDTO_Light> getMyResearchesList() {
 
 @Override
 public UserResearchSettingDTO getResearchSetting(Long research_id) {
-	// TODO Auto-generated method stub
 	UserAccountDTO userAcc =   (UserAccountDTO) this.getThreadLocalRequest().getSession().getAttribute("user");
 	if (userAcc != null && userAcc.getId() != 0)
 	{
-		return eao.getUserResearchSetting(research_id,userAcc.getId());
+		UserHistoryDTO hist = (UserHistoryDTO)this.getThreadLocalRequest().getSession().getAttribute("user_history");
+		UserResearchSettingDTO sett  = eao.getUserResearchSetting(research_id,userAcc.getId());
+		hist.setCurrent_research(sett);
+		return sett; 
+	}else if(userAcc != null && userAcc.getId() == 0){
+		//default user, not persistant, function implicitly disabled).
+		UserHistoryDTO hist = (UserHistoryDTO)this.getThreadLocalRequest().getSession().getAttribute("user_history");
+		//UserResearchSettingDTO sett  = 
+				//eao.getUserResearchSetting(research_id,userAcc.getId());
+		return hist.getCurrent_research();
 	}
 	return null;
 }

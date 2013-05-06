@@ -150,13 +150,12 @@ public class SearchResultsGrid extends VerticalPanel
       
       {
     	  if(map.containsKey("sociovar_researchname")){
-    		  Integer key = (int) research_names.get(i).getRes_id();
-    		  String name = research_names.get(i).getRes_name();
-    		  
-    		  hit.put("sociovar_researchname", new JSONString("<a href=\"#user-research@showResearch="+key+"\">"+name+"</a>"));
-          }
-    	  
-    	  
+    		  if( research_names.get(i)!=null){
+    			  Integer key = (int) research_names.get(i).getRes_id();
+        		  String name = research_names.get(i).getRes_name();
+        		  hit.put("sociovar_researchname", new JSONString("<a href=\"#user-research@showResearch="+key+"\">"+name+"</a>"));
+              }
+    		 }
       }
       for (String key : map.keySet())
       {

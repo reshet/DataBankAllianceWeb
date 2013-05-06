@@ -9,6 +9,8 @@ public class VarDTO extends VarDTO_Light implements Serializable{
 	private ArrayList<Double> v_label_codes;
 	private ArrayList<String> v_label_values;
 	private ArrayList<Double> distribution;
+        private ArrayList<Double> valid_distribution;
+        
         private Long research_id;
 	public VarDTO()
 	{
@@ -63,6 +65,20 @@ public class VarDTO extends VarDTO_Light implements Serializable{
      */
     public void setResearch_id(Long research_id) {
         this.research_id = research_id;
+    }
+
+    /**
+     * @return the valid_distribution
+     */
+    public ArrayList<Double> getValid_distribution() {
+        return valid_distribution;
+    }
+
+    /**
+     * @param valid_distribution the valid_distribution to set
+     */
+    public void setValid_distribution(ArrayList<Double> valid_distribution) {
+        this.valid_distribution = valid_distribution;
     }
         
 }

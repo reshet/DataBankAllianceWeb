@@ -54,39 +54,42 @@
 		</g:HorizontalPanel>
 			
 		<h2>Просмотр переменной</h2>
-		<g:HorizontalPanel spacing="5">
-					<g:Label styleName="{style.text_f}">Текст вопроса:  </g:Label>
-					<g:Label ui:field="varText"></g:Label>
-		</g:HorizontalPanel>
-		<g:HorizontalPanel spacing="5">
-					<g:Label styleName="{style.text_f}">Кол-во записей:  </g:Label>
-					<g:Label ui:field="number_of_records"></g:Label>
-		</g:HorizontalPanel>
-		<h3>Список значений:</h3>
-		<g:FlexTable ui:field="values_table" styleName="{style.tableStyle}"></g:FlexTable>
-		<br/>
-		<h3>Перейти к исследованию:</h3>
-		<br/>
-		<g:VerticalPanel ui:field="research_link"></g:VerticalPanel>
-		<h3>Переменная использовалась как:</h3>
-		<g:FlexTable ui:field="generalizedTbl"></g:FlexTable>
-		<br/>
-		
-		<table>
-			<tr>
-				<th>
-					<div class="gray25 bold">
-						<g:Label ui:field="concept_name"></g:Label>
-					</div>
-				</th>
-				
-				<th>
-					<div class="gray40">
-						<g:Label ui:field="concept_value"></g:Label>
-					</div>
-				</th>
-			</tr>
-		</table>
+			<g:HTMLPanel ui:field="main_html">
+			
+			<g:HorizontalPanel spacing="5">
+						<g:Label styleName="{style.text_f}">Текст вопроса:  </g:Label>
+						<g:Label ui:field="varText"></g:Label>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel spacing="5">
+						<g:Label styleName="{style.text_f}">Кол-во записей:  </g:Label>
+						<g:Label ui:field="number_of_records"></g:Label>
+			</g:HorizontalPanel>
+			<h3>Список значений:</h3>
+			<g:FlexTable ui:field="values_table" styleName="{style.tableStyle}"></g:FlexTable>
+			<br/>
+			<h3>Перейти к исследованию:</h3>
+			<br/>
+			<g:VerticalPanel ui:field="research_link"></g:VerticalPanel>
+			<h3>Переменная использовалась как:</h3>
+			<g:FlexTable ui:field="generalizedTbl"></g:FlexTable>
+			<br/>
+			
+			<table>
+				<tr>
+					<th>
+						<div class="gray25 bold">
+							<g:Label ui:field="concept_name"></g:Label>
+						</div>
+					</th>
+					
+					<th>
+						<div class="gray40">
+							<g:Label ui:field="concept_value"></g:Label>
+						</div>
+					</th>
+				</tr>
+			</table>
 
+		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

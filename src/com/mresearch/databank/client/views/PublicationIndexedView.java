@@ -155,7 +155,7 @@ public class PublicationIndexedView extends Composite {
 			
 			//MultiValuedFieldViewer mv = new MultiValuedFieldViewer(db,dto.getFilling(),"");
 			
-			final PopupPanel dialogBox = DialogBoxFactory.createDialogBox("Подробности публикации",h,null);
+			final PopupPanel dialogBox = DialogBoxFactory.createDialogBox("Подробности публикации",h,null,"Назад");
 	        dialogBox.show();
 		}
 		

@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import com.mplatforma.amr.service.remote.UserSocioResearchBeanRemote;
 import com.mresearch.databank.shared.SocioResearchDTO;
 import com.mresearch.databank.shared.UserAccountDTO;
+import com.mresearch.databank.shared.UserHistoryDTO;
+import com.mresearch.databank.shared.VarDTO;
 
 
 
@@ -43,13 +45,15 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 		
 		
 		String original_file_name = "saved_distr.html";
-		res.setHeader( "Content-Disposition", "attachment; filename=\"" + original_file_name +"\"" );
+		String filename = (String) req.getParameter("name");
+        if(filename!=null && !filename.equals(""))original_file_name = filename;
+        res.setHeader( "Content-Disposition", "attachment; filename=\"" + original_file_name +"\"" );
         //res.setHeader("Content-Type", "text/html");
         String st = (String) req.getParameter("content");
         //st = new String(st.getBytes(),"UTF-8");
         
         HttpSession session = req.getSession(true);
-        UserAccountDTO userAcc =   (UserAccountDTO) session.getAttribute("user");
+        UserHistoryDTO userAcc =   (UserHistoryDTO) session.getAttribute("user_history");
        // st = new String(st.getBytes(),"UTF-8");
         
         String dd = getHeaderSection(userAcc)+getResearchSection(userAcc)+getWeightsSection(userAcc)+getFiltersSection(userAcc);
@@ -78,20 +82,20 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
         //blobstoreService.serve(blobKey, res);
        
     }
-	private String getHeaderSection(UserAccountDTO dto)
+	private String getHeaderSection(UserHistoryDTO dto)
 	{
 		String ans = "<h1>Отчет о распределении переменной в массиве</h1><br/>";
 		Date dt = new Date();
 		ans+="<h3>Время генерации: "+dt+"</h3><br/><br/>";
 		return ans;
 	}
-	private String getFiltersSection(UserAccountDTO dto)
+	private String getFiltersSection(UserHistoryDTO dto)
 	{
 		String ans = "<h3>Использованные фильтры:</h3><br/>";
 		Long research_id = getResearchID(dto);
 		if (research_id != null && dto != null)
 		{
-			ArrayList<String> filters = dto.getFiltersToProcess(research_id);
+			ArrayList<String> filters = dto.getCurrent_research().getFiltersToProcess();
 			if (filters== null)
 			{
 				ans+=" нет";
@@ -113,7 +117,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 		ans+="<br/>";
 		return ans;
 	}
-	private long getResearchID(UserAccountDTO dto)
+	private long getResearchID(UserHistoryDTO dto)
 	{
 		//suppose that research id is missing
 		if(dto != null)
@@ -124,18 +128,18 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 //				var = pm.getObjectById(Var.class,dto.getCurrant_var());
 //				if (var != null) return var.getResearch_id();
 		//	}
-		if(dto.getCurrent_research()!= 0)
+		if(dto.getCurrent_research()!= null && dto.getCurrent_research().getResearh()!=null)
 			{
-				return dto.getCurrent_research();
+				return dto.getCurrent_research().getResearh().getId();
 			}
 		}
 		return 0;
 	}
-	private String getWeightsSection(UserAccountDTO dto)
+	private String getWeightsSection(UserHistoryDTO dto)
 	{
 		String ans = "<h3>Использованные веса: </h3>";
 		Long research_id = getResearchID(dto);
-		if (dto != null && dto.getWeights_use()==1 && research_id!= null)
+		if (dto != null && dto.getCurrent_research().getWeights_use()==1 && research_id!= null)
 		{
 				SocioResearchDTO research;
 			    try {
@@ -143,7 +147,8 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 			      
 			      String var_weight_name = null;
 			      //TODO add var from personal account settings
-			      //if(research != null )var_weight_name= research.getVar_weight_name();
+			      VarDTO vr = eao.getVar(dto.getCurrent_research().getWeights_var_id(),null,null);
+			      if(research != null )var_weight_name= vr.getCode()+" "+vr.getLabel();
 			      
 			      if (var_weight_name != null) ans+=var_weight_name;
 			      	else 	ans+=" нет";
@@ -159,7 +164,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 		ans+="<br/>";
 		return ans;
 	}
-	private String getResearchSection(UserAccountDTO dto)
+	private String getResearchSection(UserHistoryDTO dto)
 	{
 		String ans = "<h3>Исследование: </h3>";
 		Long res_id = getResearchID(dto);

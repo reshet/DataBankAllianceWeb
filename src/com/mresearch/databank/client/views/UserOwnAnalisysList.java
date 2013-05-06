@@ -19,7 +19,7 @@ public class UserOwnAnalisysList extends TreeItem implements ICatalogizationConc
 	public UserOwnAnalisysList()
 	{
 		super();
-		setText("Мои анализы");
+		setText("Сохраненные распределения");
 		//setStylePrimaryName("gwt-TreeItem");
 		addItem("Загрузка...");
 	}

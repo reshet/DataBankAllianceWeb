@@ -18,6 +18,7 @@ import org.moxieapps.gwt.highcharts.client.ToolTipData;
 import org.moxieapps.gwt.highcharts.client.ToolTipFormatter;
 import org.moxieapps.gwt.highcharts.client.labels.DataLabels;
 import org.moxieapps.gwt.highcharts.client.labels.PieDataLabels;
+import org.moxieapps.gwt.highcharts.client.labels.XAxisLabels;
 import org.moxieapps.gwt.highcharts.client.labels.YAxisLabels;
 import org.moxieapps.gwt.highcharts.client.plotOptions.BarPlotOptions;
 import org.moxieapps.gwt.highcharts.client.plotOptions.PiePlotOptions;
@@ -90,35 +91,35 @@ public class CompareVariableGraphItemView extends Composite {
 //		//save_pnl.add(new HTML("<a href=\"/databank/htmlSave?tosave="+s+"\" target=\"_blank\">Скачать файл!</a>"));
 //	}
 	
-	
-	private native JavaScriptObject getJSON()/*-{
-		return eval(
-		{
-			"title":{"text":"ПРодажі Васі", "style":"font-size: 14px; font-family: Verdana; text-align: center;"}, 
-			"legend":{"visible":true, "bg_colour":"#fefefe", "position":"right", "border":true, "shadow":true},
-			"bg_colour":"#ffffff", 
-			"elements":
-				[
-					{"type":"pie",
-					 "tip":"#label# $#val#<br>#percent#", 
-					"values":[
-						{"value":1000, "label":"AU", "text":"Австралія"},
-						{"value":84000, "label":"USA", "text":"USA"},
-						{"value":37000, "label":"UK", "text":"United Kingdom"},
-						{"value":9000, "label":"JP", "text":"Japan"},
-						{"value":32000, "label":"EU", "text":"Europe"}],
-					"radius":130, 
-					"highlight":"alpha", 
-					"animate":true, 
-					"gradient-fill":true, 
-					"alpha":0.5, 
-					"no-labels":true, 
-					"colours":["#ff0000","#00aa00","#0000ff","#ff9900","#ff00ff"]
-					}
-				]
-			}
-	)
- }-*/;
+//	
+//	private native JavaScriptObject getJSON()/*-{
+//		return eval(
+//		{
+//			"title":{"text":"ПРодажі Васі", "style":"font-size: 14px; font-family: Verdana; text-align: center;"}, 
+//			"legend":{"visible":true, "bg_colour":"#fefefe", "position":"right", "border":true, "shadow":true},
+//			"bg_colour":"#ffffff", 
+//			"elements":
+//				[
+//					{"type":"pie",
+//					 "tip":"#label# $#val#<br>#percent#", 
+//					"values":[
+//						{"value":1000, "label":"AU", "text":"Австралія"},
+//						{"value":84000, "label":"USA", "text":"USA"},
+//						{"value":37000, "label":"UK", "text":"United Kingdom"},
+//						{"value":9000, "label":"JP", "text":"Japan"},
+//						{"value":32000, "label":"EU", "text":"Europe"}],
+//					"radius":130, 
+//					"highlight":"alpha", 
+//					"animate":true, 
+//					"gradient-fill":true, 
+//					"alpha":0.5, 
+//					"no-labels":true, 
+//					"colours":["#ff0000","#00aa00","#0000ff","#ff9900","#ff00ff"]
+//					}
+//				]
+//			}
+//	)
+// }-*/;
 	
 	
 	
@@ -223,7 +224,7 @@ public class CompareVariableGraphItemView extends Composite {
 			   .setType(Series.Type.BAR)
 //			   .setChartTitleText(wrap(dto.getLabel(),70))
 	
-			   .setChartTitle(new ChartTitle().setText(wrap(dto.getLabel(),70)).setAlign(org.moxieapps.gwt.highcharts.client.ChartTitle.Align.LEFT))
+			   .setChartTitle(new ChartTitle().setText(wrap(dto.getResearch_name()+": "+dto.getLabel(),70)).setAlign(org.moxieapps.gwt.highcharts.client.ChartTitle.Align.LEFT))
 			   .setSizeToMatchContainer()
 			   .setMarginRight(10)
 			   			    .setLegend(new Legend()
@@ -246,9 +247,9 @@ public class CompareVariableGraphItemView extends Composite {
             .setBarPlotOptions(new BarPlotOptions()
             	.setAllowPointSelect(false)
             	.setCursor(PlotOptions.Cursor.POINTER)  
-                .setDataLabels(new DataLabels()  
-                    .setEnabled(false)  
-                )  
+//                .setDataLabels(new DataLabels()  
+//                    .setEnabled(false)  
+//                )  
                 //.setShowInLegend(true)
             		)
 //            .setPiePlotOptions(new PiePlotOptions()  
@@ -311,7 +312,7 @@ public class CompareVariableGraphItemView extends Composite {
 						new AxisTitle().setText("Количество кейсов (%)").setAlign(org.moxieapps.gwt.highcharts.client.AxisTitle.Align.HIGH))
 				.setLabels(new YAxisLabels().setEnabled(false));
 				;
-			
+				chart.getXAxis().setLabels(new XAxisLabels().setEnabled(false));
 			
 					main_html.add(chart);
 //			final PopupPanel dialogBox = createDialogBox(chart);

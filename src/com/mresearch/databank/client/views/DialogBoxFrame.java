@@ -36,12 +36,13 @@ public class DialogBoxFrame extends Composite {
 	@UiField VerticalPanel contents;
 	PopupPanel parentPopup;
 	private closeAction action;
-	public DialogBoxFrame(String header,PopupPanel popup,Widget w,closeAction action) {
+	public DialogBoxFrame(String header,PopupPanel popup,Widget w,closeAction action,String close_btn_text) {
 		initWidget(uiBinder.createAndBindUi(this));
 		parentPopup = popup;
 		contents.add(w);
 		this.action = action;
 		this.header.setText(header);
+		button.setText(close_btn_text);
 	}
 
 	@UiHandler("button")

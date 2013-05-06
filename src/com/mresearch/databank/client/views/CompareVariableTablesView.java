@@ -41,6 +41,7 @@ import com.mresearch.databank.client.DatabankApp;
 import com.mresearch.databank.client.event.ShowVarPlotEvent;
 import com.mresearch.databank.client.event.ShowVarPlotEventHandler;
 import com.mresearch.databank.client.helper.RPCCall;
+import com.mresearch.databank.client.presenters.UpdateUserHistoryActor;
 import com.mresearch.databank.client.presenters.UserResearchPerspectivePresenter;
 import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.shared.MetaUnitDTO;
@@ -48,6 +49,7 @@ import com.mresearch.databank.shared.MetaUnitMultivaluedEntityDTO;
 import com.mresearch.databank.shared.SocioResearchDTO_Light;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
+import com.mresearch.databank.shared.UserResearchSettingDTO;
 import com.mresearch.databank.shared.VarDTO_Detailed;
 import com.smartgwt.client.types.ChartType;
 
@@ -73,21 +75,43 @@ public class CompareVariableTablesView extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.dtos_detailed_ids = dtos_detailed_ids;
 		this.display = display;
-		UserAccountDTO user = DatabankApp.get().getCurrentUser();
+		final UserResearchSettingDTO setting = DatabankApp.get().getCurrentUserHistory().getCurrent_research();
+		final UserResearchSettingDTO pre_setting = setting;
+		
 		for(final Long dto_id:dtos_detailed_ids)
         {
 		   new RPCCall<VarDTO_Detailed>() {
 			@Override
 			public void onFailure(Throwable arg0) {
+				new UpdateUserHistoryActor(pre_setting){
+					@Override
+					public void doPostAction() {
+					}
+				};
 			}
 			@Override
 			public void onSuccess(VarDTO_Detailed dto) {
 				   compareTbl.setWidget(i+1, 0, new CompareVariableTableItemView(dto, db, CompareVariableTablesView.this.display, new UserAnalysisSaveDTO()));
 				   i++;
+				   new UpdateUserHistoryActor(pre_setting){
+						@Override
+						public void doPostAction() {
+						}
+					};
 			}
 			@Override
-			protected void callService(AsyncCallback<VarDTO_Detailed> cb) {
-				UserSocioResearchService.Util.getInstance().getVarDetailed(dto_id, cb);
+			protected void callService(final AsyncCallback<VarDTO_Detailed> cb) {
+				//switch off filters and weights for a while
+				if(setting!=null){
+					setting.setFilters_use(0);
+					setting.setWeights_use(0);
+					new UpdateUserHistoryActor(setting){
+						@Override
+						public void doPostAction() {
+							UserSocioResearchService.Util.getInstance().getVarDetailed(dto_id, cb);
+						}
+					};
+				}
 			}
 		   }.retry(1);
         }

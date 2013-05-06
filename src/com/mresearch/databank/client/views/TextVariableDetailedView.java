@@ -17,6 +17,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
@@ -35,8 +36,9 @@ import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
 import com.mresearch.databank.shared.VarDTO;
 import com.mresearch.databank.shared.VarDTO_Detailed;
+import com.sun.xml.rpc.tools.wscompile.Main;
 
-public class TextVariableDetailedView extends Composite {
+public class TextVariableDetailedView extends Composite implements HTML_Saver{
 
 	private static RealVariableDetailedViewUiBinder uiBinder = GWT
 			.create(RealVariableDetailedViewUiBinder.class);
@@ -53,13 +55,14 @@ public class TextVariableDetailedView extends Composite {
 	@UiField HorizontalPanel analysis_bar;
 	@UiField Label concept_name,concept_value;
 	private UserResearchPerspectivePresenter.Display display;
+	@UiField HTMLPanel main_html;
 	public TextVariableDetailedView(TextVarDTO_Detailed dto,MetaUnitMultivaluedEntityDTO dt,SimpleEventBus bus,UserResearchPerspectivePresenter.Display display,UserAnalysisSaveDTO sv_dt) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.display = display;
 		this.dto = dto;
 		this.db = dt;
 		UserAccountDTO user = DatabankApp.get().getCurrentUser();
-		analysis_bar.add(new AnalisysBarView(bus, display,sv_dt));
+		analysis_bar.add(new AnalisysBarView(bus, display,sv_dt,this));
 		
 		research_link.add(new ResearchDescItemView(new SocioResearchDTO_Light(dto.getResearch_id(),dto.getResearch_name())));
 		
@@ -117,5 +120,10 @@ public class TextVariableDetailedView extends Composite {
 			}
 		}
 	
+	}
+
+	@Override
+	public String composeSpecificContent() {
+		return main_html.toString();
 	}
 }

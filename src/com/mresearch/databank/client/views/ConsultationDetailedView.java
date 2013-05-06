@@ -119,7 +119,7 @@ public class ConsultationDetailedView extends Composite {
 			
 			//MultiValuedFieldViewer mv = new MultiValuedFieldViewer(db,dto.getFilling(),"");
 			
-			final PopupPanel dialogBox = DialogBoxFactory.createDialogBox("Подробности консультации",h,null);
+			final PopupPanel dialogBox = DialogBoxFactory.createDialogBox("Подробности консультации",h,null,"Назад");
 		    dialogBox.setGlassEnabled(true);
 		    dialogBox.setAnimationEnabled(true);
 		    

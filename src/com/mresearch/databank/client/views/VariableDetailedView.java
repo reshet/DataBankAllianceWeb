@@ -50,7 +50,7 @@ import com.mresearch.databank.shared.UserAnalysisSaveDTO;
 import com.mresearch.databank.shared.VarDTO_Detailed;
 import com.smartgwt.client.types.ChartType;
 
-public class VariableDetailedView extends Composite {
+public class VariableDetailedView extends Composite implements HTML_Saver{
 
 	private static VariableDetailedViewUiBinder uiBinder = GWT
 			.create(VariableDetailedViewUiBinder.class);
@@ -89,35 +89,35 @@ public class VariableDetailedView extends Composite {
 //		//save_pnl.add(new HTML("<a href=\"/databank/htmlSave?tosave="+s+"\" target=\"_blank\">Скачать файл!</a>"));
 //	}
 	
-	
-	private native JavaScriptObject getJSON()/*-{
-		return eval(
-		{
-			"title":{"text":"ПРодажі Васі", "style":"font-size: 14px; font-family: Verdana; text-align: center;"}, 
-			"legend":{"visible":true, "bg_colour":"#fefefe", "position":"right", "border":true, "shadow":true},
-			"bg_colour":"#ffffff", 
-			"elements":
-				[
-					{"type":"pie",
-					 "tip":"#label# $#val#<br>#percent#", 
-					"values":[
-						{"value":1000, "label":"AU", "text":"Австралія"},
-						{"value":84000, "label":"USA", "text":"USA"},
-						{"value":37000, "label":"UK", "text":"United Kingdom"},
-						{"value":9000, "label":"JP", "text":"Japan"},
-						{"value":32000, "label":"EU", "text":"Europe"}],
-					"radius":130, 
-					"highlight":"alpha", 
-					"animate":true, 
-					"gradient-fill":true, 
-					"alpha":0.5, 
-					"no-labels":true, 
-					"colours":["#ff0000","#00aa00","#0000ff","#ff9900","#ff00ff"]
-					}
-				]
-			}
-	)
- }-*/;
+//	
+//	private native JavaScriptObject getJSON()/*-{
+//		return eval(
+//		{
+//			"title":{"text":"ПРодажі Васі", "style":"font-size: 14px; font-family: Verdana; text-align: center;"}, 
+//			"legend":{"visible":true, "bg_colour":"#fefefe", "position":"right", "border":true, "shadow":true},
+//			"bg_colour":"#ffffff", 
+//			"elements":
+//				[
+//					{"type":"pie",
+//					 "tip":"#label# $#val#<br>#percent#", 
+//					"values":[
+//						{"value":1000, "label":"AU", "text":"Австралія"},
+//						{"value":84000, "label":"USA", "text":"USA"},
+//						{"value":37000, "label":"UK", "text":"United Kingdom"},
+//						{"value":9000, "label":"JP", "text":"Japan"},
+//						{"value":32000, "label":"EU", "text":"Europe"}],
+//					"radius":130, 
+//					"highlight":"alpha", 
+//					"animate":true, 
+//					"gradient-fill":true, 
+//					"alpha":0.5, 
+//					"no-labels":true, 
+//					"colours":["#ff0000","#00aa00","#0000ff","#ff9900","#ff00ff"]
+//					}
+//				]
+//			}
+//	)
+// }-*/;
 	
 	
 	
@@ -138,7 +138,7 @@ public class VariableDetailedView extends Composite {
 		setResearchMeta();
 		UserAccountDTO user = DatabankApp.get().getCurrentUser();
 		save_dto.setDistr_type(save_dto.DISTR_TYPE_1D);
-		anal_bar_w = new AnalisysBarView(bus, display,save_dto);
+		anal_bar_w = new AnalisysBarView(bus, display,save_dto,this);
 		analysis_bar.add(anal_bar_w);
 		//form.a
 		
@@ -160,12 +160,20 @@ public class VariableDetailedView extends Composite {
 		codeSchemeTbl.setWidget(0, 0, new Label("Код"));
 		codeSchemeTbl.setWidget(0, 1, new Label("Текст альтернативы"));
 		codeSchemeTbl.setWidget(0, 2, new Label("Проценты"));
+		codeSchemeTbl.setWidget(0, 3, new Label("Валидные %"));
+		
 		//codeSchemeTbl.insertCell(beforeRow, beforeColumn)
 		Double total = new Double(0);
+		Double total_valid = new Double(0);
+		//Double total = dto.getNumber_of_records();
 		
 		for(Double cnt:dto.getDistribution())
 		{
 			total+=cnt;
+		}
+		for(Double cnt:dto.getValid_distribution())
+		{
+			total_valid+=cnt;
 		}
         for(Double key:codes)
         {
@@ -178,9 +186,12 @@ public class VariableDetailedView extends Composite {
           // formatter.
            //formatter.setMaximumFractionDigits(2);
            String myNumber = formatter.format(new Double(dto.getDistribution().get(i)/total)*100);
+           String myNumber_v = formatter.format(new Double(dto.getValid_distribution().get(i)/total_valid)*100);
            
           // new NumberFormat();
            codeSchemeTbl.setWidget(i+1, 2, new Label(myNumber+"%"));
+           codeSchemeTbl.setWidget(i+1, 3, new Label(myNumber_v+"%"));
+           
            //com.google.gwt.user.client.ui.MultiWordSuggestOracle c = new MultiWordSuggestOracle();
            //c.requestSuggestions(request, callback)
            //com.google.gwt.user.client.ui.
@@ -245,13 +256,19 @@ public class VariableDetailedView extends Composite {
 	public void compare_table(ClickEvent ev)
 	{
 		display.getCenterPanel().clear();
-		display.getCenterPanel().add(new CompareVariableTablesView(dto.getGen_vars_ids(),display));
+		ArrayList<Long> lst = new ArrayList<Long>();
+		for(Long l:dto.getGen_vars_ids())lst.add(l);
+		lst.add(dto.getId());
+		display.getCenterPanel().add(new CompareVariableTablesView(lst,display));
 	}
 	@UiHandler(value="compare_graph")
 	public void compare_graph(ClickEvent ev)
 	{
 		display.getCenterPanel().clear();
-		display.getCenterPanel().add(new CompareVariableGraphsView(dto.getGen_vars_ids(),display));
+		ArrayList<Long> lst = new ArrayList<Long>();
+		for(Long l:dto.getGen_vars_ids())lst.add(l);
+		lst.add(dto.getId());
+		display.getCenterPanel().add(new CompareVariableGraphsView(lst,display));
 	}
 	private void renderDBfillers()
 	{
@@ -423,4 +440,12 @@ public class VariableDetailedView extends Composite {
 	    
 	    
 	  }
+
+
+
+
+	@Override
+	public String composeSpecificContent() {
+		return main_html.toString();
+	}
 }

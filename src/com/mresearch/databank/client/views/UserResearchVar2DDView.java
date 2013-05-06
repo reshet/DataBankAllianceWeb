@@ -30,12 +30,13 @@ import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
+import com.mresearch.databank.shared.UserAnalysisSaveDTO.User2DD_Choice;
 import com.mresearch.databank.shared.UserHistoryDTO;
 import com.mresearch.databank.shared.VarDTO;
 import com.mresearch.databank.shared.VarDTO_Detailed;
 import com.mresearch.databank.shared.VarDTO_Light;
 //There MVP pattern is ommited)
-public class UserResearchVar2DDView extends Composite {
+public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 
 	private static UserResearchVar2DDViewUiBinder uiBinder = GWT
 			.create(UserResearchVar2DDViewUiBinder.class);
@@ -74,8 +75,20 @@ public class UserResearchVar2DDView extends Composite {
 		
 		//DatabankApp.get().updateUserAccountState();
 		//UserAccountDTO user = DatabankApp.get().getCurrentUser();
-		anal_bar_w = new AnalisysBarView(bus, display,this.pre_saved);
+		anal_bar_w = new AnalisysBarView(bus, display,this.pre_saved,this);
 		analysis_bar.add(anal_bar_w);
+		
+		User2DD_Choice ch = pre_saved.getUser2dd_choice();
+		if(ch == User2DD_Choice.FREQ) showFreqChoice();
+		else{
+			//show_percents.setValue(true);
+			showPercentsChoice();
+			if(ch == User2DD_Choice.PERC_COL) percentsColomnChoice();
+			if(ch == User2DD_Choice.PERC_ROW) percentsRowChoice();
+			if(ch == User2DD_Choice.PERC_ALL) percentsTableChoice();
+		}
+		
+		
 		new RPCCall<UserHistoryDTO>() {
 			
 			@Override
@@ -110,45 +123,80 @@ public class UserResearchVar2DDView extends Composite {
 		msg.setHTML("<h2 class=\"green\">Идет построение распределения. Подождите пожалуйста...</h2>");
 		fetchSelectedVarDTOs();
 	}
-	@UiHandler(value="show_percents")
-	public void onShowPercentsChoice(ClickEvent e)
+	private void showPercentsChoice()
 	{
 		show_frequences.setValue(false);
+		show_percents.setValue(true);
 		percents_colomn.setVisible(true);
 		percents_row.setVisible(true);
 		percents_table.setVisible(true);
+		User2DD_Choice ch = User2DD_Choice.PERC_COL;
+		if(percents_colomn.getValue())ch =  User2DD_Choice.PERC_COL;
+		else if(percents_row.getValue())ch =  User2DD_Choice.PERC_ROW;
+		else if(percents_table.getValue())ch =  User2DD_Choice.PERC_ALL;
+		anal_bar_w.setUser2dd_choice(ch);		
+	}
+	@UiHandler(value="show_percents")
+	public void onShowPercentsChoice(ClickEvent e)
+	{
+		showPercentsChoice();
 		fill2DDtable(var1, var2, distribution);
 		//percents_type_pnl.setVisible(true);
 	}
-	@UiHandler(value="show_frequences")
-	public void onShowFrequencesChoice(ClickEvent e)
+	private void showFreqChoice()
 	{
 		percents_colomn.setVisible(false);
 		percents_row.setVisible(false);
 		percents_table.setVisible(false);
 		show_percents.setValue(false);
+		show_frequences.setValue(true);
+		anal_bar_w.setUser2dd_choice(User2DD_Choice.FREQ);
+	}
+	@UiHandler(value="show_frequences")
+	public void onShowFrequencesChoice(ClickEvent e)
+	{
+		showFreqChoice();
 		fill2DDtable(var1, var2, distribution);
 	//	percents_type_pnl.setVisible(false);
+	}
+	private void percentsColomnChoice()
+	{
+		percents_colomn.setValue(true);
+		percents_row.setValue(false);
+		percents_table.setValue(false);
+		anal_bar_w.setUser2dd_choice(User2DD_Choice.PERC_COL);
 	}
 	@UiHandler(value="percents_colomn")
 	public void onPercentsColomnChoice(ClickEvent e)
 	{
-		percents_row.setValue(false);
-		percents_table.setValue(false);
+		percentsColomnChoice();
 		fill2DDtable(var1, var2, distribution);
 	}
+	private void percentsRowChoice()
+	{
+		percents_row.setValue(true);
+		percents_colomn.setValue(false);
+		percents_table.setValue(false);
+		anal_bar_w.setUser2dd_choice(User2DD_Choice.PERC_ROW);
+	}
+
 	@UiHandler(value="percents_row")
 	public void onPercentsRowChoice(ClickEvent e)
 	{
-		percents_colomn.setValue(false);
-		percents_table.setValue(false);
+		percentsRowChoice();
 		fill2DDtable(var1, var2, distribution);
+	}
+	private void percentsTableChoice()
+	{
+		percents_table.setValue(true);
+		percents_colomn.setValue(false);
+		percents_row.setValue(false);
+		anal_bar_w.setUser2dd_choice(User2DD_Choice.PERC_ALL);
 	}
 	@UiHandler(value="percents_table")
 	public void onPercentsTableChoice(ClickEvent e)
 	{
-		percents_row.setValue(false);
-		percents_colomn.setValue(false);
+		percentsTableChoice();
 		fill2DDtable(var1, var2, distribution);
 	}
 	private void fetchVarsList()
@@ -189,14 +237,14 @@ public class UserResearchVar2DDView extends Composite {
 			var2_lbox.addItem(dto.getCode()+"::"+dto.getLabel());
 		}
 		
-		if(pre_saved.getVar_1()!= null && pre_saved.getVar_2()!=null)
+		if(pre_saved.getVar_1()!= null || pre_saved.getVar_2()!=null)
 		{
 			int index1=0,index2=0;
 			int i = 0;
 			for(VarDTO_Light dto:arr)
 			{
-				if (dto.getLabel().equals(pre_saved.getVar_1().getLabel())) index1 = i;
-				if (dto.getLabel().equals(pre_saved.getVar_2().getLabel())) index2 = i;
+				if (pre_saved.getVar_1()!= null && dto.getLabel().equals(pre_saved.getVar_1().getLabel())) index1 = i;
+				if (pre_saved.getVar_2()!=null && dto.getLabel().equals(pre_saved.getVar_2().getLabel())) index2 = i;
 				i++;
 			}
 			var1_lbox.setItemSelected(index1, true);
@@ -211,6 +259,8 @@ public class UserResearchVar2DDView extends Composite {
 	}
 	private void fill2DDtable(VarDTO var1,VarDTO var2,ArrayList<Double> distr)
 	{
+		
+		
 		selected_vars.clear();
 		msg.setHTML("");
 		selected_vars.add(new HTML("<h3 class=\"green\">Распределение "+var1.getCode()+"</h3>"+"<p class=\"gray25\">"+ var1.getLabel()+"</p>"));
@@ -262,6 +312,7 @@ public class UserResearchVar2DDView extends Composite {
 		}
 		
 		NumberFormat formatter = NumberFormat.getFormat("0.0");
+		//NumberFormat formatter_round = NumberFormat.getFormat("0");
         
 		if(show_frequences.getValue() == true)
 		{
@@ -271,7 +322,7 @@ public class UserResearchVar2DDView extends Composite {
 				for(int j = 1; j < var2.getV_label_values().size()+1;j++)
 				{ 
 					//Double freq_ij = (var1.getDistribution().get(j-1)/total1)*freq2_i;
-					String myNumber = formatter.format(table_distr[i-1][j-1]);       		
+					String myNumber = String.valueOf(Math.round(table_distr[i-1][j-1]));       		
 					the2DD_table.setWidget(i, j, new Label(myNumber));
 				}	
 			}
@@ -433,5 +484,21 @@ public class UserResearchVar2DDView extends Composite {
 				service.getVar(var1_id, cb);
 			}
 		}.retry(2);
+	}
+	@Override
+	public String composeSpecificContent() {
+		StringBuilder ans = new StringBuilder();
+			ans.append("<h3>Распределение "+var1_lbox.getItemText(var1_lbox.getSelectedIndex())+"</h3>");
+			ans.append("<h3>Относительно "+var2_lbox.getItemText(var2_lbox.getSelectedIndex())+"</h3>");
+		ans.append("</br>");
+		if(show_frequences.getValue()) ans.append("<p>Частоты</p></br>");
+		else{
+			if(percents_colomn.getValue()) ans.append("<p>Проценты по столбцам</p></br>");
+			if(percents_row.getValue()) ans.append("<p>Проценты по строкам</p></br>");
+			if(percents_table.getValue()) ans.append("<p>Проценты по всей таблице</p></br>");
+		}
+		ans.append("</br>");
+		ans.append(the2DD_table.toString());
+		return ans.toString();
 	}
 }

@@ -30,7 +30,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DoubleBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -69,6 +71,7 @@ public class VariableEditView extends Composite {
 	//@UiField VerticalPanel graph_pnl;
 	@UiField VerticalPanel elasticDBfields;
 	@UiField Button confirmBtn,generalizeBtn;
+	@UiField DoubleBox param_box;
 //	Hyperlink link;
 //	private FormPanel form;
 //	private TextBox hidden_box;
@@ -100,6 +103,7 @@ public class VariableEditView extends Composite {
 		this.displ= displ;
 		this.db = dt;
 		this.dto = dto;
+		param_box.setValue(2.0);
 		if(dto.getFilling() == null) dto.setFilling(new HashMap<String, String>());
 		//form.a
 		save_pnl.add(new SaveHTMLAddon(main_html));
@@ -255,6 +259,7 @@ public class VariableEditView extends Composite {
 			@Override
 			protected void callService(AsyncCallback<ArrayList<VarDTO_Detailed>> cb) {
 				ComparativeSearchParamsDTO dt = new ComparativeSearchParamsDTO();
+				dt.setBarrier_variance(param_box.getValue());
 				AdminSocioResearchService.Util.getInstance().findVarsLikeThis(dto.getId(),dt, cb);
 			}
 		}.retry(2);
@@ -265,7 +270,11 @@ public class VariableEditView extends Composite {
 		to_generalizeTbl.clear();
 		if(vars_to_generalize==null)return;
 		to_generalizeTbl.setSize("600px", "350px");
-		if(vars_to_generalize.size()>0)generalizeBtn.setVisible(true);else generalizeBtn.setVisible(false);
+		if(vars_to_generalize.size()>0)generalizeBtn.setVisible(true);
+		else {
+			generalizeBtn.setVisible(false);
+			to_generalizeTbl.setWidget(0, 0, new HTML("<h3 class=\"green\">По запросу в банке не найдено схожих переменных.</h3>"));
+		}
 		for(int j = 0; j < vars_to_generalize.size();j++)
 		{
 			to_generalizeTbl.setWidget(j, 0, new CheckBox("идентична"));

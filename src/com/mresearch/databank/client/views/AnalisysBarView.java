@@ -48,6 +48,7 @@ import com.mresearch.databank.client.service.UserAccountServiceAsync;
 import com.mresearch.databank.shared.IPickableElement;
 import com.mresearch.databank.shared.ShowResearchSavedParameters;
 import com.mresearch.databank.shared.UserAccountDTO;
+import com.mresearch.databank.shared.UserAnalysisSaveDTO.User2DD_Choice;
 import com.mresearch.databank.shared.UserHistoryDTO;
 
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
@@ -59,6 +60,7 @@ import com.mresearch.databank.shared.VarDTO_Detailed;
 
 public class AnalisysBarView extends Composite implements UserResearchPerspectivePresenter.AnalisysDisplay{
 
+	
 	private static AnalisysBarViewUiBinder uiBinder = GWT
 			.create(AnalisysBarViewUiBinder.class);
 
@@ -80,11 +82,28 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 	private boolean w_use,f_use;
 	private FormPanel form;
 	private TextBox content = new TextBox();
+	private TextBox save_name = new TextBox();
+	
 	String realPath = GWT.getModuleBaseURL();
 	private UserAnalysisSaveDTO save_dto = null;
-	private  ArrayList<String> weights_names;
-	private ArrayList<Long> weights_ids;
+	private ArrayList<String> weights_names;
+	private HTML_Saver saver;
+	public User2DD_Choice user2dd_choice = User2DD_Choice.FREQ;
 	
+	public User2DD_Choice getUser2dd_choice() {
+		return user2dd_choice;
+	}
+
+	public void setUser2dd_choice(User2DD_Choice user2dd_choice) {
+		this.user2dd_choice = user2dd_choice;
+	}
+
+
+
+
+
+
+	private ArrayList<Long> weights_ids;
 	public UserAnalysisSaveDTO getSave_dto() {
 		return save_dto;
 	}
@@ -93,7 +112,7 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 		this.save_dto = save_dto;
 	}
 
-	public AnalisysBarView(SimpleEventBus bus,UserResearchPerspectivePresenter.Display display,UserAnalysisSaveDTO save_dto) {
+	public AnalisysBarView(SimpleEventBus bus,UserResearchPerspectivePresenter.Display display,UserAnalysisSaveDTO save_dto,HTML_Saver saver) {
 		initWidget(uiBinder.createAndBindUi(this));
 		if(DatabankApp.get().getCurrentUser().getId()!=0)save_btn.setVisible(true);
 			else save_btn.setVisible(false);
@@ -101,6 +120,7 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 		this.eventBus = bus;
 		this.display = display;
 		this.save_dto = save_dto;
+		this.saver = saver;
 		this.w_use = save_dto.getSeting().getWeights_use()==1?true:false;
 		this.f_use = save_dto.getSeting().getFilters_use()==1?true:false;
 		current_research_id = save_dto.getSeting().getResearh().getID();
@@ -124,11 +144,16 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 	{
 		content.setVisible(false);
 		content.setName("content");
+		save_name.setVisible(false);
+		save_name.setName("name");
+		
 		form = new FormPanel();
 		form.setAction(realPath+"htmlSave");
 		form.setMethod(FormPanel.METHOD_POST);
 		VerticalPanel panel = new VerticalPanel();
 		panel.add(content);
+		panel.add(save_name);
+	
 		form.add(panel);
 	}
 	private int getCurrentWeightId()
@@ -136,6 +161,12 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 		if(weights_ids==null) return 0;
 		//if(weights_list.getSelectedIndex()==0)return 0;
 		return weights_ids.get(weights_list.getSelectedIndex()).intValue();
+	}
+	private String composeHTMLanalysis(){
+		//String s;
+		//s = new String(display.getCenterPanel().toString().getBytes());
+		//return s;
+		return saver.composeSpecificContent();
 	}
 	private void bind()
 	{
@@ -180,6 +211,7 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 			@Override
 			public void onClick(ClickEvent arg0) {
 				//eventBus.
+				save_dto.setUser2dd_choice(user2dd_choice);
 				eventBus.fireEvent(new RecalculateDistributionsEvent(save_dto.getSeting(),save_dto));
 			}
 		});
@@ -214,6 +246,8 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 //				}.retry(2);
 				save_dto.getSeting().setWeights_var_id(new Integer(getCurrentWeightId()));
 				save_dto.getSeting().setWeights_use(getWeightsUseState());
+				//save_dto.setVar_1(save_dto.getVar2);
+				//save_dto.setVar_2();
 				ShowVar2DDEvent event = new ShowVar2DDEvent(save_dto.getSeting().getResearh().getID());
 				event.setPre_saved(save_dto);
 				eventBus.fireEvent(event);
@@ -223,12 +257,32 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 			@Override
 			public void onClick(ClickEvent arg0) {
 				//eventBus.fireEvent(new SaveHTMLEvent());
-				String s;
-				s = new String(display.getCenterPanel().toString().getBytes());
-				content.setText(s);
-				form.submit();
 				
-			}
+				final TextBox tb = new TextBox();
+	        	Label l = new Label("Введите имя файла:");
+	        	VerticalPanel vp = new VerticalPanel();
+	        	vp.add(l);
+	        	vp.add(tb);
+	        	PopupPanel b = DialogBoxFactory.createDialogBox("Сохранение результатов анализа в HTML",vp,new DialogBoxFactory.closeAction(){
+	        		@Override
+	        		public void doAction(){
+	        			String nam = tb.getText();
+	        			if (nam.equals("")) nam = "cохраненное распределение.html";
+	        			final String name = nam;
+	        			save_name.setText(name);
+	        	
+	        			content.setText(composeHTMLanalysis());
+	    				
+	        			form.submit();
+	    			
+	        			//save_dto.setName(name);
+	        			//save_dto.getSeting().setWeights_var_id(new Integer(getCurrentWeightId()));
+	    				//save_dto.getSeting().setWeights_use(getWeightsUseState());
+	        			//User;
+	        		}
+	        	},"Сохранить");
+	        	b.show();
+	       }
 		});
 	
 		save_btn.addClickHandler(new ClickHandler()
@@ -243,7 +297,10 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 	        	PopupPanel b = DialogBoxFactory.createDialogBox("Сохранение результатов анализа",vp,new DialogBoxFactory.closeAction(){
 	        		@Override
 	        		public void doAction(){
-	        			final String name = tb.getText();
+	        			String nam = tb.getText();
+	        			if (nam.equals("")) nam = "cохраненное распределение";
+	        			final String name = nam;
+	        			save_dto.setUser2dd_choice(user2dd_choice);
 	        			save_dto.setName(name);
 	        			save_dto.getSeting().setWeights_var_id(new Integer(getCurrentWeightId()));
 	    				save_dto.getSeting().setWeights_use(getWeightsUseState());
@@ -255,7 +312,7 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 	        				}
 	        				@Override
 	        				public void onSuccess(Void arg0) {
-	        					PopupPanel b = DialogBoxFactory.createDialogBox("Сохранение результатов анализа",new Label("Результаты анализа успешно сохранены!"),null);
+	        					PopupPanel b = DialogBoxFactory.createDialogBox("Сохранение результатов анализа",new Label("Результаты анализа успешно сохранены!"),null,"ОК");
 	        					b.show();
 	        				}
 	        				@Override
@@ -265,7 +322,7 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 	        			}.retry(2);
 	        			
 	        		}
-	        	});
+	        	},"Сохранить");
 	        	b.show();
 	        }
 		 });
@@ -475,7 +532,9 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 						
 						filters.add(t.getText());
 						filter_usage.add(0);
-						filters_details_btn.click();
+						eventBus.fireEvent(new RecalculateDistributionsEvent(save_dto.getSeting(),save_dto));
+						
+						//filters_details_btn.fireEvent();
 //						new RPCCall<UserAccountDTO>() {
 //							
 //							@Override

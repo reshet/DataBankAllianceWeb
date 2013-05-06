@@ -58,7 +58,13 @@
 		<g:HorizontalPanel ui:field="save_pnl"></g:HorizontalPanel>
 		<g:Button ui:field="confirmBtn">Сохранить</g:Button>
 		<br/>
-		<g:Button ui:field="searchBtn">Поиск примерно похожих переменных</g:Button>
+		<table>
+			<tr>
+				<td>Параметр: </td>
+				<td><g:DoubleBox ui:field="param_box"></g:DoubleBox></td>
+				<td><g:Button ui:field="searchBtn">Поиск примерно похожих переменных</g:Button></td>
+			</tr>
+		</table>
 		<g:FlexTable ui:field="to_generalizeTbl"></g:FlexTable>
 		<g:Button ui:field="generalizeBtn" visible="false">Унифицировать выбранные переменные</g:Button>
 	</g:HTMLPanel>

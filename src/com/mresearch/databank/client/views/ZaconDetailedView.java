@@ -129,7 +129,7 @@ public class ZaconDetailedView extends Composite {
 			
 			//MultiValuedFieldViewer mv = new MultiValuedFieldViewer(db,dto.getFilling(),"");
 			
-			final PopupPanel dialogBox = DialogBoxFactory.createDialogBox("Подробности документа",h,null);
+			final PopupPanel dialogBox = DialogBoxFactory.createDialogBox("Подробности документа",h,null,"Назад");
 		    dialogBox.show();
 		}
 		private void doShowFiles()
