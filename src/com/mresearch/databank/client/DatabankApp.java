@@ -76,7 +76,7 @@ public class DatabankApp implements EntryPoint {
 		 singleton = this; 
 		// initWidget(binder.createAndBindUi(this));
 		//initDefUsers();
-		login("email","password");
+		login("email","password",null);
 		//login("research@admin.com","default");
 		
 		
@@ -129,9 +129,9 @@ public class DatabankApp implements EntryPoint {
 		}.retry(2);
 
 	}
-	public void login(String email,String password)
+	public void login(String email,String password,String token)
 	{
-		    userService.login(email, password,
+		    userService.login(email, password,token,
 		        new AsyncCallback<UserAccountDTO>() {
 		          public void onFailure(Throwable caught) {
 		        	  Window.alert("An error occurred: "+caught.getMessage());

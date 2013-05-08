@@ -121,7 +121,7 @@ public class ResearchAdminAppController implements ValueChangeHandler<String>, A
 		public void onClick(ClickEvent event) {
 			DatabankApp.get().setCurrentUser(null);
 			DatabankApp.get().logout();
-			DatabankApp.get().login("email", "pass");
+			DatabankApp.get().login("email", "pass",null);
 		}
 	});
     

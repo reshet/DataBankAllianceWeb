@@ -99,7 +99,7 @@ public class JuryAdminAppController implements ValueChangeHandler<String>, AppCo
 		public void onClick(ClickEvent event) {
 			DatabankApp.get().setCurrentUser(null);
 			DatabankApp.get().logout();
-			DatabankApp.get().login("email", "pass");
+			DatabankApp.get().login("email", "pass",null);
 		}
 	});
    

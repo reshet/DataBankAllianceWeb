@@ -8,6 +8,13 @@
 			color: olive;
 			font: bold;
 		}
+		.loginfo{
+			text-align: left;
+			padding-left: 5px;
+			color: graytext;
+			font: bold;
+			font-size: 11pt;
+		}
 		/*
 		.gwt-MenuBar {
 		  cursor: default;
@@ -303,11 +310,16 @@
 						
 <!-- 				<g:HorizontalPanel horizontalAlignment="ALIGN_RIGHT" width="100%"> -->
 <!-- 				</g:HorizontalPanel> -->
-					<g:Anchor href="javascript:;" ui:field="loginNav" styleName="{style.login}" horizontalAlignment="ALIGN_RIGHT">
-								<div class="{style.login}">
-									Войти!
-								</div>
-					</g:Anchor>
+					<table><tr>
+						<td><g:Label ui:field="username" styleName="{style.loginfo}"></g:Label></td>
+						<td>	
+						<g:Anchor href="javascript:;" ui:field="loginNav" styleName="{style.login}" horizontalAlignment="ALIGN_RIGHT">
+									<div class="{style.login}">
+										Войти!
+									</div>
+						</g:Anchor>
+						</td>
+					</tr></table>
 					</div>
 				
 				

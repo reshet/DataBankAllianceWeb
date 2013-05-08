@@ -26,6 +26,7 @@
   <!-- Include GWTUpload library -->
   <inherits name="gwtupload.GWTUpload"/>
   <inherits name='com.smartgwt.SmartGwt'/>
+  <inherits name="com.google.api.gwt.oauth2.OAuth2" />
   <!-- Load dinamically predefined styles in the library when the application starts -->
 <!--   <stylesheet src="Upload.css"/> -->
   <stylesheet src="CoolStyles.css"/>

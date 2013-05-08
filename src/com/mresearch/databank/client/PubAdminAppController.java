@@ -99,7 +99,7 @@ public class PubAdminAppController implements ValueChangeHandler<String>, AppCon
 		public void onClick(ClickEvent event) {
 			DatabankApp.get().setCurrentUser(null);
 			DatabankApp.get().logout();
-			DatabankApp.get().login("email", "pass");
+			DatabankApp.get().login("email", "pass",null);
 		}
 	});
    

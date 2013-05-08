@@ -15,9 +15,13 @@
 				<td><g:PasswordTextBox  ui:field="pswd_box"></g:PasswordTextBox></td>
 			</tr>
 			<tr>
-				<td/>
 				<td>
-					<g:Button ui:field="enterBtn" text="Вход" width="177px"></g:Button>
+					<g:Button ui:field="enterBtn" text="Вход"></g:Button>
+					
+				</td>
+				<td>
+					<g:Button ui:field="authGoogleBtn" text="Вход через Google"></g:Button>
+					
 				</td>
 			</tr>
 			

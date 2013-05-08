@@ -14,7 +14,7 @@ public interface UserAccountServiceAsync {
 
 	void initDefaultUsers(AsyncCallback<Void> callback);
 
-	void login(String email, String password,
+	void login(String email, String password, String token,
 			AsyncCallback<UserAccountDTO> callback);
 
 	void logout(AsyncCallback<Void> callback);

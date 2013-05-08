@@ -56,7 +56,7 @@ public class UserAccountServiceImpl extends RemoteServiceServlet implements
 			e.printStackTrace();
 		}
 	}
-  public UserAccountDTO login(String email, String password) {
+  public UserAccountDTO login(String email, String password,String token) {
 	UserAccountDTO userAcc =   (UserAccountDTO) this.getThreadLocalRequest().getSession().getAttribute("user");
 	if (userAcc != null)
 	{
@@ -67,9 +67,13 @@ public class UserAccountServiceImpl extends RemoteServiceServlet implements
 	account = eao.getUserAccount(email, password);
 	if (account == null)
 	{
-		UserAccountDTO acc = eao.getDefaultUser();
-		this.getThreadLocalRequest().getSession().setAttribute("user", acc);
-		return acc;
+		if(token!=null && !token.isEmpty()){
+			 account = eao.getUserAccountOrRegisterByOAuthToken(token);
+		}else{
+			UserAccountDTO acc = eao.getDefaultUser();
+			this.getThreadLocalRequest().getSession().setAttribute("user", acc);
+			return acc;
+		}
 	}
 	this.getThreadLocalRequest().getSession().setAttribute("user", account);
 	return account;

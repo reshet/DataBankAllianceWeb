@@ -52,6 +52,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -147,6 +148,7 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
  // @UiField MenuBar menuBar,menuBar1,menuBar2,menuBar3,menuBar4;
   @UiField VerticalPanel centerPanel;
   @UiField TextBox searchBox;
+  @UiField Label username;
 ///  @UiField PushButton searchBtn;
  // @UiField Button searchCmd;
   
@@ -163,7 +165,7 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
     this.eventBus = eventBus;
     this.startpageService = rpcService;
     this.base = base;
-    
+    username.setText(base.getCurrentUser().getName());
 //    
 //    menuBar.setAutoOpen(true);
 //    //menuBar.setWidth("500px");
@@ -187,6 +189,10 @@ public class UserAppController implements ValueChangeHandler<String>, AppControl
     bind();
   }
   
+//  @Override
+//  public void updateUsername(String str){
+//	  username.setText(str);
+//  }
   private void bind() {
     History.addValueChangeHandler(this);
     //History.

@@ -33,7 +33,7 @@ import com.mresearch.databank.shared.UserResearchSettingDTO;
 @RemoteServiceRelativePath("userAccountService")
 public interface UserAccountService extends RemoteService {
   
-  public UserAccountDTO login(String email, String password);
+  public UserAccountDTO login(String email, String password,String token);
   public void logout();
   public void initDefaultUsers();
   public UserHistoryDTO updateResearchState(UserHistoryDTO dto);
