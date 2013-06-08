@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.json.client.JSONArray;
@@ -17,6 +18,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -26,6 +28,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ToggleButton;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.service.AdminSocioResearchService;
@@ -62,6 +66,7 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	private HashMap<String,String> filling;
 	private long previous_item_id;
 	private String previous_item_name;
+	@UiField ToggleButton editBtn;
 	private String base_name;
 	public MultiValuedEntity(MetaUnitMultivaluedEntityDTO dto,JSON_Representation represent,HashMap<String,String> filling,String base_name) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -73,12 +78,69 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 		//items_list.setVisibleItemCount(1);
 		//renderSubUnits();
 		//items_list.se
+		editBtn.setStyleName("metaoptsBtn");
 		
 		refreshMembersList();
 	}
 	
-	
-	  @UiHandler({"add"})
+	@UiHandler(value="editBtn")
+	  public void editBtnCmd(ClickEvent ev) {
+	    PopupPanel p = new PopupPanel();
+	    //p.setTitle("Добавление экземпляра сущности...");
+	    //p.setModal(false);
+	    p.setAutoHideEnabled(true);
+	    Widget source = (Widget) ev.getSource();
+        int left = source.getAbsoluteLeft();
+        int top = source.getAbsoluteTop();
+        p.setPopupPosition(left, top);
+	    //p.setPopupPosition(200, 200);
+	    p.setSize("190px", "100px");
+	    Anchor addAnch = new Anchor("Добавить");
+	    Anchor addsubAnch = new Anchor("Добавить подобъект");
+	    Anchor delAnch = new Anchor("Удалить");
+	    Anchor editAnch = new Anchor("Изменить");
+	    Anchor editstructAnch = new Anchor("Редактировать структуру");
+	    addAnch.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent ev) {
+				addCmd(ev);
+			}
+		});
+	    addsubAnch.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent ev) {
+				addCmdSub(ev);
+			}
+		});
+	    delAnch.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent ev) {
+				delCmd(ev);
+			}
+		});
+	    editAnch.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent ev) {
+				editCmd(ev);
+			}
+		});
+	    editstructAnch.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent ev) {
+				editItemCmd(ev);
+			}
+		});
+	    
+	    VerticalPanel pnl = new VerticalPanel();
+	    pnl.add(addAnch);
+	    pnl.add(addsubAnch);
+	    pnl.add(delAnch);
+	    pnl.add(editAnch);
+	    pnl.add(editstructAnch);
+	    p.add(pnl);
+		p.show();
+	  }
+	 // @UiHandler(value="add")
 	  public void addCmd(ClickEvent ev) {
 	    PopupPanel p = new PopupPanel();
 	    p.setTitle("Добавление экземпляра сущности...");
@@ -88,7 +150,7 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	    p.setWidget(new ItemCreator(new MultiValuedField(this.dto, null, new HashMap(),dto.getUnique_name()), this, p));
 	    p.show();
 	  }
-	 @UiHandler({"addsub"})
+	 //@UiHandler(value="addsub")
 	  public void addCmdSub(ClickEvent ev) {
 	    PopupPanel p = new PopupPanel();
 	    p.setTitle("Добавление подэкземпляра сущности...");
@@ -106,7 +168,7 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	  }
 	 
 	 
-	@UiHandler(value="delete") 
+	//@UiHandler(value="delete") 
 	public void delCmd(ClickEvent ev)
 	{
 		final int ind = items_list.getSelectedIndex();
@@ -131,7 +193,7 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 			}.retry(2);
 		}
 	}
-	@UiHandler(value="edit") 
+	//@UiHandler(value="edit") 
 	public void editCmd(ClickEvent ev)
 	{
 		PopupPanel p = new PopupPanel();
@@ -143,7 +205,7 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 		p.show();	
 	}
 	
-	@UiHandler(value="edit_item") 
+	//@UiHandler(value="edit_item") 
 	public void editItemCmd(ClickEvent ev)
 	{
 		int ind = items_list.getSelectedIndex();

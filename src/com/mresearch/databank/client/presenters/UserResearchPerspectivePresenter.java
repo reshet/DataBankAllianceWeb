@@ -624,7 +624,14 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 //			}
 //		});
 		
-		
+		eventBus.addHandler(ShowVar2DDEvent.TYPE, new ShowVar2DDEventHandler() {
+			@Override
+			public void onShowVar2DD(ShowVar2DDEvent event) {
+				display.getCenterPanel().clear();
+				
+				display.getCenterPanel().add(new UserResearchVar2DDView(event.getRes_id(),eventBus,display,event.getPre_saved()));
+			}
+		});
 
 		
 		display.getTreeForSelection().addSelectionHandler(new SelectionHandler<TreeItem>() {
@@ -816,14 +823,7 @@ public class UserResearchPerspectivePresenter implements Presenter,Action
 //				//fetchResearchDetailes(event.getResearch_id());
 //			}
 //		});
-		eventBus.addHandler(ShowVar2DDEvent.TYPE, new ShowVar2DDEventHandler() {
-			@Override
-			public void onShowVar2DD(ShowVar2DDEvent event) {
-				display.getCenterPanel().clear();
-				
-				display.getCenterPanel().add(new UserResearchVar2DDView(event.getRes_id(),eventBus,display,event.getPre_saved()));
-			}
-		});
+
 		//		eventBus.addHandler(ShowStartPageMainEvent.TYPE, new ShowStartPageMainEventHandler() {
 //			@Override
 //			public void onShowStartPageMain(ShowStartPageMainEvent event) {

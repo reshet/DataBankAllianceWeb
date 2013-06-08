@@ -40,7 +40,7 @@ public class AdminResearchVarGeneralizeS1View extends Composite {
 	public AdminResearchVarGeneralizeS1View(long research_id,HasWidgets cont) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.research_id = research_id;
-		this.cont = cont;
+		this.setCont(cont);
 		fetchResearchesList();
 	}
 	private void fetchResearchesList()
@@ -60,7 +60,7 @@ public class AdminResearchVarGeneralizeS1View extends Composite {
 					
 					@Override
 					public void processPickChoice(final ArrayList<Long> selected_keys) {
-						cont.clear();
+						getCont().clear();
 						new RPCCall<ArrayList<SocioResearchDTO_Light>>() {
 
 							@Override
@@ -73,7 +73,7 @@ public class AdminResearchVarGeneralizeS1View extends Composite {
 									ArrayList<SocioResearchDTO_Light> result) {
 								ArrayList<String> names = new ArrayList<String>();
 								for(SocioResearchDTO_Light dto:result)names.add(dto.getName());
-								cont.add(new AdminResearchVarGeneralizeS2View(research_id,selected_keys,names));
+								getCont().add(new AdminResearchVarGeneralizeS2View(research_id,selected_keys,names));
 							}
 
 							@Override
@@ -102,6 +102,12 @@ public class AdminResearchVarGeneralizeS1View extends Composite {
 				service.getResearchSummaries(cb);
 			}
 		}.retry(2);
+	}
+	public HasWidgets getCont() {
+		return cont;
+	}
+	public void setCont(HasWidgets cont) {
+		this.cont = cont;
 	}
 	
 }

@@ -88,7 +88,10 @@
 		}  
 	</ui:style>
 	<g:VerticalPanel styleName="{style.pad_left}">
-		<g:HorizontalPanel ui:field="analysis_bar" styleName="{style.analisys}">
+		<g:HorizontalPanel>
+			<g:Button ui:field="back_btn" text="&larr;Назад"></g:Button>
+			<g:HorizontalPanel ui:field="analysis_bar" styleName="{style.analisys}">
+			</g:HorizontalPanel>
 		</g:HorizontalPanel>
 		<g:HTMLPanel>
 			<table>
@@ -138,6 +141,47 @@
 			<g:HTML ui:field="msg"></g:HTML>
 			<br/>
 			<g:FlexTable ui:field="the2DD_table" styleName="{style.tableStyle}"></g:FlexTable>
+			<br/>
+				Принадлежит к исследованию:
+				<br/>
+				
+				<div class="{style.tableStyle}">
+				<table>
+					<tr>
+						<td>Название
+						</td>
+						<td>Даты
+						</td>
+						<td>Генеральная совокупность
+						</td>
+						<td>Объем выборки
+						</td>
+						<td>Организация-исполнитель
+						</td>
+						<td>Тэги
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+						<div class="{style.cleaner}">
+						<g:VerticalPanel ui:field="research_link"></g:VerticalPanel>
+						</div>
+						</td>
+						<td><g:Label ui:field="dates"/>
+						</td>
+						<td><g:Label ui:field="gen_geath"/>
+						</td>
+						<td><g:Label ui:field="sel_size"/>
+						</td>
+						<td><g:Label ui:field="org_impl"/>
+						</td>
+						<td><g:Label ui:field="tag"/>
+						</td>
+					</tr>
+				</table>
+				</div>
+				<br/>
 		</g:HTMLPanel>
 		
 	</g:VerticalPanel>

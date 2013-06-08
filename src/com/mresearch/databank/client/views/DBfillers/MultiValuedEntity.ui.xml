@@ -9,32 +9,35 @@
 		{
 			max-width: 400px;
 		}
+		.category
+		{
+			font-weight: bold;
+			font: 15px;
+			vertical-align: text-top;
+		}
 	</ui:style>
-	<g:HTMLPanel styleName="{.important}">
-		<table>
-			<tr>
-				<td>
-					<g:Label ui:field="entity_name"></g:Label>
-				</td>
-				<td>
-					<g:ListBox ui:field="items_list" styleName="{style.constr}"></g:ListBox>
-				</td>
-				<td>
-					<g:Anchor ui:field="add">+Доб</g:Anchor>
-				</td>
-				<td>
-					<g:Anchor ui:field="addsub">+Юнит</g:Anchor>
-				</td>
-				<td>
-					<g:Anchor ui:field="delete">-Удл</g:Anchor>
-				</td>
-				<td>
-					<g:Anchor ui:field="edit_item">изменить</g:Anchor>
-				</td>
-				<td>
-					<g:Anchor ui:field="edit">ред.</g:Anchor>
-				</td>
-			</tr>
-		</table>
-	</g:HTMLPanel>
+	<g:HorizontalPanel styleName="{style.important}" verticalAlignment="ALIGN_MIDDLE">
+			<g:Label ui:field="entity_name" styleName="{style.category}"></g:Label>
+			<g:ListBox ui:field="items_list" styleName="{style.constr}"></g:ListBox>
+			<g:ToggleButton ui:field="editBtn" height="28px" width="28px"></g:ToggleButton>
+<!-- 			<table> -->
+<!-- 			<tr> -->
+<!-- 				<td> -->
+<!-- 					<g:Anchor ui:field="add">+Доб</g:Anchor> -->
+<!-- 				</td> -->
+<!-- 				<td> -->
+<!-- 					<g:Anchor ui:field="addsub">+Юнит</g:Anchor> -->
+<!-- 				</td> -->
+<!-- 				<td> -->
+<!-- 					<g:Anchor ui:field="delete">-Удл</g:Anchor> -->
+<!-- 				</td> -->
+<!-- 				<td> -->
+<!-- 					<g:Anchor ui:field="edit_item">изменить</g:Anchor> -->
+<!-- 				</td> -->
+<!-- 				<td> -->
+<!-- 					<g:Anchor ui:field="edit">ред.</g:Anchor> -->
+<!-- 				</td> -->
+<!-- 			</tr> -->
+<!-- 		</table> -->
+	</g:HorizontalPanel>
 </ui:UiBinder> 

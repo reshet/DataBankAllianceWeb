@@ -13,9 +13,7 @@
 						<tr>
 <!-- 							<td float="right"><g:CheckBox text="Взвешивание отключено" checked="false" ui:field="weights_use"></g:CheckBox></td>
 							<td float="right"><g:CheckBox text="Фильтры" checked="false" ui:field="filters_use"></g:CheckBox> </td>
- -->
-							<td><g:Button ui:field="back_btn" text="&larr;Назад к переменным"></g:Button>
-							</td>
+ -->						
  							<td float="right"><g:ToggleButton height="32px" width="32px"  ui:field="weights_use"></g:ToggleButton></td>
  							<td float="right"><g:ListBox height="32px" width="90px"  ui:field="weights_list" visible="false"></g:ListBox></td>
 							<td float="right"><g:PushButton ui:field="plotBtn" height="32px" width="32px"></g:PushButton></td>

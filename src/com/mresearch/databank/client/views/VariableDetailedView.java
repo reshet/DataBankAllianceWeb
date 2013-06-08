@@ -29,6 +29,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -232,7 +233,11 @@ public class VariableDetailedView extends Composite implements HTML_Saver{
 	}
 	
 	
-	
+	@UiHandler(value="back_btn")
+	public void back_action(ClickEvent e)
+	{
+		History.back();
+	}
 	
 	private void setResearchMeta()
 	{
@@ -298,7 +303,7 @@ public class VariableDetailedView extends Composite implements HTML_Saver{
 		//VarMultiValuedFieldViewer mv = new VarMultiValuedFieldViewer(db,dto.getFilling(),"");
 		//elasticDBfields.add(mv);
 	}
-	private boolean plot_viewed = false;
+	private static boolean plot_viewed = false;
 	public static String wrap(String in,int len) {
 		in=in.trim();
 		if(in.length()<len) return in;

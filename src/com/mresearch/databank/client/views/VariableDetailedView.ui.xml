@@ -95,7 +95,10 @@
 	</ui:style>
 	
 	<g:HTMLPanel styleName="{style.pad_left}">
-		<g:HorizontalPanel ui:field="analysis_bar" styleName="{style.analisys}">
+		<g:HorizontalPanel>
+			<g:Button ui:field="back_btn" text="&larr;Назад к переменным"></g:Button>
+			<g:HorizontalPanel ui:field="analysis_bar" styleName="{style.analisys}">
+			</g:HorizontalPanel>
 		</g:HorizontalPanel>
 		<h2>Просмотр переменной</h2>
 		<g:HTMLPanel ui:field="main_html">

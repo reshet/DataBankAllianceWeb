@@ -112,7 +112,7 @@ public class UserResearchDetailedView extends Composite {
 //		//this.selectionAppr.setText(dto.getSelection_appr());
 //		this.method.setText(dto.getMethod());
 		this.weights.setText("Без взвешивания");
-		if(dto.getVar_weight_names()!=null)
+		if(dto.getVar_weight_names()!=null && dto.getVar_weight_names().size()>0)
 		{
 			String text = "";
 			for(String st:dto.getVar_weight_names())

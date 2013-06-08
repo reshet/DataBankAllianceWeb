@@ -49,7 +49,7 @@ public class AdminResearchGroupEditView extends Composite implements AdminResear
 	//@UiField TextBox nameResearch,selectionSize;
 	@UiField ListBox ethalonSelector;
 	@UiField VerticalPanel researchesToPropogate,elasticDBfields,descriptionEditor;
-	@UiField Button confirmBtn,deleteBtn;
+	//@UiField Button confirmBtn,deleteBtn;
 	private final PopupPanel addOrgPopupPanel = new PopupPanel();
 	public AdminResearchGroupEditView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -116,14 +116,14 @@ private void renderDBfillers()
 		renderDBfillers();
 	}
 	
-	@Override
-	public HasClickHandlers getCondirmBtn() {
-		return confirmBtn;
-	}
-	@Override
-	public HasClickHandlers getDeleteBtn() {
-		return deleteBtn;
-	}
+//	@Override
+//	public HasClickHandlers getCondirmBtn() {
+//		return confirmBtn;
+//	}
+//	@Override
+//	public HasClickHandlers getDeleteBtn() {
+//		return deleteBtn;
+//	}
 	@Override
 	public void setResearchesAvaible(ArrayList<String> names, ArrayList<Long> ids) {
 		researches_names = names;
@@ -150,7 +150,7 @@ private void renderDBfillers()
 	}
 	@Override
 	public VerticalPanel getPickResearchesToPropagatePanel() {
-		// TODO Auto-generated method stub
+		
 		return researchesToPropogate;
 	}
 

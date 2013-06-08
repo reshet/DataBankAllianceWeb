@@ -5,27 +5,26 @@
 		.important {
 			font-weight: bold;
 		}
+		.category
+		{
+			font-weight: bold;
+			font: 15px;
+			vertical-align: text-top;
+		}
+		.tableResearch
+		{
+			font-weight: normal;
+			padding: 2px;
+			margin-left: 15px;
+		}
 	</ui:style>
+	
 	<g:HTMLPanel>
-		<table>
-			<tr>
-				<td>
-					<g:Label ui:field="field_name"></g:Label>
-				</td>
-			</tr>
-			<tr>
-				<td/>
-				<td>
-					<g:FlexTable ui:field="subunits_table"></g:FlexTable>
-				</td>
-			</tr>
-			<tr>
-				<td/><td/>
-				<td>
-					<g:Anchor ui:field="edit">редактировать</g:Anchor>
-				</td>
-			</tr>
-			
-		</table>
-	</g:HTMLPanel>
+		<g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE">
+			<g:Label ui:field="field_name" styleName="{style.category}"></g:Label>
+<!-- 			<g:Anchor ui:field="edit">редактировать</g:Anchor> -->
+			<g:PushButton ui:field="editBtn" height="28px" width="28px"></g:PushButton>
+		</g:HorizontalPanel>
+		<g:FlexTable ui:field="subunits_table" styleName="{style.tableResearch}"></g:FlexTable>
+	</g:HTMLPanel>	
 </ui:UiBinder> 

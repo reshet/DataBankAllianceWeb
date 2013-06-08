@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.mresearch.databank.shared.JSON_Representation;
@@ -50,6 +51,7 @@ public class MultiValuedField extends Composite implements MetaUnitFiller,MetaUn
 
 	@UiField Label field_name;
 	@UiField FlexTable subunits_table;
+	@UiField PushButton editBtn;
 	public MetaUnitMultivaluedDTO dto;
 	private JSON_Representation current_json;
 	private HashMap<String,String> filling;
@@ -60,16 +62,18 @@ public class MultiValuedField extends Composite implements MetaUnitFiller,MetaUn
 		this.filling = fill;
 		this.base_name = base_name.equals("")?dto.getUnique_name():base_name+"_"+dto.getUnique_name();
 		field_name.setText(dto.getDesc());
+		editBtn.setStyleName("metaeditBtn");
 		renderSubUnits();
 	}
 	
-	@UiHandler(value="edit") 
+	@UiHandler(value="editBtn") 
 	public void editCmd(ClickEvent ev)
 	{
 		PopupPanel p = new PopupPanel();
 		p.setTitle("Редактирование поля...");
 		p.setModal(true);
-		p.setPopupPosition(400, 400);
+		//p.setPopupPosition(300, 300);
+		p.center();
 		p.setSize("800px", "800px");
 		p.setWidget(new FieldEditor(this,p));
 		p.show();	

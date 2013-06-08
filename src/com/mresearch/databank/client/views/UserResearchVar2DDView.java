@@ -1,6 +1,7 @@
 package com.mresearch.databank.client.views;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -9,6 +10,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -28,9 +30,11 @@ import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.presenters.UserResearchPerspectivePresenter;
 import com.mresearch.databank.client.service.UserSocioResearchService;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
+import com.mresearch.databank.shared.SocioResearchDTO;
 import com.mresearch.databank.shared.UserAccountDTO;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO;
 import com.mresearch.databank.shared.UserAnalysisSaveDTO.User2DD_Choice;
+import com.mresearch.databank.shared.SocioResearchDTO_Light;
 import com.mresearch.databank.shared.UserHistoryDTO;
 import com.mresearch.databank.shared.VarDTO;
 import com.mresearch.databank.shared.VarDTO_Detailed;
@@ -62,6 +66,8 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 	@UiField HTMLPanel content_panel;
 	@UiField VerticalPanel selected_vars;
 	@UiField HorizontalPanel analysis_bar;
+	@UiField VerticalPanel research_link;
+	@UiField Label dates,gen_geath,sel_size,org_impl,tag;
 	private AnalisysBarView anal_bar_w;
 	private UserAnalysisSaveDTO pre_saved;
 	private long curr_res = 0;
@@ -71,6 +77,7 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 		this.pre_saved = pre_saved;
 		this.pre_saved.setDistr_type(pre_saved.DISTR_TYPE_2D);
 		curr_res = research_id;
+		//setResearchMeta();
 		//DatabankApp.get().getCurrentUser().setCurrent_research(research_id);
 		
 		//DatabankApp.get().updateUserAccountState();
@@ -113,6 +120,30 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 		}.retry(2);
 		
 		
+	}
+	private void setResearchMeta(VarDTO_Detailed dto)
+	{
+		research_link.clear();
+		research_link.add(new ResearchDescItemView(new SocioResearchDTO_Light(dto.getResearch_id(),dto.getResearch_name())));
+		HashMap<String, String> mapa = dto.getResearch_meta_filling();
+		String dates1 = "",dates2="",dates="";
+		if(mapa.containsKey("socioresearch_sel_size"))sel_size.setText(mapa.get("socioresearch_sel_size"));
+		if(mapa.containsKey("socioresearch_gen_geath"))gen_geath.setText(mapa.get("socioresearch_gen_geath"));
+		
+		if(mapa.containsKey("socioresearch_dates_start_date"))dates1=mapa.get("socioresearch_dates_start_date");
+		if(mapa.containsKey("socioresearch_dates_end_date"))dates2=mapa.get("socioresearch_dates_end_date");
+		if(!dates1.equals("")&&!dates2.equals(""))dates=dates1+" - "+dates2; 
+		else dates=dates1+dates2;
+		this.dates.setText(dates);
+		
+		if(mapa.containsKey("socioresearch_orgs_org_impl_organization"))org_impl.setText(mapa.get("socioresearch_orgs_org_impl_organization"));
+		if(mapa.containsKey("socioresearch_tag"))tag.setText(mapa.get("socioresearch_tag"));
+		
+	}
+	@UiHandler(value="back_btn")
+	public void back_action(ClickEvent e)
+	{
+		History.back();
 	}
 	@UiHandler(value="build_btn")
 	public void onBuildBtnClick(ClickEvent e)
@@ -251,6 +282,7 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 			var2_lbox.setItemSelected(index2, true);
 		}
 		if(pre_saved.getDistribution()!=null){
+			if(pre_saved.getVar_1()!=null)setResearchMeta(pre_saved.getVar_1());
 			fill2DDtable(pre_saved.getVar_1(), pre_saved.getVar_2(), pre_saved.getDistribution());
 		}else
 		{
@@ -449,7 +481,7 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 	{	
 		final long var1_id = var_ids.get(var1_lbox.getSelectedIndex());
 		final long var2_id = var_ids.get(var2_lbox.getSelectedIndex());
-		new RPCCall<VarDTO>() {
+		new RPCCall<VarDTO_Detailed>() {
 			private VarDTO var1 = null;
 			private VarDTO var2 = null;
 			@Override
@@ -458,8 +490,9 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 			}
 
 			@Override
-			public void onSuccess(VarDTO result) {
+			public void onSuccess(VarDTO_Detailed result) {
 				var1 = result;
+				setResearchMeta(result);
 				new RPCCall<VarDTO>() {
 					@Override
 					public void onFailure(Throwable caught) {
@@ -480,8 +513,8 @@ public class UserResearchVar2DDView extends Composite implements HTML_Saver{
 			}
 
 			@Override
-			protected void callService(AsyncCallback<VarDTO> cb) {
-				service.getVar(var1_id, cb);
+			protected void callService(AsyncCallback<VarDTO_Detailed> cb) {
+				service.getVarDetailed(var1_id, cb);
 			}
 		}.retry(2);
 	}

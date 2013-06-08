@@ -33,38 +33,108 @@
 		    text-align: left;
 		    border-right: #cccccc double 3px;
 		}
+		
+			.cleaner table {
+		    font-family: 'Trebuchet MS', Verdana, Arial, Helvetica;
+		    font-size: 14px;
+		    color: #4d4d4d;
+		    border-collapse: collapse;
+		}
+		
+		.cleaner th {
+		    text-align: right;
+		    min-width: 100px;
+		    font-weight: normal;
+		    padding: 2px 5px;
+		    border-right: #cccccc solid 0px;
+		    /*border-bottom: #e5e5e5 solid 1px;*/
+		}
+		
+		.cleaner td {
+		    color: #656565;
+		    text-align: right;
+		    border-right: #cccccc solid 0px;
+		    border-bottom: #e5e5e5 solid 0px;
+		    padding: 2px 5px;
+		
+		}
+		
+		.cleaner tr > th:first-child, .cleaner  tr > td:first-child  {
+		    color: #4d4d4d;
+		    text-align: left;
+		    border-right: #cccccc solid 0px;
+		 
+		}
+		.text_f
+		{
+			font-weight: bold;
+		}
 	</ui:style>
 	<g:HTMLPanel>
-		<h2>Просмотр переменной</h2>
+		<g:Button ui:field="back_btn" text="&larr;Назад к переменным"></g:Button>
+		<h2>Редактирование переменной</h2>
 		<g:HTMLPanel ui:field="main_html">
-			<table>
-				<tr>
-					<td>Имя переменной: </td><td><g:Label ui:field="varCode"></g:Label></td>
-				</tr>
-				<tr>
-					<td>Текст вопроса: </td><td><g:Label ui:field="varText"></g:Label></td>
-				</tr>
-				<tr>
-					<td>Code Scheme: </td><td><g:FlexTable ui:field="codeSchemeTbl" styleName="{style.tableStyle}"></g:FlexTable></td>
-				</tr>
-				<tr>
-					<td>Переменная использовалась:</td><td><g:FlexTable ui:field="generalizedTbl"></g:FlexTable></td>
-				</tr>
-				<tr>
-					<td><g:VerticalPanel ui:field="elasticDBfields"></g:VerticalPanel></td>
-				</tr>
-			</table>
+			<g:HorizontalPanel spacing="5">
+					<g:Label styleName="{style.text_f}">Текст вопроса:  </g:Label>
+					<g:Label ui:field="varText"></g:Label>
+				</g:HorizontalPanel>
+				
+				<g:FlexTable ui:field="codeSchemeTbl" styleName="{style.tableStyle}"></g:FlexTable>
+				<br/>
+				<br/>
+				Принадлежит к исследованию:
+				<br/>
+				
+				<div class="{style.tableStyle}">
+				<table>
+					<tr>
+						<td>Название
+						</td>
+						<td>Даты
+						</td>
+						<td>Генеральная совокупность
+						</td>
+						<td>Объем выборки
+						</td>
+						<td>Организация-исполнитель
+						</td>
+						<td>Тэги
+						</td>
+					</tr>
+					
+					<tr>
+						<td>
+						<div class="{style.cleaner}">
+						<g:VerticalPanel ui:field="research_link"></g:VerticalPanel>
+						</div>
+						</td>
+						<td><g:Label ui:field="dates"/>
+						</td>
+						<td><g:Label ui:field="gen_geath"/>
+						</td>
+						<td><g:Label ui:field="sel_size"/>
+						</td>
+						<td><g:Label ui:field="org_impl"/>
+						</td>
+						<td><g:Label ui:field="tag"/>
+						</td>
+					</tr>
+				</table>
+				</div>
+				<br/>
+				Переменная использовалась как:
+				<g:FlexTable ui:field="generalizedTbl"></g:FlexTable>
+			<br/>
+			<g:VerticalPanel ui:field="elasticDBfields"></g:VerticalPanel>
 		</g:HTMLPanel>
-		<g:HorizontalPanel ui:field="save_pnl"></g:HorizontalPanel>
+<!-- 		<g:HorizontalPanel ui:field="save_pnl"></g:HorizontalPanel> -->
 		<g:Button ui:field="confirmBtn">Сохранить</g:Button>
 		<br/>
-		<table>
-			<tr>
-				<td>Параметр: </td>
-				<td><g:DoubleBox ui:field="param_box"></g:DoubleBox></td>
-				<td><g:Button ui:field="searchBtn">Поиск примерно похожих переменных</g:Button></td>
-			</tr>
-		</table>
+		<g:HorizontalPanel>
+				<g:Label text="Параметр:"></g:Label>
+				<g:DoubleBox ui:field="param_box"></g:DoubleBox>
+				<g:Button ui:field="searchBtn">Поиск примерно похожих переменных</g:Button>
+		</g:HorizontalPanel>
 		<g:FlexTable ui:field="to_generalizeTbl"></g:FlexTable>
 		<g:Button ui:field="generalizeBtn" visible="false">Унифицировать выбранные переменные</g:Button>
 	</g:HTMLPanel>

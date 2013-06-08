@@ -123,8 +123,10 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 		descriptionEditor.clear();
 		
         richTextEditor = new RichTextEditor();
-        richTextEditor.setHeight(400);  
-        richTextEditor.setWidth("700px");
+        richTextEditor.setHeight(200);  
+        richTextEditor.setWidth("400px");
+        richTextEditor.setBorder("1px solid red");
+        
         richTextEditor.setZIndex(0);
         
         //richTextEditor.setOverflow(Overflow.HIDDEN);  
@@ -142,6 +144,7 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 		
 		
 		elasticDBfields.clear();
+		_db_.setDesc("Метаданные исследования");
 		mv = new MultiValuedField(_db_, null,dto.getFilling(),"");
 		elasticDBfields.add(mv);
 		
@@ -203,7 +206,8 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 		ArrayList<Long> lst = new ArrayList<Long>();
 		for(Long sel:getSelectedItemsWeights())
 		{
-		 lst.add(var_ids.get((int)(sel-1)));
+			//on fst place text string. Invariant
+		   if(sel>0)lst.add(var_ids.get((int)(sel-1)));
 		}
 		return lst;
 	}

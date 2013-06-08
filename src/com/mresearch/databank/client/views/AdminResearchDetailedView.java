@@ -16,7 +16,7 @@ public class AdminResearchDetailedView extends Composite implements AdminResearc
 	interface AdminResearchDetailedViewUiBinder extends
 			UiBinder<Widget, AdminResearchDetailedView> {
 	}
-	@UiField VerticalPanel viewPanel,editPanel,groupEditPanel,filesEditPanel;
+	@UiField VerticalPanel viewPanel,editPanel,groupEditPanel,filesEditPanel,varsPanel,unificPanel;
 	public AdminResearchDetailedView(UserResearchDetailedView view) {
 		initWidget(uiBinder.createAndBindUi(this));
 		viewPanel.add(view);
@@ -36,6 +36,14 @@ public class AdminResearchDetailedView extends Composite implements AdminResearc
 	@Override
 	public VerticalPanel getFilesPanel() {
 		return filesEditPanel;
+	}
+	@Override
+	public VerticalPanel getVarsPanel() {
+		return varsPanel;
+	}
+	@Override
+	public VerticalPanel getUnificPanel() {
+		return unificPanel;
 	}
 
 }

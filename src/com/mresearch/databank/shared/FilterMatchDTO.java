@@ -48,11 +48,11 @@ public class FilterMatchDTO extends FilterBaseDTO implements Serializable{
 	    JSONObject q = new JSONObject();
 	    JSONObject qq = new JSONObject();
 	    
-	    qq.put("value", new JSONString(getFiltering_value()));
-	    qq.put("min_similarity", new JSONNumber(0.5));
+	    //qq.put("value", new JSONString(getFiltering_value()));
+	    //qq.put("min_similarity", new JSONNumber(0.5));
 	    
-	    q.put(super.getTarget_field_name(), qq);
-	    obj.put("fuzzy", q);
+	    q.put(super.getTarget_field_name(), new JSONString(getFiltering_value()));
+	    obj.put("match_phrase", q);
 	    
 	    return obj;
 	}

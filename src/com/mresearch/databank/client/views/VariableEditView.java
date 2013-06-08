@@ -25,6 +25,7 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -63,15 +64,20 @@ public class VariableEditView extends Composite {
 			UiBinder<Widget, VariableEditView> {
 	}
 
-	@UiField Label varCode,varText;
+	@UiField Label varText;
 	@UiField FlexTable codeSchemeTbl,generalizedTbl,to_generalizeTbl;
 	@UiField HTMLPanel main_html;
 //	@UiField Button save_html_btn;
-	@UiField HorizontalPanel save_pnl;
+	//@UiField HorizontalPanel save_pnl;
 	//@UiField VerticalPanel graph_pnl;
 	@UiField VerticalPanel elasticDBfields;
 	@UiField Button confirmBtn,generalizeBtn;
 	@UiField DoubleBox param_box;
+	
+	//@UiField Label concept_name,concept_value;
+	@UiField Label dates,gen_geath,sel_size,org_impl,tag;
+//@UiField HorizontalPanel analysis_bar;
+	@UiField VerticalPanel research_link;
 //	Hyperlink link;
 //	private FormPanel form;
 //	private TextBox hidden_box;
@@ -103,13 +109,14 @@ public class VariableEditView extends Composite {
 		this.displ= displ;
 		this.db = dt;
 		this.dto = dto;
+		setResearchMeta();
 		param_box.setValue(2.0);
 		if(dto.getFilling() == null) dto.setFilling(new HashMap<String, String>());
 		//form.a
-		save_pnl.add(new SaveHTMLAddon(main_html));
+		//save_pnl.add(new SaveHTMLAddon(main_html));
 		
-		varCode.setText(dto.getCode());
-		varText.setText(dto.getLabel());
+		//varCode.setText(dto.getCode());
+		varText.setText(dto.getCode()+" "+ dto.getLabel());
 		ArrayList<Double> codes = dto.getV_label_codes();
 		ArrayList<String> values = dto.getV_label_values();
 		
@@ -224,6 +231,24 @@ public class VariableEditView extends Composite {
 		});
 	}
 
+	private void setResearchMeta()
+	{
+		research_link.add(new ResearchDescItemView(new SocioResearchDTO_Light(dto.getResearch_id(),dto.getResearch_name())));
+		HashMap<String, String> mapa = dto.getResearch_meta_filling();
+		String dates1 = "",dates2="",dates="";
+		if(mapa.containsKey("socioresearch_sel_size"))sel_size.setText(mapa.get("socioresearch_sel_size"));
+		if(mapa.containsKey("socioresearch_gen_geath"))gen_geath.setText(mapa.get("socioresearch_gen_geath"));
+		
+		if(mapa.containsKey("socioresearch_dates_start_date"))dates1=mapa.get("socioresearch_dates_start_date");
+		if(mapa.containsKey("socioresearch_dates_end_date"))dates2=mapa.get("socioresearch_dates_end_date");
+		if(!dates1.equals("")&&!dates2.equals(""))dates=dates1+" - "+dates2; 
+		else dates=dates1+dates2;
+		this.dates.setText(dates);
+		
+		if(mapa.containsKey("socioresearch_orgs_org_impl_organization"))org_impl.setText(mapa.get("socioresearch_orgs_org_impl_organization"));
+		if(mapa.containsKey("socioresearch_tag"))tag.setText(mapa.get("socioresearch_tag"));
+		
+	}
 	private void renderGeneralizedVars()
 	{
 		  generalizedTbl.setSize("600px", "350px");
@@ -239,10 +264,20 @@ public class VariableEditView extends Composite {
 	private void renderDBfillers()
 	{
 		elasticDBfields.clear();
+		db.setDesc("Метаданные переменной");
 		 mv = new VarMultiValuedField(db,null,dto.getFilling(),"");
 		elasticDBfields.add(mv);
 	}
 	
+	@UiHandler(value="back_btn")
+	public void back_action(ClickEvent e)
+	{
+		//History.back();
+		if(displ.getPrevCenterState()!=null){
+			displ.getCenterPanel().clear();
+			displ.getCenterPanel().add(displ.getPrevCenterState().asWidget());
+		}
+	}
 	@UiHandler(value="searchBtn")
 	public void onCompSearchDo(ClickEvent ev)
 	{

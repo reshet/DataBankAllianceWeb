@@ -122,7 +122,7 @@ public class SearchTaskResearchDTO implements Serializable,ISearchTask{
 		if (date == null) return str;
 //		str+=String.valueOf(date.getDate());
 //		str+="-"+String.valueOf(date.getTime());
-		str+=String.valueOf(1900+date.getYear())+"-"+String.valueOf(date.getMonth())+"-"+String.valueOf(date.getDate())+"T";
+		str+=String.valueOf(1900+date.getYear())+"-"+String.valueOf(date.getMonth()+1)+"-"+String.valueOf(date.getDate())+"T";
 		str+=String.valueOf(date.getHours())+":"+String.valueOf(date.getMinutes())+":"+String.valueOf(date.getSeconds());
 		return str;
 	}

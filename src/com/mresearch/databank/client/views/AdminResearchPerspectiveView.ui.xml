@@ -24,22 +24,29 @@
 		}
 		.ControlPanel
 		{
-			float:left;
-			padding-left: 600px;
-			text-align: right;			
+			padding-left: 40px;
+		}
+		
+		.splitter
+		{
+			border: 3px solid #69c014;
 		}
 	</ui:style>
 	
-	<g:SplitLayoutPanel   width="2000px" height="2400px">
-				<g:west size = "300" unit='EM'>
+	<g:SplitLayoutPanel   width="100%" height="2400px">
+				<g:west size = "400" unit='EM'>
 					<g:ScrollPanel   width="100%" height="100%">
-						<g:VerticalPanel>
+						<g:VerticalPanel styleName="{style.ControlPanel}">
 								<g:Tree ui:field="tree">
 								</g:Tree>
 								<g:HorizontalPanel>
-									<g:Button ui:field="createBtn" enabled="false">Create</g:Button>
-									<g:Button ui:field="deleteBtn" enabled="false">Delete</g:Button>
-									<g:Button ui:field="addBtn" enabled="false">Add research</g:Button>
+<!-- 									<g:Button ui:field="createBtn" enabled="false">Create</g:Button> -->
+<!-- 									<g:Button ui:field="deleteBtn" enabled="false">Delete</g:Button> -->
+									<g:HTMLPanel>
+										<br/>
+										<div class="line-separator"></div>
+									</g:HTMLPanel>
+									<g:Button ui:field="addBtn" enabled="true">Добавить исследование</g:Button>
 								</g:HorizontalPanel>	
 						</g:VerticalPanel>
 					</g:ScrollPanel>

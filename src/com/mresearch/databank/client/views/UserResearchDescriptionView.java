@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -94,7 +95,9 @@ public class UserResearchDescriptionView extends Composite {
 			}
 			@Override
 			public void onSuccess(Void arg0) {
-		
+				addToSelectedBtn.setVisible(false);
+				PopupPanel b = DialogBoxFactory.createDialogBox("Избранные исследования",new Label("Исследование успешно добавлено!"),null,"ОК");
+				b.show();
 			}
 			@Override
 			protected void callService(AsyncCallback<Void> cb) {

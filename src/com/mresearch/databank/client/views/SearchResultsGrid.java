@@ -102,16 +102,26 @@ public class SearchResultsGrid extends VerticalPanel
     countryGrid.setCellHeight(38);
     
     
-
+    ArrayList<Long> db_ids = null ;
+    if(research_names!=null){
+    	db_ids = new ArrayList<Long>();
+    	for(VarDTO_Research dtor:research_names)db_ids.add(dtor.getId());
+    }
     HashMap<String,String> used_map = new LinkedHashMap<String,String>();
     final ListGridRecord[] records = new ListGridRecord[hits.size()];
     int i = 0;
+    int k = 0;
     for (JSONObject hit_c : hits)
     {
       JSONObject hit = (JSONObject)hit_c.get("_source");
 
       ListGridRecord rec = new ListGridRecord();
       String id =  ((JSONString)hit_c.get("_id")).stringValue();
+      
+      //Here prevent from showing non-existent vars hits, in case when research names checked.
+      Long idl = Long.parseLong(id);
+      if(db_ids!=null&& !db_ids.contains(idl)) continue;
+      
       //String link = ""
       rec.setAttribute("_id",id);
       rec.setAttribute("_type", ((JSONString)hit_c.get("_type")).stringValue());
@@ -150,10 +160,11 @@ public class SearchResultsGrid extends VerticalPanel
       
       {
     	  if(map.containsKey("sociovar_researchname")){
-    		  if( research_names.get(i)!=null){
-    			  Integer key = (int) research_names.get(i).getRes_id();
-        		  String name = research_names.get(i).getRes_name();
+    		  if( research_names.size()>k && research_names.get(k)!=null){
+    			  Integer key = (int) research_names.get(k).getRes_id();
+        		  String name = research_names.get(k).getRes_name();
         		  hit.put("sociovar_researchname", new JSONString("<a href=\"#user-research@showResearch="+key+"\">"+name+"</a>"));
+        		  k++;
               }
     		 }
       }

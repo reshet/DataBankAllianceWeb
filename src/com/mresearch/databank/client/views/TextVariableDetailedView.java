@@ -15,6 +15,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -91,7 +92,11 @@ public class TextVariableDetailedView extends Composite implements HTML_Saver{
 		}
 		renderDBfillers();
 	}
-	
+	@UiHandler(value="back_btn")
+	public void back_action(ClickEvent e)
+	{
+		History.back();
+	}
 	private void renderDBfillers()
 	{
 		//elasticDBfields.clear();

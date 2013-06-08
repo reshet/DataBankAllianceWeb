@@ -9,10 +9,13 @@ import java.util.Map;
 import org.opendatafoundation.data.spss.mod.SPSSUtils;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -57,7 +60,11 @@ public class RealVariableDetailedView extends Composite implements HTML_Saver{
 	@UiField HTMLPanel main_html;
 	@UiField HorizontalPanel analysis_bar;
 
-	
+	@UiHandler(value="back_btn")
+	public void back_action(ClickEvent e)
+	{
+		History.back();
+	}
 	
 	public RealVariableDetailedView(RealVarDTO_Detailed dto,MetaUnitMultivaluedEntityDTO dt,SimpleEventBus bus,UserResearchPerspectivePresenter.Display display,UserAnalysisSaveDTO save_Dto) {
 		initWidget(uiBinder.createAndBindUi(this));

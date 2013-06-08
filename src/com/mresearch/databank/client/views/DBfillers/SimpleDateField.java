@@ -69,10 +69,11 @@ public class SimpleDateField extends Composite implements MetaUnitFiller{
 
 	  //  obj.put(base_name + "_"+this.dto.getUnique_name(), new JSONString(this.date_picker.getValue()));
 		Date d = null;
-		if(!this.date_picker.getValue().equals(""))
+		if(!this.date_picker.getValue().equals("")){
 			d = new Date(this.date_picker.getValue());
-	      obj.put(base_name + "_"+this.dto.getUnique_name(), new JSONString(SearchTaskResearchDTO.date_serialize(d)));
-		    this.current_json = new JSON_Representation(obj);
+		    obj.put(base_name + "_"+this.dto.getUnique_name(), new JSONString(SearchTaskResearchDTO.date_serialize(d)));	
+		}
+		this.current_json = new JSON_Representation(obj);
 	}
 	@Override
 	public MetaUnitDTO getDTO() {

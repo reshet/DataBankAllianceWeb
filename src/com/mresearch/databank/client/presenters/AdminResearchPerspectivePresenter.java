@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,6 +39,7 @@ import com.mresearch.databank.client.event.CreateConceptDisabledEvent;
 import com.mresearch.databank.client.event.CreateConceptEnabledEventHandler;
 import com.mresearch.databank.client.event.CreateConceptEvent;
 import com.mresearch.databank.client.event.CreateConceptEventHandler;
+import com.mresearch.databank.client.event.ShowPlaceEvent;
 import com.mresearch.databank.client.event.ShowResearchDetailsEvent;
 import com.mresearch.databank.client.event.ShowResearchDetailsEventHandler;
 import com.mresearch.databank.client.event.ShowStartPageMainEvent;
@@ -58,6 +60,7 @@ import com.mresearch.databank.client.views.AdminResearchEditView;
 import com.mresearch.databank.client.views.AdminResearchFilesEditView;
 import com.mresearch.databank.client.views.AdminResearchGroupEditView;
 import com.mresearch.databank.client.views.AdminResearchVarGeneralizeS1View;
+import com.mresearch.databank.client.views.AdminResearchVarsView;
 import com.mresearch.databank.client.views.ConceptContentsItem;
 import com.mresearch.databank.client.views.ConceptItem;
 import com.mresearch.databank.client.views.ConceptItemEntity;
@@ -76,6 +79,7 @@ import com.mresearch.databank.client.views.UserResearchVar2DDView;
 import com.mresearch.databank.client.views.VarDescItem;
 import com.mresearch.databank.client.views.VariableDetailedView;
 import com.mresearch.databank.client.views.VariableEditView;
+import com.mresearch.databank.client.views.WrappedCustomLabel;
 import com.mresearch.databank.client.views.addResearchUI;
 //import com.mresearch.databank.server.CatalogServiceImpl;
 //import com.mresearch.databank.server.domain.SocioResearch;
@@ -88,6 +92,7 @@ import com.mresearch.databank.shared.NewsDTO;
 import com.mresearch.databank.shared.NewsSummaryDTO;
 import com.mresearch.databank.shared.RealVarDTO_Detailed;
 import com.mresearch.databank.shared.ResearchBundleDTO;
+import com.mresearch.databank.shared.ShowCatalogParameters;
 import com.mresearch.databank.shared.SocioResearchDTO;
 import com.mresearch.databank.shared.SocioResearchDTO_Light;
 import com.mresearch.databank.shared.TextVarDTO_Detailed;
@@ -106,7 +111,9 @@ public class AdminResearchPerspectivePresenter implements Presenter
 	
 	
 	 public interface Display {
+		 Tree getTreeWhole();
 		 HasMouseDownHandlers getTree();
+		 
 		 HasOpenHandlers<TreeItem> getTreeForOpen();
 		 HasSelectionHandlers<TreeItem> getTreeForSelection();
 		 
@@ -120,17 +127,20 @@ public class AdminResearchPerspectivePresenter implements Presenter
 		// String getSelectedConceptID();
 		// void showResearchDetailes(AdminResearchDetailedPresenter presenter);
 		 VerticalPanel getCenterPanel();
-		 HasClickHandlers getEditButton();
-		 HasClickHandlers getDeleteButton();
+		 //HasClickHandlers getEditButton();
+		 //HasClickHandlers getDeleteButton();
 		 HasEnabled getAddResearchBtn();
 		 HasClickHandlers getAddResearchBt();
-		 HasEnabled getCreateConceptBtn();
-		 HasEnabled getDeleteConceptBtn();
-		 HasClickHandlers getCreateConceptBt();
+		 //HasEnabled getCreateConceptBtn();
+		 //HasEnabled getDeleteConceptBtn();
+		 //HasClickHandlers getCreateConceptBt();
 		 VerticalPanel asRoot();
 		 void showCreateConceptPopup(int x, int y,String c_type);
 		 void hideConceptPopup();
 		 void setRootConceptUpdateMode(boolean isRoot);
+		 Widget getPrevCenterState();
+		 void setPrevCenterState(Widget w);
+		 
 	 }
 	
 	 
@@ -166,22 +176,32 @@ public class AdminResearchPerspectivePresenter implements Presenter
 	public void bind()
 	{
 		display.getTreeForSelection().addSelectionHandler(new SelectionHandler<TreeItem>() {
+			private WrappedCustomLabel prevRes;
 			@Override
 			public void onSelection(SelectionEvent<TreeItem> event) {
 				TreeItem it = display.getSelectedItem();
+				UserResearchPerspectivePresenter.removeParentStylesRoot(display.getTreeWhole());
+				if(prevRes!=null)prevRes.getLabel().removeStyleDependentName("selected");
+			
 				if (it instanceof SimpleResearchList)
 				{
 					//fetchResearchListData();
-					eventBus.fireEvent(new AddResearchEnabledEvent());
+					//eventBus.fireEvent(new AddResearchEnabledEvent());
 				}else if (it instanceof ResearchDescItem)
 				{
 					ResearchDescItem rv = (ResearchDescItem)it;
+					rv.getLabel().addStyleDependentName("selected");
+					prevRes = (WrappedCustomLabel)rv;
+					
 					//fetchResearchVarData(it, rv.getResearch_id());
 					eventBus.fireEvent(new ShowResearchDetailsEvent(rv.getContents_id()));
 				//	eventBus.fireEvent(new AddResearchDisabledEvent());
 				}else if (it instanceof VarDescItem)
 				{
 					VarDescItem rv = (VarDescItem)it;
+					rv.getLabel().addStyleDependentName("selected");
+					prevRes = (WrappedCustomLabel)rv;
+					
 					//fetchResearchVarData(it, rv.getResearch_id());
 					eventBus.fireEvent(new ShowVarDetailsEvent(rv.getVar_id()));
 				//	eventBus.fireEvent(new AddResearchDisabledEvent());
@@ -189,7 +209,7 @@ public class AdminResearchPerspectivePresenter implements Presenter
 				{
 					//RootConceptsList rcl = (RootConceptsList)it;
 					//rcl.refreshContents();
-					eventBus.fireEvent(new CreateConceptEnabledEvent(true));
+					//eventBus.fireEvent(new CreateConceptEnabledEvent(true));
 				}
 				else if (it instanceof ResearchVarList)
 				{
@@ -199,95 +219,31 @@ public class AdminResearchPerspectivePresenter implements Presenter
 				}
 				else if (it instanceof ConceptItemItem)
 				{
-					eventBus.fireEvent(new CreateConceptEnabledEvent(true));
+					//eventBus.fireEvent(new CreateConceptEnabledEvent(true));
 					display.getCenterPanel().clear();
 					display.getCenterPanel().add(new HTML("<h1>Загрузка, подождите...</h1>"));
 					final long concept_id = ((ConceptItemItem)it).getEntity_id();
-					//ArrayList<SocioResearchDTO> dtos = new ArrayList<SocioResearchDTO>();
-					new RPCCall<ArrayList<SocioResearchDTO_Light>>() {
+					final ConceptItemItem rcl = (ConceptItemItem)it;
+					rcl.getLabel().addStyleDependentName("selected");
+					prevRes = (WrappedCustomLabel)rcl;
+					rcl.refreshTaggedEntitiesIDs(new ConceptItemItem.AsyncAction() {
 						@Override
-						public void onFailure(Throwable caught) {
-							Window.alert("Error getting researh summaries");
+						public void doAction() {
+							//eventBus.fireEvent(new ShowPlaceEvent("user-research", "catalog", new ShowCatalogParameters(rcl.getAll_tagged_ids(), rcl.getAll_tagged_idents())));
 						}
-						@Override
-						public void onSuccess(ArrayList<SocioResearchDTO_Light> result) {
-							final ArrayList<IPickableElement> arr = new ArrayList<IPickableElement>();
-							for(SocioResearchDTO_Light dto:result)
-							{
-								arr.add(dto);
-							}
-							new RPCCall<ArrayList<Long>>() {
-								@Override
-								public void onFailure(Throwable caught) {
-									Window.alert("Error while fetching already selected elements");
-								}
-
-								@Override
-								public void onSuccess(ArrayList<Long> result) {
-									PickElementsTableView pickResearchesToTag = new PickElementsTableView(arr, result,
-										new IPickBinder() {
-											@Override
-											public void processPickChoice( ArrayList<Long> selected_keys) {
-												final ArrayList<Long> sel_keys = selected_keys;
-												new RPCCall<Void>() {
-													@Override
-													public void onFailure(
-															Throwable caught) {
-													}
-													@Override
-													public void onSuccess(Void v) {
-														Window.alert("Концепт успешно распространен!");
-													}
-													@Override
-													protected void callService(
-															AsyncCallback<Void> cb) {
-													rpcAdminService.updateMetaUnitEntityItemLinks(concept_id, sel_keys,"socioresearch", cb);
-													}
-												}.retry(2);
-											}
-											
-											@Override
-											public String getCommandName() {
-												return "Добавить концепт к выбранным!";
-											}
-
-											@Override
-											public String getTitle() {
-												// TODO Auto-generated method stub
-												return "Доступные исследования:";
-											}
-										}			
-									);
-									display.getCenterPanel().clear();
-									display.getCenterPanel().add(pickResearchesToTag);
-									//display.getCenterPanel().add(new HTML("<h2>LOADED</h2>"));
-									//display.getCenterPanel().add(new SearchResultsView(result));
-									
-								}
-
-								@Override
-								protected void callService(
-										AsyncCallback<ArrayList<Long>> cb) {
-									rpcUserService.getEntityItemTaggedEntitiesIDs(concept_id,"socioresearch", cb);
-								}
-							}.retry(2);
-						}
-						@Override
-						protected void callService(
-								AsyncCallback<ArrayList<SocioResearchDTO_Light>> cb) {
-							rpcUserService.getResearchSummaries(cb);
-						}
-					}.retry(2);
+					});
 				}
 				else if (it instanceof ConceptItemEntity)
 				{
-					ConceptItemEntity rcl = (ConceptItemEntity)it;
+					final ConceptItemEntity rcl = (ConceptItemEntity)it;
+					rcl.getLabel().addStyleDependentName("selected");
+					prevRes = (WrappedCustomLabel)rcl;
 					//rcl.refreshContents();
-					eventBus.fireEvent(new CreateConceptEnabledEvent(false));
+					//eventBus.fireEvent(new CreateConceptEnabledEvent(false));
 				}
 				else if (it instanceof ConceptItem<?>)
 				{
-					eventBus.fireEvent(new CreateConceptEnabledEvent(false));
+					//eventBus.fireEvent(new CreateConceptEnabledEvent(false));
 					display.getCenterPanel().clear();
 					display.getCenterPanel().add(new HTML("<h1>Загрузка, подождите...</h1>"));
 					final long concept_id = ((ConceptItem<?>)it).getConcept_id();
@@ -370,12 +326,13 @@ public class AdminResearchPerspectivePresenter implements Presenter
 				
 				if (!(it instanceof RootConceptsList) && !(it instanceof ConceptItemItem) && !(it instanceof ConceptItemEntity))
 				{
-					eventBus.fireEvent(new CreateConceptDisabledEvent());
+					//eventBus.fireEvent(new CreateConceptDisabledEvent());
 				}
 				if (!(it instanceof SimpleResearchList))
 				{
-					eventBus.fireEvent(new AddResearchDisabledEvent());
+					//eventBus.fireEvent(new AddResearchDisabledEvent());
 				}
+				UserResearchPerspectivePresenter.setParentStyles(it.getParentItem());
 			}
 		});
 		display.getTreeForOpen().addOpenHandler(new OpenHandler<TreeItem>() {
@@ -391,7 +348,7 @@ public class AdminResearchPerspectivePresenter implements Presenter
 					ResearchVarList rv = (ResearchVarList)it;
 					fetchResearchVarData(it, rv.getResearch_id());
 					//eventBus.fireEvent(new ShowResearchDetailsEvent(rv.getResearch_id()));
-					eventBus.fireEvent(new AddResearchDisabledEvent());
+					//eventBus.fireEvent(new AddResearchDisabledEvent());
 				}else if (it instanceof RootConceptsList)
 				{
 					RootConceptsList rcl = (RootConceptsList)it;
@@ -408,7 +365,7 @@ public class AdminResearchPerspectivePresenter implements Presenter
 				{
 					ConceptItemEntity rcl = (ConceptItemEntity)it;
 					rcl.refreshContents();
-					eventBus.fireEvent(new CreateConceptEnabledEvent(false));
+					//eventBus.fireEvent(new CreateConceptEnabledEvent(false));
 				}
 				else if (it instanceof ConceptItem<?>)
 				{
@@ -465,6 +422,7 @@ public class AdminResearchPerspectivePresenter implements Presenter
 					}
 					finally{}	
 				}
+				UserResearchPerspectivePresenter.setParentStyles(it.getParentItem());
 			}			
 		});
 		
@@ -502,31 +460,31 @@ public class AdminResearchPerspectivePresenter implements Presenter
 		});
 		
 		
-		eventBus.addHandler(AddResearchDisabledEvent.TYPE, new AddResearchDisabledEventHandler() {
-			//@Override
-			public void onAddResearchDisabled(AddResearchDisabledEvent event) {
-				display.getAddResearchBtn().setEnabled(false);
-			}
-		});
+//		eventBus.addHandler(AddResearchDisabledEvent.TYPE, new AddResearchDisabledEventHandler() {
+//			//@Override
+//			public void onAddResearchDisabled(AddResearchDisabledEvent event) {
+//				display.getAddResearchBtn().setEnabled(false);
+//			}
+//		});
 		eventBus.addHandler(CreateConceptEnabledEvent.TYPE,new CreateConceptEnabledEventHandler() {
 			@Override
 			public void onCreateConceptEnabled(CreateConceptEnabledEvent event) {
-				display.getCreateConceptBtn().setEnabled(true);
+				//display.getCreateConceptBtn().setEnabled(true);
 				display.setRootConceptUpdateMode(event.isRootConcept());
 			}
 		});
 		eventBus.addHandler(CreateConceptDisabledEvent.TYPE,new CreateConceptDisabledEventHandler() {
 			@Override
 			public void onCreateConceptDisabled(CreateConceptDisabledEvent event) {
-				display.getCreateConceptBtn().setEnabled(false);
+				//display.getCreateConceptBtn().setEnabled(false);
 			}
 		});
-		display.getCreateConceptBt().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				display.showCreateConceptPopup(event.getClientX(), event.getClientY(),"SocioResearch");
-			}
-		});
+//		display.getCreateConceptBt().addClickHandler(new ClickHandler() {
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				display.showCreateConceptPopup(event.getClientX(), event.getClientY(),"SocioResearch");
+//			}
+//		});
 		eventBus.addHandler(CreateConceptEvent.TYPE, new CreateConceptEventHandler() {
 			@Override
 			public void onCreateConcept(CreateConceptEvent event) {
@@ -696,13 +654,17 @@ public class AdminResearchPerspectivePresenter implements Presenter
 				AdminResearchEditView ed_view = new AdminResearchEditView(result.getDto(), result.getMeta());
 				AdminResearchGroupEditView gr_ed_view = new AdminResearchGroupEditView(result.getDto(),result.getMeta());
 				AdminResearchAdvancedFilesEditView files_ed_view = new AdminResearchAdvancedFilesEditView(id_research, result.getFiles_dto());
-					AdminResearchDetailedPresenter presenter = new AdminResearchDetailedPresenter(rpcUserService,rpcAdminService, eventBus, ad_view, ed_view,gr_ed_view,files_ed_view);
+				AdminResearchVarsView varsview = new AdminResearchVarsView(result.getDto());
+				AdminResearchVarGeneralizeS1View gen = new AdminResearchVarGeneralizeS1View(result.getDto().getId(), display.getCenterPanel());
+				AdminResearchDetailedPresenter presenter = new AdminResearchDetailedPresenter(rpcUserService,rpcAdminService, eventBus, ad_view, varsview,ed_view,gr_ed_view,files_ed_view,gen);
+				display.setPrevCenterState(display.getCenterPanel());
 				presenter.go(display.getCenterPanel(),null,null);
+				
 //				new RPCCall<MetaUnitMultivaluedEntityDTO>() {
 //					@Override
 //					public void onFailure(Throwable caught) {
 //						Window.alert("Error on fetching DB structure"+caught.getMessage());
-//						// TODO Auto-generated method stub
+//						
 //					}
 //					
 //					

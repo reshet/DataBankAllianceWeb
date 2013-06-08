@@ -39,9 +39,10 @@ public class AdminStartupPerspectiveView extends Composite implements AdminStart
 	interface AdminResearchPerspectiveViewUiBinder extends
 			UiBinder<Widget, AdminStartupPerspectiveView> {
 	}
-	@UiField VerticalPanel pubsPanel,researchesPanel,lawsPanel;
+	//@UiField VerticalPanel pubsPanel,researchesPanel,lawsPanel;
+	@UiField VerticalPanel researchesPanel;
 	@UiField Button save;
-	@UiField TextBox pubsShowLast;
+	//@UiField TextBox pubsShowLast;
 	private ArrayList<SocioResearchDTO_Light> res_all,res_sel;
 	private ArrayList<ZaconDTO_Light> laws_all,laws_sel;
 	private FlexTable res_table = new FlexTable(),laws_table = new FlexTable();
@@ -50,7 +51,7 @@ public class AdminStartupPerspectiveView extends Composite implements AdminStart
 		initWidget(uiBinder.createAndBindUi(this));
 		this.bus = bus;
 		researchesPanel.add(res_table);
-		lawsPanel.add(laws_table);
+		//lawsPanel.add(laws_table);
 	}
 	private void displayLaws(){
 		laws_table.clear();
@@ -128,7 +129,7 @@ public class AdminStartupPerspectiveView extends Composite implements AdminStart
 	}
 	@Override
 	public void setPubsSel(Long howmuch) {
-		pubsShowLast.setText(String.valueOf(howmuch));
+		//pubsShowLast.setText(String.valueOf(howmuch));
 	}
 	@Override
 	public ArrayList<ZaconDTO_Light> getLawsSel() {
@@ -142,7 +143,8 @@ public class AdminStartupPerspectiveView extends Composite implements AdminStart
 	}
 	@Override
 	public Long getPubsSel() {
-		return Long.parseLong(pubsShowLast.getText());
+		//return Long.parseLong(pubsShowLast.getText());
+		return new Long(0);
 	}
 	@Override
 	public HasClickHandlers getSaveBtn() {

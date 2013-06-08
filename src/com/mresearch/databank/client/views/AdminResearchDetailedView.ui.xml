@@ -13,6 +13,15 @@
 				</g:VerticalPanel>
 		</g:tab>
 		<g:tab>
+			<g:header>
+				Переменные
+			</g:header>
+			<g:ScrollPanel width="100%" height="100%">
+				<g:VerticalPanel ui:field="varsPanel">
+				</g:VerticalPanel>
+			</g:ScrollPanel>
+		</g:tab>
+		<g:tab>
 		
 			<g:header>
 				Редактирование
@@ -35,6 +44,15 @@
 			</g:header>
 			<g:ScrollPanel width="100%" height="100%">
 				<g:VerticalPanel ui:field="filesEditPanel">
+				</g:VerticalPanel>
+			</g:ScrollPanel>
+		</g:tab>
+		<g:tab>
+			<g:header>
+				Унификация переменных
+			</g:header>
+			<g:ScrollPanel width="100%" height="100%">
+				<g:VerticalPanel ui:field="unificPanel">
 				</g:VerticalPanel>
 			</g:ScrollPanel>
 		</g:tab>

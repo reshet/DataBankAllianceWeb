@@ -38,13 +38,14 @@ public class AdminResearchPerspectiveView extends Composite implements AdminRese
 	}
 	@UiField VerticalPanel centerPanel;
 	@UiField Tree tree;
-	@UiField 
-	Button createBtn,deleteBtn,addBtn;
+	//@UiField Button createBtn,deleteBtn,
+	@UiField Button addBtn;
 	
 	
 	
 	
-	
+	private Widget previous_centerpanel_state = null;
+		
 	
 	SimpleResearchList simpleResearchListItem;
 	RootConceptsList rootResearchConcepts;
@@ -56,6 +57,7 @@ public class AdminResearchPerspectiveView extends Composite implements AdminRese
 	private boolean rootConceptUpdateMode = false;
 	public AdminResearchPerspectiveView(SimpleEventBus bus) {
 		initWidget(uiBinder.createAndBindUi(this));
+		tree.setStyleName("law_section");
 		//centerPanel.setWidth("1300px");
 		//centerPanel.setHeight("900px");
 		centerPanel.setVisible(true);
@@ -79,11 +81,12 @@ public class AdminResearchPerspectiveView extends Composite implements AdminRese
 		for(SocioResearchDTO_Light dto:researchList)
 		{
 			ResearchDescItem research_node = new ResearchDescItem(dto);
-			research_node.addItem(new ResearchVarList(dto));
+			//research_node.addItem(new ResearchVarList(dto));
 			//for(String )
 			simpleResearchListItem.addItem(research_node);
 		}
 	}
+	
 	@Override
 	public HasMouseDownHandlers getTree() {
 		return tree;
@@ -140,14 +143,14 @@ public class AdminResearchPerspectiveView extends Composite implements AdminRese
 		// TODO Auto-generated method stub
 		return centerPanel;
 	}
-	@Override
-	public HasClickHandlers getEditButton() {
-		return createBtn;
-	}
-	@Override
-	public HasClickHandlers getDeleteButton() {
-		return deleteBtn;
-	}
+//	@Override
+//	public HasClickHandlers getEditButton() {
+//		return createBtn;
+//	}
+//	@Override
+//	public HasClickHandlers getDeleteButton() {
+//		return deleteBtn;
+//	}
 	@Override
 	public HasEnabled getAddResearchBtn() {
 		return addBtn;
@@ -156,18 +159,18 @@ public class AdminResearchPerspectiveView extends Composite implements AdminRese
 	public HasClickHandlers getAddResearchBt() {
 		return addBtn;
 	}
-	@Override
-	public HasEnabled getCreateConceptBtn() {
-		return createBtn;
-	}
-	@Override
-	public HasEnabled getDeleteConceptBtn() {
-		return deleteBtn;
-	}
-	@Override
-	public HasClickHandlers getCreateConceptBt() {
-		return createBtn;
-	}
+//	@Override
+//	public HasEnabled getCreateConceptBtn() {
+//		return createBtn;
+//	}
+//	@Override
+//	public HasEnabled getDeleteConceptBtn() {
+//		return deleteBtn;
+//	}
+//	@Override
+//	public HasClickHandlers getCreateConceptBt() {
+//		return createBtn;
+//	}
 	@Override
 	public void showCreateConceptPopup(int x, int y, String c_type) {
 		Long parent_id = null;
@@ -213,6 +216,18 @@ public class AdminResearchPerspectiveView extends Composite implements AdminRese
 	@Override
 	public HasSelectionHandlers<TreeItem> getTreeForSelection() {
 		return tree;
+	}
+	@Override
+	public Tree getTreeWhole() {
+		return tree;
+	}
+	@Override
+	public Widget getPrevCenterState() {
+		return previous_centerpanel_state;
+	}
+	@Override
+	public void setPrevCenterState(Widget w) {
+		previous_centerpanel_state = w;
 	}
 
 }

@@ -134,11 +134,7 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 		bind();
 	}
 	
-	@UiHandler(value="back_btn")
-	public void back_action(ClickEvent e)
-	{
-		History.back();
-	}
+	
 	
 	private void initSaveOption()
 	{
@@ -159,6 +155,7 @@ public class AnalisysBarView extends Composite implements UserResearchPerspectiv
 	private int getCurrentWeightId()
 	{
 		if(weights_ids==null) return 0;
+		if(weights_ids.size()==0)return 0;
 		//if(weights_list.getSelectedIndex()==0)return 0;
 		return weights_ids.get(weights_list.getSelectedIndex()).intValue();
 	}

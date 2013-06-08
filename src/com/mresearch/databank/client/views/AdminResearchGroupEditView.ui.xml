@@ -7,7 +7,9 @@
 		 .tableResearch
 		{
 			font-weight: normal;
-			background-color: #88AA66;
+			/*background-color: #88AA66;
+			
+			*/
 			padding: 15px;
 			font-family: Helvetica;
 			font: 13px;
@@ -52,12 +54,12 @@
 				</td>
 			</tr>
 			<tr/>
-			<tr>
-				<td><g:Button ui:field="confirmBtn">Подтвердить</g:Button>
-				</td>
-				<td><g:Button ui:field="deleteBtn">Удалить</g:Button>
-				</td>
-			</tr>
+<!-- 			<tr> -->
+<!-- 				<td><g:Button ui:field="confirmBtn">Подтвердить</g:Button> -->
+<!-- 				</td> -->
+<!-- 				<td><g:Button ui:field="deleteBtn">Удалить</g:Button> -->
+<!-- 				</td> -->
+<!-- 			</tr> -->
 		</table>
 	</g:HTMLPanel>
 </ui:UiBinder> 

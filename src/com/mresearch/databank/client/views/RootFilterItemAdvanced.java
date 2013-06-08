@@ -161,7 +161,7 @@ public class RootFilterItemAdvanced extends VerticalPanel
       FilterMultiMatchView filtGS = new FilterMultiMatchView(ddto.getDesc(), base_name, dto, ddto)
       {
         public FilterBaseDTO getFilterDTO() {
-          ArrayList<FilterBaseDTO> filters = new ArrayList();
+          ArrayList<FilterBaseDTO> filters = new ArrayList<FilterBaseDTO>();
           ArrayList<String> variants = getVariants();
           int i = 0;
           for (String variant : variants)

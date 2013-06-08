@@ -435,6 +435,55 @@ div.search-submit {
 
 
 
+.metaeditBtn{
+    outline: none;
+    border: none;
+    margin: 1px; /* border size */
+    background: transparent url(icons/struct_icon_1.png);
+}
+.metaeditBtn-down{
+    margin: 1px;
+    border: 1px #529510; /* margin size */
+    background: transparent url(icons/struct_icon_1.png) center no-repeat;
+}
+
+.metaeditBtn-down-hovering {
+    margin: 1px;
+    border: 1px #529510; /* margin size */
+    background: transparent url(icons/struct_icon_1.png) center no-repeat;
+}
+.metaeditBtn-up-hovering {
+    margin: 1px;
+    border: 1px #529510; /* margin size */
+    background: transparent url(icons/struct_icon_1.png) center no-repeat;
+}
+
+
+.metaoptsBtn{
+    outline: none;
+    border: none;
+    margin: 1px; /* border size */
+    background: transparent url(icons/icon_settings_1.png);
+}
+.metaoptsBtn-down{
+    margin: 1px;
+    border: 1px #529510; /* margin size */
+    background: transparent url(icons/icon_settings_1.png) center no-repeat;
+}
+
+.metaoptsBtn-down-hovering {
+    margin: 1px;
+    border: 1px #529510; /* margin size */
+    background: transparent url(icons/icon_settings_1.png) center no-repeat;
+}
+.metaoptsBtn-up-hovering {
+    margin: 1px;
+    border: 1px #529510; /* margin size */
+    background: transparent url(icons/icon_settings_1.png) center no-repeat;
+}
+
+
+
 .plotBtn{
     outline: none;
     border: none;

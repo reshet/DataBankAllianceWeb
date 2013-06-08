@@ -23,6 +23,8 @@ import com.mresearch.databank.client.event.OrgListChangedEventHandler;
 import com.mresearch.databank.client.helper.RPCCall;
 import com.mresearch.databank.client.service.AdminSocioResearchServiceAsync;
 import com.mresearch.databank.client.service.UserSocioResearchServiceAsync;
+import com.mresearch.databank.client.views.AdminResearchVarGeneralizeS1View;
+import com.mresearch.databank.client.views.AdminResearchVarsView;
 import com.mresearch.databank.client.views.IPickBinder;
 import com.mresearch.databank.client.views.PickElementsTableView;
 import com.mresearch.databank.client.views.JSON_Construct;
@@ -44,9 +46,12 @@ public class AdminResearchDetailedPresenter implements Presenter{
 	public interface Display
 	{
 		VerticalPanel getViewPanel();
+		VerticalPanel getVarsPanel();
 		VerticalPanel getEditPanel();
 		VerticalPanel getGroupEditPanel();
 		VerticalPanel getFilesPanel();
+		VerticalPanel getUnificPanel();
+		
 		Widget asWidget();
 	}
 	public interface EditDisplay
@@ -84,8 +89,8 @@ public class AdminResearchDetailedPresenter implements Presenter{
 //		 Date getEndDate();
 //		 //String getName();	
 		 //String getWeightVarID();
-		 HasClickHandlers getCondirmBtn();
-		 HasClickHandlers getDeleteBtn();
+//		 HasClickHandlers getCondirmBtn();
+//		 HasClickHandlers getDeleteBtn();
 //		 HasClickHandlers getAddOrgImplPopup();
 //		 HasClickHandlers getAddOrgOrderPopup();
 //		 
@@ -120,24 +125,29 @@ public class AdminResearchDetailedPresenter implements Presenter{
 	
 	 private final Display display;
 	 private EditDisplay edit_display;
+	 private AdminResearchVarsView vars_view;
 	 private GroupEditDisplay gr_edit_displ;
 	 private FilesEditDisplay files_ed_displ;
 	 private final AdminSocioResearchServiceAsync rpcAdminService;
 	 private final UserSocioResearchServiceAsync rpcUserService;
 	 private final SimpleEventBus eventBus;
 	public AdminResearchDetailedPresenter(UserSocioResearchServiceAsync rpcUserSerice,AdminSocioResearchServiceAsync rpcAdminService, SimpleEventBus eventBus,
-		      Display view,EditDisplay edit_dspl, GroupEditDisplay gr_edit_displ,FilesEditDisplay files_ed_displ)
+		      Display view,AdminResearchVarsView vars_view,EditDisplay edit_dspl, GroupEditDisplay gr_edit_displ,FilesEditDisplay files_ed_displ,AdminResearchVarGeneralizeS1View gener)
 	{
 		 this.rpcAdminService = rpcAdminService;
 		 this.rpcUserService = rpcUserSerice;
 		    this.eventBus = eventBus;
 		    this.display = view;
+		    this.vars_view = vars_view;
 		    this.edit_display = edit_dspl;
 		    this.gr_edit_displ = gr_edit_displ;
 		    this.files_ed_displ = files_ed_displ;
 		    this.display.getEditPanel().add(this.edit_display.asWidget());
+		    this.display.getVarsPanel().add(this.vars_view.asWidget());
 		    this.display.getGroupEditPanel().add(this.gr_edit_displ.asWidget());
 		    this.display.getFilesPanel().add(this.files_ed_displ.asWidget());
+		    gener.setCont(this.display.getUnificPanel());
+		    this.display.getUnificPanel().add(gener);
 		    bind();
 	}
 	 
@@ -145,6 +155,7 @@ public class AdminResearchDetailedPresenter implements Presenter{
 	public void go(HasWidgets container,ArrayList<String> p_names,ArrayList<String> p_values) {
 		 container.clear();
 		 container.add(display.asWidget());
+		 
 		 fetchWeightVarCandidates(edit_display.getResearchID());
 		 fetchResearchListData();
 		 //fetchDatabankStructure();
