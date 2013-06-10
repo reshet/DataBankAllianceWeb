@@ -85,7 +85,7 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	
 	@UiHandler(value="editBtn")
 	  public void editBtnCmd(ClickEvent ev) {
-	    PopupPanel p = new PopupPanel();
+	    final PopupPanel p = new PopupPanel();
 	    //p.setTitle("Добавление экземпляра сущности...");
 	    //p.setModal(false);
 	    p.setAutoHideEnabled(true);
@@ -94,49 +94,55 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
         int top = source.getAbsoluteTop();
         p.setPopupPosition(left, top);
 	    //p.setPopupPosition(200, 200);
-	    p.setSize("190px", "100px");
+	    //p.setSize("190px", "100px");
+	    p.setSize("100%", "100%");
 	    Anchor addAnch = new Anchor("Добавить");
 	    Anchor addsubAnch = new Anchor("Добавить подобъект");
 	    Anchor delAnch = new Anchor("Удалить");
-	    Anchor editAnch = new Anchor("Изменить");
-	    Anchor editstructAnch = new Anchor("Редактировать структуру");
+	    Anchor editAnch = new Anchor("Изменить структуру");
+	    Anchor editstructAnch = new Anchor("Редактировать объект");
 	    addAnch.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent ev) {
 				addCmd(ev);
+				p.hide();
 			}
 		});
 	    addsubAnch.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent ev) {
 				addCmdSub(ev);
+				p.hide();
 			}
 		});
 	    delAnch.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent ev) {
 				delCmd(ev);
+				p.hide();
 			}
 		});
 	    editAnch.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent ev) {
 				editCmd(ev);
+				p.hide();
 			}
 		});
 	    editstructAnch.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent ev) {
 				editItemCmd(ev);
+				p.hide();
 			}
 		});
 	    
 	    VerticalPanel pnl = new VerticalPanel();
 	    pnl.add(addAnch);
 	    pnl.add(addsubAnch);
+	    pnl.add(editstructAnch);
 	    pnl.add(delAnch);
 	    pnl.add(editAnch);
-	    pnl.add(editstructAnch);
 	    p.add(pnl);
 		p.show();
 	  }
@@ -145,18 +151,20 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	    PopupPanel p = new PopupPanel();
 	    p.setTitle("Добавление экземпляра сущности...");
 	    p.setModal(true);
-	    p.setPopupPosition(200, 200);
-	    p.setSize("300px", "400px");
+	    //p.setPopupPosition(200, 200);
+	    //p.setSize("300px", "400px");
+	    p.setSize("100%", "100%");
 	    p.setWidget(new ItemCreator(new MultiValuedField(this.dto, null, new HashMap(),dto.getUnique_name()), this, p));
 	    p.show();
+	    p.center();
 	  }
 	 //@UiHandler(value="addsub")
 	  public void addCmdSub(ClickEvent ev) {
 	    PopupPanel p = new PopupPanel();
 	    p.setTitle("Добавление подэкземпляра сущности...");
 	    p.setModal(true);
-	    p.setPopupPosition(200, 200);
-	    p.setSize("300px", "400px");
+	    //p.setPopupPosition(200, 200);
+	    p.setSize("100%", "100%");
 	    int ind = this.items_list.getSelectedIndex();
 	    if (ind >= 0)
 	    {
@@ -164,6 +172,7 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	      Long id_ent = Long.valueOf(this.dto.getId());
 	      p.setWidget(new SubItemCreator(id.longValue(), new MultiValuedField(this.dto, null, new HashMap(),dto.getUnique_name()), this, p));
 	      p.show();
+	      p.center();
 	    }
 	  }
 	 
@@ -179,11 +188,11 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 			new RPCCall<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
-					Window.alert("Error on deleting item!"+caught.getMessage());
+					Window.alert("Ошибка удаления значения!"+caught.getMessage());
 				}
 				@Override
 				public void onSuccess(Void result) {
-					Window.alert("Item sucessfully deleted!");
+					Window.alert("Значение успешно удалено");
 			          MultiValuedEntity.this.items_list.removeItem(ind);
 				}
 				@Override
@@ -197,12 +206,13 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	public void editCmd(ClickEvent ev)
 	{
 		PopupPanel p = new PopupPanel();
-		p.setTitle("Редактирование поля...");
+		//p.setTitle("Редактирование поля...");
 		p.setModal(true);
-		p.setPopupPosition(400, 400);
-		p.setSize("800px", "800px");
+		//p.setPopupPosition(400, 400);
+		p.setSize("100%", "100%");
 		p.setWidget(new FieldEditor(new MultiValuedField(dto, null, filling,dto.getUnique_name()),p));
 		p.show();	
+		p.center();
 	}
 	
 	//@UiHandler(value="edit_item") 
@@ -223,8 +233,8 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 					PopupPanel p = new PopupPanel();
 					p.setTitle("Редактирование объекта...");
 					p.setModal(true);
-					p.setPopupPosition(400, 400);
-					p.setSize("800px", "800px");
+					//p.setPopupPosition(400, 400);
+					p.setSize("100%", "100%");
 					//p.setWidget(new EntityItemEditor(new MultiValuedField(dto, null, result),id,name,p));
 					//p.show();	
 					
@@ -232,6 +242,7 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 			          EntityItemEditor ed = new EntityItemEditor(f, MultiValuedEntity.this, id, name, p);
 			          p.setWidget(ed);
 			          p.show();
+			          p.center();
 				}
 
 				@Override

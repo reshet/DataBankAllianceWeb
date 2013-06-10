@@ -445,6 +445,7 @@ public class AdminResearchPerspectivePresenter implements Presenter
 		eventBus.addHandler(ShowVarDetailsEvent.TYPE, new ShowVarDetailsEventHandler() {
 			@Override
 			public void onShowVarDetails(ShowVarDetailsEvent event) {
+				display.setPrevCenterState(display.getCenterPanel().getWidget(0));
 				display.getCenterPanel().clear();
 				//display.getCenterPanel().add(new VariableDetailedView(event.get))
 				display.getCenterPanel().add(new HTML("<h2>Загрузка данных...</h2>"));
@@ -657,7 +658,7 @@ public class AdminResearchPerspectivePresenter implements Presenter
 				AdminResearchVarsView varsview = new AdminResearchVarsView(result.getDto());
 				AdminResearchVarGeneralizeS1View gen = new AdminResearchVarGeneralizeS1View(result.getDto().getId(), display.getCenterPanel());
 				AdminResearchDetailedPresenter presenter = new AdminResearchDetailedPresenter(rpcUserService,rpcAdminService, eventBus, ad_view, varsview,ed_view,gr_ed_view,files_ed_view,gen);
-				display.setPrevCenterState(display.getCenterPanel());
+				
 				presenter.go(display.getCenterPanel(),null,null);
 				
 //				new RPCCall<MetaUnitMultivaluedEntityDTO>() {

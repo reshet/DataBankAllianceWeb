@@ -9,6 +9,7 @@
 	</ui:style>
 	<g:ScrollPanel>
 		<g:VerticalPanel>
+		<g:Label styleName="{style.important} green">Редактирование выьранного элемента</g:Label>
 			<g:HorizontalPanel>
 				<g:Label>Имя: </g:Label>
 				<g:TextBox ui:field="name_field"></g:TextBox>

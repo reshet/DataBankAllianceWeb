@@ -124,8 +124,8 @@ public class AdminResearchEditView extends Composite implements AdminResearchDet
 		
         richTextEditor = new RichTextEditor();
         richTextEditor.setHeight(200);  
-        richTextEditor.setWidth("400px");
-        richTextEditor.setBorder("1px solid red");
+        richTextEditor.setWidth("600px");
+        richTextEditor.setBorder("1px solid green");
         
         richTextEditor.setZIndex(0);
         

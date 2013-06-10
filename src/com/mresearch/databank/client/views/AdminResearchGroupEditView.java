@@ -84,6 +84,7 @@ private void renderDBfillers()
     richTextEditor.setWidth("700px");
     //richTextEditor.setOverflow(Overflow.HIDDEN);  
     richTextEditor.setCanDragResize(true);  
+    richTextEditor.setBorder("1px solid green");
     //richTextEditor.setShowEdges(true);  
 
     // Standard control group options include  

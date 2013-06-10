@@ -482,7 +482,25 @@ div.search-submit {
     background: transparent url(icons/icon_settings_1.png) center no-repeat;
 }
 
+.metaeditUpBtn{
+    outline: none;
+    border: none;
+    margin: 1px; /* border size */
+    background: transparent url(icons/up_arrow_28.png);
+}
 
+.metaeditDownBtn{
+    outline: none;
+    border: none;
+    margin: 1px; /* border size */
+    background: transparent url(icons/down_arrow_28.png);
+}
+.metaeditDelBtn{
+    outline: none;
+    border: none;
+    margin: 1px; /* border size */
+    background: transparent url(icons/delete_icon_28.png);
+}
 
 .plotBtn{
     outline: none;

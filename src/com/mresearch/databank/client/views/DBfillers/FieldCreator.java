@@ -15,6 +15,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasText;
@@ -58,6 +59,7 @@ public class FieldCreator extends Composite {
 	//private MetaUnitFiller new_field;
 	@UiField TextBox unique_name,field_name;
 	@UiField ListBox field_type;
+	@UiField CheckBox multiselection_en;
 	public FieldCreator(FieldEditor editor,PopupPanel parent) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.field = editor.getField();
@@ -119,7 +121,16 @@ public class FieldCreator extends Composite {
 		if(val.equals("Cущность"))
 		{
 			dto = new MetaUnitMultivaluedEntityDTO(new Long(0), field_name.getText(), unique_name.getText());;
-			w = new MultiValuedEntity((MetaUnitMultivaluedEntityDTO)dto, null, null,field.getUniqueName());
+			
+			if(multiselection_en.getValue())
+			{
+				w = new MultiValuedEntityMultiselected((MetaUnitMultivaluedEntityDTO)dto, null, null,field.getUniqueName());
+			}else
+			{
+				w = new MultiValuedEntity((MetaUnitMultivaluedEntityDTO)dto, null, null,field.getUniqueName());
+			}
+			
+			//w = new MultiValuedEntity((MetaUnitMultivaluedEntityDTO)dto, null, null,field.getUniqueName());
 			addFieldToDB(dto,w);
 		}
 		par.hide();

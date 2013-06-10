@@ -71,14 +71,17 @@ public class MultiValuedField extends Composite implements MetaUnitFiller,MetaUn
 	{
 		PopupPanel p = new PopupPanel();
 		p.setTitle("Редактирование поля...");
+	//	p.set("Редактирование поля...");
 		p.setModal(true);
 		//p.setPopupPosition(300, 300);
-		p.center();
-		p.setSize("800px", "800px");
+	
+		//p.setSize("400px", "400px");
+		p.setSize("100%", "100%");
 		p.setWidget(new FieldEditor(this,p));
 		p.show();	
+		p.center();
 	}
-	private void renderSubUnits()
+	public void renderSubUnits()
 	{
 		
 		subunits_table.clear();

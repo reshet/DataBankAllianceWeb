@@ -19,9 +19,11 @@ import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.mresearch.databank.shared.JSON_Representation;
+import com.mresearch.databank.shared.MetaUnitDTO;
 import com.mresearch.databank.shared.MetaUnitDateDTO;
 import com.mresearch.databank.shared.MetaUnitStringDTO;
 
@@ -41,24 +43,37 @@ public class FieldEditWrapper extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 	
-	@UiField HorizontalPanel host;
-	private Widget w;
-	public Widget getW() {
-		return w;
+	@UiField Label field_name;
+	//@UiField HorizontalPanel host;
+//	private Widget w;
+//	public Widget getW() {
+//		return w;
+//	}
+//	public void setW(Widget w) {
+//		this.w = w;
+//		host.clear();
+//		host.add(w);
+//	}
+	private MetaUnitDTO mu;
+	public MetaUnitDTO getMU() {
+		return mu;
 	}
-	public void setW(Widget w) {
-		this.w = w;
-		host.clear();
-		host.add(w);
+	public void setMU(MetaUnitDTO mu) {
+		this.mu = mu;
+		field_name.setText(mu.getDesc());
 	}
-
+	
+	@UiField PushButton up,down,delete;
 	private FieldEditor editor;
 	private int position;
-	public FieldEditWrapper(Widget c,FieldEditor editor,int pos) {
+	public FieldEditWrapper(MetaUnitDTO field_dto,FieldEditor editor,int pos) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.editor = editor;
 		this.position = pos;
-		setW(c);
+		up.setStyleName("metaeditUpBtn");
+		down.setStyleName("metaeditDownBtn");
+		delete.setStyleName("metaeditDelBtn");
+		this.setMU(field_dto);
 		initFields();
 	}
 	public int getPosition() {
@@ -79,12 +94,16 @@ public class FieldEditWrapper extends Composite {
 	}
 	@UiHandler(value="up") public void upCmd(ClickEvent ev)
 	{
-		host.clear();
-		editor.doSwap(position, position--);
+		//host.clear();
+		//field_name.setText("");
+		editor.doSwap(position, position-1);
+		//--position;
 	}
 	@UiHandler(value="down") public void downCmd(ClickEvent ev)
 	{
-		host.clear();
-		editor.doSwap(position, position++);
+		//host.clear();
+		//field_name.setText("");
+		editor.doSwap(position, position+1);
+		//++position;
 	}
 }

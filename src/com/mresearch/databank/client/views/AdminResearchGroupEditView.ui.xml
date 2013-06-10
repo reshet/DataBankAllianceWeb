@@ -24,7 +24,7 @@
 	</ui:style>
 	<g:HTMLPanel>
 	<h2>Редактирование метаданных исследования...</h2>
-		<table class="{style.tableResearch}" cellSpacing="20px">
+		<table class="{style.tableResearch}" cellSpacing="10px">
 <!-- 			<tr> -->
 <!-- 				<td class="{style.category}">Название исследования:</td> -->
 <!-- 				<td><g:TextBox ui:field="nameResearch" width="300px">Name of research</g:TextBox></td> -->
@@ -38,18 +38,18 @@
 					</td>
 				</tr>
 			<tr>
-				<td>
+				<td colspan="2">
 					<g:VerticalPanel ui:field="descriptionEditor"></g:VerticalPanel>
 				</td>
 			</tr>	
 			<tr>
-				<td>
+				<td colspan="2">
 					<g:VerticalPanel ui:field="elasticDBfields"></g:VerticalPanel>
 				</td>
 			</tr>
 				
 			<tr>
-				<td>
+				<td colspan="2">
 					<g:VerticalPanel ui:field="researchesToPropogate"></g:VerticalPanel>
 				</td>
 			</tr>

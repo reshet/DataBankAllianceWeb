@@ -9,14 +9,14 @@
 	</ui:style>
 	<g:ScrollPanel>
 		<g:VerticalPanel>
-			<g:FlexTable ui:field="host_table">
-			
+			<g:Label styleName="{style.important} green">Изменение структуры метаданных</g:Label>
+			<g:FlexTable ui:field="host_table">	
 			</g:FlexTable>
-		<g:HorizontalPanel>
-			<g:Button ui:field="doEdit">ОК</g:Button>
-			<g:Button ui:field="doCancel">Отмена</g:Button>
-			<g:Button ui:field="doAddField">Добавить поле...</g:Button>
-		</g:HorizontalPanel>
+			<g:HorizontalPanel>
+				<g:Button ui:field="doEdit">ОК</g:Button>
+				<g:Button ui:field="doCancel">Отмена</g:Button>
+				<g:Button ui:field="doAddField">Добавить поле...</g:Button>
+			</g:HorizontalPanel>
 		</g:VerticalPanel>
 	</g:ScrollPanel>	
 </ui:UiBinder> 

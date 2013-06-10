@@ -61,21 +61,24 @@ public class FieldEditor extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.field = field;
 		this.par = parent;
-		initFields();
+		initFields(field.dto.getSub_meta_units());
 	}
-	private void initFields()
+	private void initFields(ArrayList<MetaUnitDTO> dtos)
 	{
 		host_table.clear();
 		for(int i = 0;i < field.subunits_table.getRowCount();i++)
 		{
-			host_table.setWidget(i, 0, new FieldEditWrapper(field.subunits_table.getWidget(i, 0), this,i));
+			//host_table.setWidget(i, 0, new FieldEditWrapper(field.subunits_table.getWidget(i, 0), this,i));
+			host_table.setWidget(i, 0, new FieldEditWrapper(dtos.get(i), this,i));
 		}
 	}
 	public void doSwap(int old_pos, int new_pos)
 	{
 		if(old_pos<0||new_pos<0||old_pos>=host_table.getRowCount()||new_pos>=host_table.getRowCount()||old_pos==new_pos) return;
-		Widget w = host_table.getWidget(old_pos, 0);
-		Widget w2 = host_table.getWidget(new_pos, 0);
+		FieldEditWrapper w = (FieldEditWrapper)host_table.getWidget(old_pos, 0);
+		FieldEditWrapper w2 = (FieldEditWrapper)host_table.getWidget(new_pos, 0);
+		w.setPosition(new_pos);
+		w2.setPosition(old_pos);
 		host_table.setWidget(new_pos, 0, w);
 		host_table.setWidget(old_pos, 0, w2);
 		
@@ -106,32 +109,44 @@ public class FieldEditor extends Composite {
 	public void doEdit(ClickEvent ev)
 	{
 		
-		field.subunits_table.clear();
+//		field.subunits_table.clear();
+//		for(int i = 0;i < host_table.getRowCount();i++)
+//		{
+//			field.subunits_table.setWidget(i, 0, ((FieldEditWrapper)host_table.getWidget(i, 0)).host.getWidget(0));
+//		}
+//		ArrayList<MetaUnitDTO> subunits = new ArrayList<MetaUnitDTO>();
+//		for(int i = 0;i < field.subunits_table.getRowCount();i++)
+//		{
+//			FieldEditWrapper wrap = (FieldEditWrapper) field.subunits_table.getWidget(i,0);
+//			//MetaUnitFiller cont = (MetaUnitFiller)wrap.getW();
+//			//MetaUnitDTO dto = cont.getDTO();
+//			MetaUnitDTO dto = wrap.getMU();
+//			subunits.add(dto);
+//		}
+		
+		ArrayList<MetaUnitDTO> subunits = new ArrayList<MetaUnitDTO>();
 		for(int i = 0;i < host_table.getRowCount();i++)
 		{
-			field.subunits_table.setWidget(i, 0, ((FieldEditWrapper)host_table.getWidget(i, 0)).host.getWidget(0));
-		}
-		ArrayList<MetaUnitDTO> subunits = new ArrayList<MetaUnitDTO>();
-		for(int i = 0;i < field.subunits_table.getRowCount();i++)
-		{
-			FieldEditWrapper wrap = (FieldEditWrapper) field.subunits_table.getWidget(i,0);
-			MetaUnitFiller cont = (MetaUnitFiller)wrap.getW();
-			MetaUnitDTO dto = cont.getDTO();
+			FieldEditWrapper wrap = (FieldEditWrapper) host_table.getWidget(i,0);
+			//MetaUnitFiller cont = (MetaUnitFiller)wrap.getW();
+			//MetaUnitDTO dto = cont.getDTO();
+			MetaUnitDTO dto = wrap.getMU();
 			subunits.add(dto);
 		}
 		
 		this.field.dto.setSub_meta_units(subunits);
+		field.renderSubUnits();
 		
 		new RPCCall<Void>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Error on structure updating!");
+				Window.alert("Ошибка при обновлении структуры метаданных.");
 			}
 
 			@Override
 			public void onSuccess(Void result) {
-				Window.alert("Structure updated sucessfullly!");
+				Window.alert("Структура обновлена успешно!");
 			}
 
 			@Override
@@ -150,11 +165,11 @@ public class FieldEditor extends Composite {
 	public void doAddField(ClickEvent ev)
 	{
 		PopupPanel p = new PopupPanel();
-		p.setTitle("Добавить поле...");
+		//p.setTitle("Добавить поле...");
 		p.setModal(true);
-		p.setPopupPosition(500, 500);
-		p.setSize("800px", "800px");
+		p.setSize("100%", "100%");
 		p.setWidget(new FieldCreator(this,p));
 		p.show();
+		p.center();
 	}
 }

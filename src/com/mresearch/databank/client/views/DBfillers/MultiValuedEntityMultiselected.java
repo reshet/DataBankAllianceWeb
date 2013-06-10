@@ -2,6 +2,7 @@ package com.mresearch.databank.client.views.DBfillers;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -9,11 +10,13 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.mresearch.databank.client.helper.RPCCall;
@@ -48,9 +51,11 @@ public class MultiValuedEntityMultiselected extends Composite
   public ArrayList<Long> initial_selected_ids = new ArrayList();
   public ArrayList<Long> selected_ids = new ArrayList();
   private String base_name;
+  @UiField ToggleButton editBtn;
   public MultiValuedEntityMultiselected()
   {
     initWidget((Widget)uiBinder.createAndBindUi(this));
+	
   }
 
   public MultiValuedEntityMultiselected(MetaUnitMultivaluedEntityDTO dto, JSON_Representation represent, HashMap<String, String> filling,String base_name)
@@ -59,6 +64,7 @@ public class MultiValuedEntityMultiselected extends Composite
     this.dto = dto;
     this.entity_name.setText(dto.getDesc());
     this.filling = filling;
+    editBtn.setStyleName("metaoptsBtn");
     this.base_name = base_name.equals("")?dto.getUnique_name():base_name+"_"+dto.getUnique_name();
     if(this.filling!=null)
     if (this.filling.containsKey(this.base_name))
@@ -93,18 +99,66 @@ public class MultiValuedEntityMultiselected extends Composite
 
   
   
+  @UiHandler({"editBtn"})
+  public void editBtnCmd(ClickEvent ev)
+  {
+	  final PopupPanel p = new PopupPanel();
+	    //p.setTitle("Добавление экземпляра сущности...");
+	    //p.setModal(false);
+	    p.setAutoHideEnabled(true);
+	    Widget source = (Widget) ev.getSource();
+      int left = source.getAbsoluteLeft();
+      int top = source.getAbsoluteTop();
+      p.setPopupPosition(left, top);
+	    //p.setPopupPosition(200, 200);
+	    //p.setSize("190px", "100px");
+	    p.setSize("100%", "100%");
+	   
+		Anchor editSel = new Anchor("Изменить выбор");
+	    Anchor editField = new Anchor("Изменить структуру");
+	    Anchor editItems = new Anchor("К элементам");
+	    editSel.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent ev) {
+				editSelectionCmd(ev);
+				p.hide();
+			}
+		});
+	    editField.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent ev) {
+				editFieldCmd(ev);
+				p.hide();
+			}
+		});
+	    editItems.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent ev) {
+				editItemsCmd(ev);
+				p.hide();
+			}
+		});
+	   
+	    
+	    VerticalPanel pnl = new VerticalPanel();
+	    pnl.add(editSel);
+	    pnl.add(editField);
+	    pnl.add(editItems);
+	    p.add(pnl);
+		p.show();
+  }
   
-  
-  @UiHandler({"edit_field"})
+  //@UiHandler({"edit_field"})
   public void editFieldCmd(ClickEvent ev)
   {
     PopupPanel p = new PopupPanel();
-    p.setTitle("Редактирование поля...");
+    //p.setTitle("Редактирование поля...");
     p.setModal(true);
-    p.setPopupPosition(200, 200);
-    p.setSize("700px", "400px");
+    //p.setPopupPosition(200, 200);
+    p.setSize("100%", "100%");
     p.setWidget(new FieldEditor(new MultiValuedField(this.dto, null, this.filling,base_name), p));
     p.show();
+    p.center();
   }
 
   
@@ -118,32 +172,34 @@ public class MultiValuedEntityMultiselected extends Composite
   
   
   
-  @UiHandler({"edit_selection"})
+  //@UiHandler({"edit_selection"})
   public void editSelectionCmd(ClickEvent ev) {
     //DialogBox dialogBox = createDialogBox("Редактирование выбора...");
     //dialogBox.setGlassEnabled(true);
     //dialogBox.setAnimationEnabled(true);
 	  PopupPanel p = new PopupPanel(true);
 	  p.setModal(false);
-	  p.setPopupPosition(200, 200);
+	  //p.setPopupPosition(200, 200);
 	  p.setAnimationEnabled(true);
-	 p.setTitle("Редактирование выбора...");
+	 //p.setTitle("Редактирование выбора...");
     //dialogBox.setModal(true);
     //dialogBox.center();
-    p.setSize("500px", "350px");
+    p.setSize("100%", "100%");
     p.setWidget(new MultiselectionEditor(this, p));
     p.setVisible(true);
     p.show();
+    p.center();
   }
-  @UiHandler({"edit_items"})
+ // @UiHandler({"edit_items"})
   public void editItemsCmd(ClickEvent ev) {
     PopupPanel p = new PopupPanel(true);
-    p.setTitle("Редактирование элементов...");
+    //p.setTitle("Редактирование элементов...");
     p.setModal(false);
-    p.setPopupPosition(200, 200);
-    p.setSize("700px", "400px");
+    //p.setPopupPosition(200, 200);
+    p.setSize("100%", "100%");
     p.setWidget(new MultiValuedEntity(this.dto, null, this.filling,""));
     p.show();
+    p.center();
   }
 
   

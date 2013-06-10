@@ -5,15 +5,18 @@
 	<ui:style>
 		.important {
 			font-weight: bold;
+			padding-right: 10px;
 		}
 	</ui:style>
 	<g:HorizontalPanel>
-		<g:HorizontalPanel ui:field="host">	
+		<g:Label ui:field="field_name" styleName="{style.important}"></g:Label>
+		<g:HorizontalPanel>
+			<g:PushButton ui:field="up" height="28px" width="28px"></g:PushButton>
+			<g:PushButton ui:field="down" height="28px" width="28px"></g:PushButton>
+			<g:PushButton ui:field="delete" height="28px" width="28px"></g:PushButton>
+<!-- 			<g:Anchor ui:field="up">Вверх</g:Anchor> -->
+<!-- 			<g:Anchor ui:field="down">Вниз</g:Anchor> -->
 		</g:HorizontalPanel>
-		<g:VerticalPanel>
-			<g:Anchor ui:field="up">Вверх</g:Anchor>
-			<g:Anchor ui:field="down">Вниз</g:Anchor>
-		</g:VerticalPanel>
-		<g:Anchor ui:field="delete">Удалить</g:Anchor>		
+<!-- 		<g:Anchor ui:field="delete">Удалить</g:Anchor>		 -->
 	</g:HorizontalPanel>
 </ui:UiBinder> 
