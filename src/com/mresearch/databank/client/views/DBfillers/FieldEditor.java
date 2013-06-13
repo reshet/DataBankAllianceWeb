@@ -66,11 +66,16 @@ public class FieldEditor extends Composite {
 	private void initFields(ArrayList<MetaUnitDTO> dtos)
 	{
 		host_table.clear();
-		for(int i = 0;i < field.subunits_table.getRowCount();i++)
+		int i = 0;
+		for(MetaUnitDTO dto:dtos)
 		{
 			//host_table.setWidget(i, 0, new FieldEditWrapper(field.subunits_table.getWidget(i, 0), this,i));
-			host_table.setWidget(i, 0, new FieldEditWrapper(dtos.get(i), this,i));
+			host_table.setWidget(i, 0, new FieldEditWrapper(dto, this,i));
+			i++;
 		}
+	}
+	public void addNewField(MetaUnitDTO dto){
+		host_table.setWidget(host_table.getRowCount(), 0, new FieldEditWrapper(dto, this,host_table.getRowCount()));
 	}
 	public void doSwap(int old_pos, int new_pos)
 	{
@@ -83,27 +88,11 @@ public class FieldEditor extends Composite {
 		host_table.setWidget(old_pos, 0, w2);
 		
 	}
-	public boolean doDelete(FieldEditWrapper wrap)
+	public void doDelete(MetaUnitDTO dto)
 	{
-		//Window.alert("Delete initiated!");
-		new RPCCall<Void>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("Delete failed!"+caught.getMessage());
-			}
-
-			@Override
-			public void onSuccess(Void result) {
-				Window.alert("Field removed!");
-			}
-
-			@Override
-			protected void callService(AsyncCallback<Void> cb) {
-				service.deleteMetaUnit(new Long(0),new Long(0), cb);
-			}
-		}.retry(2);
-		return false;
+		field.dto.getSub_meta_units().remove(dto);
+		field.renderSubUnits();
+		initFields(field.dto.getSub_meta_units());
 	}
 	@UiHandler(value="doEdit") 
 	public void doEdit(ClickEvent ev)
@@ -130,8 +119,11 @@ public class FieldEditor extends Composite {
 			FieldEditWrapper wrap = (FieldEditWrapper) host_table.getWidget(i,0);
 			//MetaUnitFiller cont = (MetaUnitFiller)wrap.getW();
 			//MetaUnitDTO dto = cont.getDTO();
-			MetaUnitDTO dto = wrap.getMU();
-			subunits.add(dto);
+			if(wrap != null){
+				MetaUnitDTO dto = wrap.getMU();
+				subunits.add(dto);	
+			}
+			
 		}
 		
 		this.field.dto.setSub_meta_units(subunits);

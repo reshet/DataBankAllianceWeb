@@ -13,6 +13,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
@@ -22,6 +23,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.mresearch.databank.client.helper.RPCCall;
+import com.mresearch.databank.client.service.AdminSocioResearchService;
+import com.mresearch.databank.client.service.AdminSocioResearchServiceAsync;
 import com.mresearch.databank.shared.JSON_Representation;
 import com.mresearch.databank.shared.MetaUnitDTO;
 import com.mresearch.databank.shared.MetaUnitDateDTO;
@@ -42,7 +46,7 @@ public class FieldEditWrapper extends Composite {
 	public FieldEditWrapper() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
-	
+	private AdminSocioResearchServiceAsync service = AdminSocioResearchService.Util.getInstance();
 	@UiField Label field_name;
 	//@UiField HorizontalPanel host;
 //	private Widget w;
@@ -90,7 +94,28 @@ public class FieldEditWrapper extends Composite {
 	
 	@UiHandler(value="delete") public void deleteCmd(ClickEvent ev)
 	{
-		
+		if(Window.confirm("Внимание, будут удалены все метаданные в банке по этому полю! Продолжить?"))
+		{
+			new RPCCall<Void>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("Ошибка удаления поля!"+caught.getMessage());
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					Window.alert("Поле успешно удалено!");
+					editor.doDelete(mu);
+				}
+
+				@Override
+				protected void callService(AsyncCallback<Void> cb) {
+					service.deleteMetaUnit(mu.getId(),editor.getField().dto.getId(), cb);
+				}
+			}.retry(2);
+	
+		}
 	}
 	@UiHandler(value="up") public void upCmd(ClickEvent ev)
 	{

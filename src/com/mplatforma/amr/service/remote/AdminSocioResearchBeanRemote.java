@@ -37,7 +37,7 @@ public interface AdminSocioResearchBeanRemote {
       Boolean deleteFileFromAccessor(long id_research,long id_file);
       Boolean addSSE(String clas,String kind,String value);
       Boolean updateFileAccessor(long research_id,ResearchFilesDTO dto);
-      Boolean addMetaUnit(long parent_id,MetaUnitDTO dto);
+      MetaUnitDTO addMetaUnit(long parent_id,MetaUnitDTO dto);
       void updateMetaUnitStructure(MetaUnitDTO dto);
       void addEntityItem(Long entity_id,String value,HashMap<String,String> filling);
       void addSubEntityItem(Long parent_id,String value,HashMap<String,String> filling);

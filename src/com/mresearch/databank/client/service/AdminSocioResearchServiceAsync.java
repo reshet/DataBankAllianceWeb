@@ -43,7 +43,7 @@ public interface AdminSocioResearchServiceAsync {
 			AsyncCallback<Boolean> callback);
 	void updateMetaUnitStructure(MetaUnitDTO dto, AsyncCallback<Void> callback);
 	void addMetaUnit(MetaUnitDTO dto, Long parent_unit_id,
-			AsyncCallback<Void> callback);
+			AsyncCallback<MetaUnitDTO> callback);
 	void addEntityItem(Long entity_id, String value,
 			HashMap<String, String> filling, AsyncCallback<Void> callback);
 	void deleteMetaUnit(Long id, Long unit_parent_id,

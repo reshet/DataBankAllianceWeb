@@ -68,12 +68,14 @@ import com.mresearch.databank.client.views.ConceptItemItem;
 import com.mresearch.databank.client.views.IPickBinder;
 import com.mresearch.databank.client.views.PickElementsTableView;
 import com.mresearch.databank.client.views.RealVariableDetailedView;
+import com.mresearch.databank.client.views.RealVariableEditView;
 import com.mresearch.databank.client.views.ResearchDescItem;
 import com.mresearch.databank.client.views.ResearchVarList;
 import com.mresearch.databank.client.views.RootConceptsList;
 import com.mresearch.databank.client.views.SearchResultsView;
 import com.mresearch.databank.client.views.SimpleResearchList;
 import com.mresearch.databank.client.views.TextVariableDetailedView;
+import com.mresearch.databank.client.views.TextVariableEditView;
 import com.mresearch.databank.client.views.UserResearchDetailedView;
 import com.mresearch.databank.client.views.UserResearchVar2DDView;
 import com.mresearch.databank.client.views.VarDescItem;
@@ -722,11 +724,11 @@ public class AdminResearchPerspectivePresenter implements Presenter
 					public void onSuccess(MetaUnitMultivaluedEntityDTO res) {
 						display.getCenterPanel().clear();
 						//display.getCenterPanel().add(new VariableDetailedView(result));
-//						if (result instanceof RealVarDTO_Detailed)
-//							display.getCenterPanel().add(new RealVariableDetailedView((RealVarDTO_Detailed)result,res));
-//						else if (result instanceof TextVarDTO_Detailed)
-//							display.getCenterPanel().add(new TextVariableDetailedView((TextVarDTO_Detailed)result,res));
-//						else
+						if (result instanceof RealVarDTO_Detailed)
+							display.getCenterPanel().add(new RealVariableEditView((RealVarDTO_Detailed)result,res,display));
+						else if (result instanceof TextVarDTO_Detailed)
+							display.getCenterPanel().add(new TextVariableEditView((TextVarDTO_Detailed)result,res,display));
+						else
 							display.getCenterPanel().add(new VariableEditView(display,result,res));
 					}
 

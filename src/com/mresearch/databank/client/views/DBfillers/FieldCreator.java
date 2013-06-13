@@ -55,6 +55,7 @@ public class FieldCreator extends Composite {
 	}
 	private AdminSocioResearchServiceAsync service = AdminSocioResearchService.Util.getInstance();
 	private MultiValuedField field;
+	private FieldEditor editor;
 	private PopupPanel par;
 	//private MetaUnitFiller new_field;
 	@UiField TextBox unique_name,field_name;
@@ -62,6 +63,7 @@ public class FieldCreator extends Composite {
 	@UiField CheckBox multiselection_en;
 	public FieldCreator(FieldEditor editor,PopupPanel parent) {
 		initWidget(uiBinder.createAndBindUi(this));
+		this.editor = editor;
 		this.field = editor.getField();
 		this.par = parent;
 		initFields();
@@ -80,76 +82,103 @@ public class FieldCreator extends Composite {
 	public void doAdd(ClickEvent ev)
 	{
 		MetaUnitDTO dto;
-		Widget w = null;
 		String val = field_type.getItemText(field_type.getSelectedIndex());
 		if(val.equals("Текстовое поле"))
 		{
 			dto = new MetaUnitStringDTO(new Long(0), field_name.getText(), unique_name.getText());
-			w = new SimpleStringField((MetaUnitStringDTO)dto, null, null,field.getUniqueName());
-			addFieldToDB(dto,w);
+			addFieldToDB(dto);
 		}
 		if(val.equals("Целое числовое поле"))
 		{
 			dto = new MetaUnitIntegerDTO(new Long(0), field_name.getText(), unique_name.getText());
-			w = new SimpleIntegerField((MetaUnitIntegerDTO)dto, null, null,field.getUniqueName());
-			addFieldToDB(dto,w);
+			addFieldToDB(dto);
 		}
 		if(val.equals("Рациональное числовое поле"))
 		{
 			dto = new MetaUnitDoubleDTO(new Long(0), field_name.getText(), unique_name.getText());
-			w = new SimpleDoubleField((MetaUnitDoubleDTO)dto, null, null,field.getUniqueName());
-			addFieldToDB(dto,w);
+			addFieldToDB(dto);
 		}
 		if(val.equals("Поле выбора даты"))
 		{
 			dto = new MetaUnitDateDTO(new Long(0), field_name.getText(), unique_name.getText());
-			w = new SimpleDateField((MetaUnitDateDTO)dto, null, null,field.getUniqueName());
-			addFieldToDB(dto,w);
+			addFieldToDB(dto);
 		}
 		if(val.equals("Поле файла"))
 		{
 			dto = new MetaUnitFileDTO(new Long(0), field_name.getText(), unique_name.getText());
-			w = new SimpleFileField((MetaUnitFileDTO)dto, null, null,field.getUniqueName());
-			addFieldToDB(dto,w);
+			addFieldToDB(dto);
 		}
 		if(val.equals("Cтруктурный тег"))
 		{
 			dto = new MetaUnitMultivaluedStructureDTO(new Long(0), field_name.getText(), unique_name.getText());;
-			w = new MultiValuedField((MetaUnitMultivaluedStructureDTO)dto, null, null,field.getUniqueName());
-			addFieldToDB(dto,w);
+			addFieldToDB(dto);
 		}
 		if(val.equals("Cущность"))
 		{
 			dto = new MetaUnitMultivaluedEntityDTO(new Long(0), field_name.getText(), unique_name.getText());;
-			
-			if(multiselection_en.getValue())
-			{
-				w = new MultiValuedEntityMultiselected((MetaUnitMultivaluedEntityDTO)dto, null, null,field.getUniqueName());
-			}else
-			{
-				w = new MultiValuedEntity((MetaUnitMultivaluedEntityDTO)dto, null, null,field.getUniqueName());
-			}
-			
+			((MetaUnitMultivaluedEntityDTO)dto).setIsMultiselected(multiselection_en.getValue());
 			//w = new MultiValuedEntity((MetaUnitMultivaluedEntityDTO)dto, null, null,field.getUniqueName());
-			addFieldToDB(dto,w);
+			addFieldToDB(dto);
 		}
 		par.hide();
 	}
-	private void addFieldToDB(final MetaUnitDTO dto,final Widget w)
+	private void addFieldToDB(final MetaUnitDTO dto_init)
 	{
-		new RPCCall<Void>() {
+		new RPCCall<MetaUnitDTO>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Error on adding new field!"+caught.getMessage());
+				Window.alert("Ошибка добавления поля!"+caught.getMessage());
 			}
 			@Override
-			public void onSuccess(Void result) {
+			public void onSuccess(MetaUnitDTO dto) {
+				
+				Widget w = null;
+				if(dto instanceof MetaUnitStringDTO)
+				{
+					w = new SimpleStringField((MetaUnitStringDTO)dto, null, null,field.getUniqueName());
+				}else
+				if(dto instanceof MetaUnitIntegerDTO)
+				{
+					w = new SimpleIntegerField((MetaUnitIntegerDTO)dto, null, null,field.getUniqueName());
+				}else
+				if(dto instanceof MetaUnitDoubleDTO)
+				{
+					w = new SimpleDoubleField((MetaUnitDoubleDTO)dto, null, null,field.getUniqueName());
+				}else
+				if(dto instanceof MetaUnitDateDTO)
+				{
+					w = new SimpleDateField((MetaUnitDateDTO)dto, null, null,field.getUniqueName());
+				}else
+				if(dto instanceof MetaUnitFileDTO)
+				{
+					w = new SimpleFileField((MetaUnitFileDTO)dto, null, null,field.getUniqueName());
+				}else
+				if(dto instanceof MetaUnitMultivaluedStructureDTO)
+				{
+					w = new MultiValuedField((MetaUnitMultivaluedStructureDTO)dto, null, null,field.getUniqueName());
+				}else
+				if(dto instanceof MetaUnitMultivaluedEntityDTO)
+				{
+					((MetaUnitMultivaluedEntityDTO)dto).setIsMultiselected(multiselection_en.getValue());
+					if(multiselection_en.getValue())
+					{
+						w = new MultiValuedEntityMultiselected((MetaUnitMultivaluedEntityDTO)dto, null, null,field.getUniqueName());
+					}else
+					{
+						w = new MultiValuedEntity((MetaUnitMultivaluedEntityDTO)dto, null, null,field.getUniqueName(),null);
+					}
+					
+					//w = new MultiValuedEntity((MetaUnitMultivaluedEntityDTO)dto, null, null,field.getUniqueName());
+				}
+				field.dto.getSub_meta_units().add(dto);
 				field.subunits_table.setWidget(field.subunits_table.getRowCount(), 0, w);
+				editor.addNewField(dto);
+				
 			}
 
 			@Override
-			protected void callService(AsyncCallback<Void> cb) {
-				service.addMetaUnit(dto, field.dto.getId(), cb);
+			protected void callService(AsyncCallback<MetaUnitDTO> cb) {
+				service.addMetaUnit(dto_init, field.dto.getId(), cb);
 			}
 		}.retry(2);
 	}

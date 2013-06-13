@@ -88,13 +88,14 @@ public class ItemCreator extends Composite {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Error on adding Entity Item!:"+caught.getMessage());
+				Window.alert("Ошибка добавления элемента!:"+caught.getMessage());
 			}
 
 			@Override
 			public void onSuccess(Void result) {
 				Window.alert("Экземпляр успешно добавлен!");
 				ItemCreator.this.entity.refreshMembersList();
+				//ItemCreator.this.entity.updateConsumerItems();
 			    ItemCreator.this.par.hide();
 				par.hide();
 			}

@@ -121,7 +121,7 @@ public class VarMultiValuedField extends Composite implements MetaUnitFiller,Met
 					subunits_table.setWidget(i++, 0, new MultiValuedEntityMultiselected(dto_str,null,filling,base_name));
 				}else
 				{
-					subunits_table.setWidget(i++, 0, new MultiValuedEntity(dto_str,null,filling,base_name));
+					subunits_table.setWidget(i++, 0, new MultiValuedEntity(dto_str,null,filling,base_name,null));
 				}
 			}
 			

@@ -68,11 +68,14 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	private String previous_item_name;
 	@UiField ToggleButton editBtn;
 	private String base_name;
-	public MultiValuedEntity(MetaUnitMultivaluedEntityDTO dto,JSON_Representation represent,HashMap<String,String> filling,String base_name) {
+	public DependentItemsConsumer consumer;
+	public MultiValuedEntity(MetaUnitMultivaluedEntityDTO dto,JSON_Representation represent,HashMap<String,String> filling,String base_name,DependentItemsConsumer cons) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.dto = dto;
 		entity_name.setText(dto.getDesc());
 		this.filling = filling;
+		this.consumer = cons;
+		if(this.filling == null)this.filling = new HashMap<String,String>();
 		this.base_name = base_name.equals("")?dto.getUnique_name():base_name+"_"+dto.getUnique_name();
 		//items_list.setMultipleSelect(dto.isIsMultiselected());
 		//items_list.setVisibleItemCount(1);
@@ -154,7 +157,7 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	    //p.setPopupPosition(200, 200);
 	    //p.setSize("300px", "400px");
 	    p.setSize("100%", "100%");
-	    p.setWidget(new ItemCreator(new MultiValuedField(this.dto, null, new HashMap(),dto.getUnique_name()), this, p));
+	    p.setWidget(new ItemCreator(new MultiValuedField(this.dto, null, new HashMap<String,String>(),dto.getUnique_name()), this, p));
 	    p.show();
 	    p.center();
 	  }
@@ -265,6 +268,7 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 		      {
 		        MultiValuedEntity.this.dto = result;
 		        MultiValuedEntity.this.renderSubUnits();
+		        updateConsumerItems();
 		      }
 
 		      protected void callService(AsyncCallback<MetaUnitMultivaluedEntityDTO> cb)
@@ -504,5 +508,10 @@ public class MultiValuedEntity extends Composite implements MetaUnitFiller,MetaU
 	      }
 	    	
 	    }
+	}
+	
+	public void updateConsumerItems()
+	{
+		if(consumer!=null)consumer.updateItems(dto.getItem_names(), dto.getItem_ids());
 	}
 }

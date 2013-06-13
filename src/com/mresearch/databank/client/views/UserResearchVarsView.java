@@ -62,6 +62,7 @@ public class UserResearchVarsView extends Composite {
 		
 		//html.setHTML(dto.getDesctiption()==null?"":dto.getDesctiption());
 		item = new ResearchVarList(new SocioResearchDTO_Light(dto.getId(),dto.getName()));
+		tree.setStyleName("research_section");
 		item.setState(true);
 		tree.addItem(item);
 		fetchResearchVarData(item, item.getResearch_id());

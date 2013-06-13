@@ -123,9 +123,9 @@ public class AdminSocioResearchServiceImpl extends RemoteServiceServlet implemen
 	  }
 
       @Override
-	  public void addMetaUnit(MetaUnitDTO dto, Long parent_unit_id)
+	  public MetaUnitDTO addMetaUnit(MetaUnitDTO dto, Long parent_unit_id)
 	  {
-	    eao.addMetaUnit(parent_unit_id.longValue(), dto);
+	    return eao.addMetaUnit(parent_unit_id.longValue(), dto);
 	  }
 
       @Override

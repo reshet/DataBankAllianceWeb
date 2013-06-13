@@ -31,9 +31,10 @@ import com.mresearch.databank.shared.MetaUnitEntityItemDTO;
 import com.mresearch.databank.shared.MetaUnitMultivaluedEntityDTO;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MultiValuedEntityMultiselected extends Composite
-  implements MetaUnitFiller, MetaUnitEntityItemRegistrator
+  implements MetaUnitFiller, MetaUnitEntityItemRegistrator, DependentItemsConsumer
 {
   private static MultiValuedEntityMultiselectedUiBinder uiBinder = (MultiValuedEntityMultiselectedUiBinder)GWT.create(MultiValuedEntityMultiselectedUiBinder.class);
 
@@ -64,9 +65,9 @@ public class MultiValuedEntityMultiselected extends Composite
     this.dto = dto;
     this.entity_name.setText(dto.getDesc());
     this.filling = filling;
+    if(this.filling == null)this.filling = new HashMap<String,String>();
     editBtn.setStyleName("metaoptsBtn");
     this.base_name = base_name.equals("")?dto.getUnique_name():base_name+"_"+dto.getUnique_name();
-    if(this.filling!=null)
     if (this.filling.containsKey(this.base_name))
     {
       String val = (String)filling.get(this.base_name);
@@ -197,7 +198,7 @@ public class MultiValuedEntityMultiselected extends Composite
     p.setModal(false);
     //p.setPopupPosition(200, 200);
     p.setSize("100%", "100%");
-    p.setWidget(new MultiValuedEntity(this.dto, null, this.filling,""));
+    p.setWidget(new MultiValuedEntity(this.dto, null, this.filling,"",this));
     p.show();
     p.center();
   }
@@ -302,7 +303,7 @@ public class MultiValuedEntityMultiselected extends Composite
               }
 
               public void onSuccess(Void result) {
-            	  Window.alert("Links populated!");
+            	 // Window.alert("Links populated!");
               }
 
               protected void callService(AsyncCallback<Void> cb) {
@@ -325,4 +326,10 @@ public class MultiValuedEntityMultiselected extends Composite
   static abstract interface MultiValuedEntityMultiselectedUiBinder extends UiBinder<Widget, MultiValuedEntityMultiselected>
   {
   }
+
+@Override
+public void updateItems(ArrayList<String> items_names, ArrayList<Long> item_ids) {
+	dto.setItem_ids(item_ids);
+	dto.setItem_names(items_names);
+}
 }

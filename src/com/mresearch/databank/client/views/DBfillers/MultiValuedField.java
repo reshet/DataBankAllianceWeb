@@ -90,6 +90,7 @@ public class MultiValuedField extends Composite implements MetaUnitFiller,MetaUn
 		if(base!=null)
 		for(MetaUnitDTO dto:base)
 		{
+			//if(dto == null)continue;
 			if(dto instanceof MetaUnitStringDTO)
 			{
 				MetaUnitStringDTO dto_str = (MetaUnitStringDTO)dto;
@@ -103,14 +104,14 @@ public class MultiValuedField extends Composite implements MetaUnitFiller,MetaUn
 				String def_val= null;
 				if(filling.containsKey(base_name+"_"+dto.getUnique_name()))def_val = filling.get(base_name+"_"+dto.getUnique_name());
 				subunits_table.setWidget(i++, 0, new SimpleDateField(dto_str,null,def_val,base_name));
-			}
+			}else
 			if(dto instanceof MetaUnitIntegerDTO)
 			{
 				MetaUnitIntegerDTO dto_str = (MetaUnitIntegerDTO)dto;
 				String def_val= null;
 				if(filling.containsKey(base_name+"_"+dto.getUnique_name()))def_val = filling.get(base_name+"_"+dto.getUnique_name());
 				subunits_table.setWidget(i++, 0, new SimpleIntegerField(dto_str,null,def_val,base_name));
-			}
+			}else
 			if(dto instanceof MetaUnitDoubleDTO)
 			{
 				MetaUnitDoubleDTO dto_str = (MetaUnitDoubleDTO)dto;
@@ -138,7 +139,7 @@ public class MultiValuedField extends Composite implements MetaUnitFiller,MetaUn
 					subunits_table.setWidget(i++, 0, new MultiValuedEntityMultiselected(dto_str,null,filling,base_name));
 				}else
 				{
-					subunits_table.setWidget(i++, 0, new MultiValuedEntity(dto_str,null,filling,base_name));
+					subunits_table.setWidget(i++, 0, new MultiValuedEntity(dto_str,null,filling,base_name,null));
 				}
 			}
 			

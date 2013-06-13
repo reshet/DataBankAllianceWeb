@@ -75,7 +75,7 @@ public interface AdminSocioResearchService extends RemoteService {
   Boolean deleteFileFromAccessor(long id_research,long id_file);
   Boolean updateFileAccessor(long research_id,ResearchFilesDTO dto);
   void updateMetaUnitStructure(MetaUnitDTO dto);
-  void addMetaUnit(MetaUnitDTO dto,Long parent_unit_id);
+  MetaUnitDTO addMetaUnit(MetaUnitDTO dto,Long parent_unit_id);
   void addEntityItem(Long entity_id,String value,HashMap<String,String> filling);
   void deleteMetaUnit(Long id,Long unit_parent_id);
   void editEntityItem(Long entity_id,String value,HashMap<String,String> filling);
